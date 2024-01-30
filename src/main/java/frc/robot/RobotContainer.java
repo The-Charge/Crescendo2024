@@ -56,9 +56,9 @@ public class RobotContainer
     }
 
     TeleopDrive teleopDrive = new TeleopDrive(drivebase,
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
             OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
             OperatorConstants.LEFT_X_DEADBAND),
         () -> -driverXbox.getRawAxis(rotationXboxAxis));
     
