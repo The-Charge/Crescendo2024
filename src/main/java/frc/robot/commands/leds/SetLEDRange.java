@@ -22,6 +22,8 @@ public class SetLEDRange extends Command {
         start = rangeStart;
         end = rangeEnd;
         col = nCol;
+
+        addRequirements(strip);
     }
 
     @Override
