@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -21,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.leds.RunLEDExample;
+import frc.robot.commands.leds.SetLEDRange;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.subsystems.leds.LEDStripSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -68,13 +70,10 @@ public class RobotContainer
     
     drivebase.setDefaultCommand(teleopDrive);
 
-    RunLEDExample enableLeds = new RunLEDExample(
-      ledStrip,
-      () -> driverController.getX(),
-      () -> driverController.getY(),
-      driverController.button(1)
-    );
-    ledStrip.setDefaultCommand(enableLeds);
+    driverController.button(7).onTrue(new SetLEDRange(ledStrip, 0, 23, Color.kRed)); //seg 1 red
+    driverController.button(9).onTrue(new SetLEDRange(ledStrip, 0, 23, Color.kBlue)); //seg 1 blue
+    driverController.button(8).onTrue(new SetLEDRange(ledStrip, 23, 45, Color.kWhite)); //seg 2 white
+    driverController.button(10).onTrue(new SetLEDRange(ledStrip, 23, 45, Color.kBrown)); //seg 2 brown
   }
 
   /**

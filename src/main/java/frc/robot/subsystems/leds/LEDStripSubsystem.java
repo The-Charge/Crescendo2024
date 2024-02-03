@@ -45,7 +45,7 @@ public class LEDStripSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {}
 
-  public void setBufferPixel(int pixel, Color col) {
+  public void setBufferColor(int pixel, Color col) {
     buffer.setLED(pixel, col);
   }
   public void setBufferHSV(int pixel, int h, int s, int v) {
