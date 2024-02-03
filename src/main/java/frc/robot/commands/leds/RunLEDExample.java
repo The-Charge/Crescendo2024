@@ -42,7 +42,7 @@ public class RunLEDExample extends Command {
         strip.setBufferRGB(i, rr, rg, rb);
       }
       else {
-        strip.setBufferHSV(i, hue, 255, value);
+        // strip.setBufferHSV(i, hue, 255, value);
       }
     }
   }

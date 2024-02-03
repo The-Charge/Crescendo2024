@@ -46,13 +46,14 @@ public class LEDStripSubsystem extends SubsystemBase {
   public void simulationPeriodic() {}
 
   public void setBufferColor(int pixel, Color col) {
-    buffer.setLED(pixel, col);
+    setBufferRGB(pixel, (int) (col.red * 255), (int) (col.green * 255), (int) (col.blue * 255));
   }
-  public void setBufferHSV(int pixel, int h, int s, int v) {
-    buffer.setHSV(pixel, h, s, v);
-  }
+  // function removed be I don't want to fix HSV color mappings
+  // public void setBufferHSV(int pixel, int h, int s, int v) {
+  //   buffer.setHSV(pixel, h, s, v);
+  // }
   public void setBufferRGB(int pixel, int r, int g, int b) {
-    buffer.setRGB(pixel, r, g, b);
+    buffer.setRGB(pixel, g, r, b); //led strips use GRB mapping
   }
 
   public int getStripLength() {
