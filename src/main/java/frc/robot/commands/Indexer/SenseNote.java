@@ -5,10 +5,12 @@ import frc.robot.Constants;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
-
+//sparkmax
 public class SenseNote extends Command {
   private final IndexerSubsystem m_indexer;
-
+//pivot, elevator: motion magic
+//pivot, elevator, climber: position
+//intake, indexer, shooter: speed control
   public SenseNote(IndexerSubsystem subsystem) {
     m_indexer = subsystem;
     addRequirements(subsystem);

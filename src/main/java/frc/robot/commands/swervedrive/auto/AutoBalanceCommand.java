@@ -22,6 +22,7 @@ public class AutoBalanceCommand extends Command
   {
     this.swerveSubsystem = swerveSubsystem;
     controller = new PIDController(1.0, 0.0, 0.0);
+   
     controller.setTolerance(1);
     controller.setSetpoint(0.0);
     // each subsystem used by the command must be passed into the

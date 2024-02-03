@@ -39,6 +39,46 @@ public final class Constants
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds
   }
+  public static final class Elevator {
+    public static final double setpoint = 2;
+    public static final double leftId = 0;
+    public static final double rightId = 1;
+    public static final PIDFConfig elevatorPID   = new PIDFConfig(0.4, 0, 0.01);
+
+    
+  }
+
+  public static final class Intake {
+    public static final double topIntakeId = 0;
+    public static final double bottomIntakeId = 1;
+  }
+
+  public static final class Shooter {
+    public static final double leftShooterId = 0;
+    public static final double rightShooterId = 1;
+  }
+
+  public static final class Indexer {
+    public static final int leftIndexerId = 0;
+    public static final int rightIndexerId = 1;
+    public static final double limitSwitchIndexer = 2;
+  }
+
+  public static final class Pivot {
+    public static final int PivotId = 0; 
+    public static final PIDFConfig pivotPID = new PIDFConfig(0.7, 0, 0);
+    public static final double pivotkS = 0.25;
+    public static final double pivotkV = 0.12;
+    public static final int kPIDLoopIdx = 0;
+    public static final int kTimeoutMs = 30;
+
+  }
+
+  public static final class Climber {
+    public static final double climberId = 0;
+
+
+  }
 
   public static class OperatorConstants
   {
@@ -49,4 +89,6 @@ public final class Constants
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
   }
+
+  
 }
