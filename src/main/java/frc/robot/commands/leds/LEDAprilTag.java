@@ -33,13 +33,6 @@ public class LEDAprilTag extends Command {
 @Override
   public void initialize() {
     stripSize = strip.getStripLength();
-
-    int rr  = (int) (255);
-    int rg = (int) (0);
-    int rb = (int) (0);
-    for(int i = 0; i < stripSize; i++) {
-        strip.setBufferRGB(i, rr, rg, rb);
-    }
   }
 
   @Override
@@ -48,12 +41,12 @@ public class LEDAprilTag extends Command {
     SmartDashboard.putNumber("tx LED", tx.getAsDouble());
     if (tv.getAsDouble() > 0){
           for(int i = 0; i < stripSize; i++) {
-        strip.setBufferRGB(i, (int) 255,(int) 0, (int)0);
+        strip.setBufferRGB(i, (int) 0,(int) 255, (int)0);
         }
     }
     else{
          for(int i = 0; i < stripSize; i++) {
-        strip.setBufferRGB(i, (int)255, (int)0,(int) 255);
+        strip.setBufferRGB(i, (int)255, (int)0,(int) 0);
     }
     }
   }
