@@ -80,7 +80,9 @@ public class RobotContainer
   private void configureBindings()
   {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    driverController.button(1).onTrue(new MoveToAngle(m_pivot, 80.0));
+    driverController.button(1).onTrue(new MoveToAngle(m_pivot, 50));
+    driverController.button(2).onTrue(new MoveToAngle(m_pivot, 0));
+    
     new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, XboxController.Button.kY.value).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
     new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(

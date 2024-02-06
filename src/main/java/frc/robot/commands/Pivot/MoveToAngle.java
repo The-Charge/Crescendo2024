@@ -39,5 +39,6 @@ public class MoveToAngle extends Command {
   @Override
   public boolean isFinished() {
     return true;
+    
   }
 }

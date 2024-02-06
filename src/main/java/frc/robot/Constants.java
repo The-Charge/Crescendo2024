@@ -65,7 +65,7 @@ public final class Constants
   }
 
   public static final class Pivot {
-    public static final int PivotId = 0; 
+    public static final int PivotId = 7; 
     public static final PIDFConfig pivotPID = new PIDFConfig(0.7, 0, 0);
     public static final double pivotkS = 0.25;
     public static final double pivotkV = 0.12;
