@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.leds.LEDAprilTag;
 import frc.robot.commands.leds.RunLEDExample;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 
@@ -36,14 +37,13 @@ import java.io.File;
  */
 public class RobotContainer
 {
-
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve"));
-
+  public final LEDStripSubsystem ledStrip = new LEDStripSubsystem();
   private final VisionSubsystem limelight1 = new VisionSubsystem();
 
-  private final LEDStripSubsystem ledStrip = new LEDStripSubsystem();
+
  
   // CommandJoystick rotationController = new CommandJoystick(1);
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -74,13 +74,8 @@ public class RobotContainer
     
     drivebase.setDefaultCommand(teleopDrive);
 
-    RunLEDExample enableLeds = new RunLEDExample(
-      ledStrip,
-      () -> driverController.getX(),
-      () -> driverController.getY(),
-      driverController.button(1)
-    );
-    ledStrip.setDefaultCommand(enableLeds);
+    LEDAprilTag startLEDAprilTag = new LEDAprilTag(ledStrip, ()-> limelight1.gettv(), ()-> limelight1.gettx());
+    ledStrip.setDefaultCommand(startLEDAprilTag);
   }
 
   /**
