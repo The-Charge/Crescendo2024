@@ -1,8 +1,8 @@
-package frc.robot.commands.leds;
+package frc.robot.commands.led;
 
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.leds.LEDStripSubsystem;
+import frc.robot.subsystems.led.LEDStripSubsystem;
 
 public class SetLEDRange extends Command {
     
@@ -29,7 +29,7 @@ public class SetLEDRange extends Command {
     @Override
     public void initialize() {
         for(int i = start; i < end; i++) {
-            strip.setBufferColor(i, col);
+            strip.setPixelColor(i, col);
         }
     }
     @Override

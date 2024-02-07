@@ -13,20 +13,20 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.leds.RunLEDExample;
-import frc.robot.commands.leds.SetLEDRange;
+import frc.robot.commands.led.*;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
-import frc.robot.subsystems.leds.LEDStripSubsystem;
+import frc.robot.subsystems.led.LEDStripSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-
 import java.io.File;
 
 /**
@@ -70,10 +70,14 @@ public class RobotContainer
     
     drivebase.setDefaultCommand(teleopDrive);
 
-    driverController.button(7).onTrue(new SetLEDRange(ledStrip, 0, 23, Color.kRed)); //seg 1 red
-    driverController.button(9).onTrue(new SetLEDRange(ledStrip, 0, 23, Color.kBlue)); //seg 1 blue
-    driverController.button(8).onTrue(new SetLEDRange(ledStrip, 23, 45, Color.kWhite)); //seg 2 white
-    driverController.button(10).onTrue(new SetLEDRange(ledStrip, 23, 45, Color.kBrown)); //seg 2 brown
+    driverController.button(7).onTrue(new SetLEDRange(ledStrip, 0, 23, new Color("#FF0000")));
+    driverController.button(8).onTrue(new SetLEDRange(ledStrip, 0, 23, new Color("#00FF00")));
+    driverController.button(9).onTrue(new SetLEDRange(ledStrip, 23, 45, new Color("#0000FF")));
+    driverController.button(10).onTrue(new SetLEDRange(ledStrip, 23, 45, new Color("#FFFF00")));
+    driverController.button(11).onTrue(new SetLEDRange(ledStrip, 0, 45, new Color("#00FFFF")));
+    driverController.button(12).onTrue(new SetLEDRange(ledStrip, 0, 45, new Color("#FF00FF")));
+
+    driverController.button(1).whileTrue(new RunLEDExample(ledStrip));
   }
 
   /**
