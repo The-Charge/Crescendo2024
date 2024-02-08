@@ -22,8 +22,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.Pivot;
 import frc.robot.commands.Pivot.MoveToAngle;
+import frc.robot.commands.Shooter.SpinShooter;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 
@@ -36,11 +38,12 @@ public class RobotContainer
 {
 
   // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-                                                                         "swerve"));
+  /*private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+                                                                         "swerve"));*/
                                                                          
   // CommandJoystick rotationController = new CommandJoystick(1);
   private final PivotSubsystem m_pivot = new PivotSubsystem();
+  private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   CommandJoystick driverController = new CommandJoystick(1);
 
@@ -60,14 +63,14 @@ public class RobotContainer
       rotationXboxAxis = 2;
     }
 
-    TeleopDrive teleopDrive = new TeleopDrive(drivebase,
+    /*TeleopDrive teleopDrive = new TeleopDrive(drivebase,
         () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
             OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
             OperatorConstants.LEFT_X_DEADBAND),
         () -> -driverXbox.getRawAxis(rotationXboxAxis));
     
-    drivebase.setDefaultCommand(teleopDrive);
+    drivebase.setDefaultCommand(teleopDrive);*/
   }
 
   /**
@@ -82,14 +85,10 @@ public class RobotContainer
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     driverController.button(1).onTrue(new MoveToAngle(m_pivot, 50));
     driverController.button(2).onTrue(new MoveToAngle(m_pivot, 0));
+    driverController.button(3).onTrue(new SpinShooter(m_shooter));
     
-    new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    new JoystickButton(driverXbox, XboxController.Button.kY.value).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
-    new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(
-        Commands.deferredProxy(() -> drivebase.driveToPose(
-                                   new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                              ));
-    new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+    //new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    //new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
   /**
@@ -100,7 +99,8 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Path", true);
+    //return drivebase.getAutonomousCommand("New Path", true);
+    return null;
   }
 
   public void setDriveMode()
@@ -110,6 +110,6 @@ public class RobotContainer
 
   public void setMotorBrake(boolean brake)
   {
-    drivebase.setMotorBrake(brake);
+    //drivebase.setMotorBrake(brake);
   }
 }

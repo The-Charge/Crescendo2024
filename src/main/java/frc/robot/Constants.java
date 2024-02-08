@@ -54,8 +54,11 @@ public final class Constants
   }
 
   public static final class Shooter {
-    public static final double leftShooterId = 0;
-    public static final double rightShooterId = 1;
+    public static final int leftShooterId = 0;
+    public static final int rightShooterId = 1;
+
+  
+    
   }
 
   public static final class Indexer {
