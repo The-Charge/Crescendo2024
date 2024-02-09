@@ -21,9 +21,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.Pivot;
+import frc.robot.commands.Indexer.SenseNote;
 import frc.robot.commands.Pivot.MoveToAngle;
 import frc.robot.commands.Shooter.SpinShooter;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
+import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -43,7 +45,11 @@ public class RobotContainer
                                                                          
   // CommandJoystick rotationController = new CommandJoystick(1);
   private final PivotSubsystem m_pivot = new PivotSubsystem();
+
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
+
+  private final IndexerSubsystem m_indexer = new IndexerSubsystem();
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   CommandJoystick driverController = new CommandJoystick(1);
 
@@ -85,7 +91,8 @@ public class RobotContainer
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     driverController.button(1).onTrue(new MoveToAngle(m_pivot, 50));
     driverController.button(2).onTrue(new MoveToAngle(m_pivot, 0));
-    driverController.button(3).onTrue(new SpinShooter(m_shooter));
+    driverController.button(4).onTrue(new SpinShooter(m_shooter));
+    driverController.button(3).onTrue(new SenseNote(m_indexer)); //never ends
     
     //new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     //new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
