@@ -41,24 +41,21 @@ public final class Constants
   }
   public static final class Elevator {
     public static final double setpoint = 2;
-    public static final double leftId = 0;
-    public static final double rightId = 1;
+    public static final int leftId = 0;
+    public static final int rightId = 1;
     public static final PIDFConfig elevatorPID   = new PIDFConfig(0.4, 0, 0.01);
 
     
   }
 
   public static final class Intake {
-    public static final double topIntakeId = 0;
-    public static final double bottomIntakeId = 1;
+    public static final int topIntakeId = 0;
+    public static final int bottomIntakeId = 1;
   }
 
   public static final class Shooter {
     public static final int leftShooterId = 0;
     public static final int rightShooterId = 1;
-
-  
-    
   }
 
   public static final class Indexer {
@@ -78,7 +75,7 @@ public final class Constants
   }
 
   public static final class Climber {
-    public static final double climberId = 0;
+    public static final int climberId = 0;
 
 
   }
