@@ -9,6 +9,7 @@ import frc.robot.subsystems.PivotSubsystem;
 public class MoveToAngle extends Command {
   public double angleGoal;
   private final PivotSubsystem m_pivot;
+  private double kFeedForward;
 
   public MoveToAngle(PivotSubsystem subsystem, double angle) {
     m_pivot = subsystem;
@@ -27,6 +28,8 @@ public class MoveToAngle extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+
     m_pivot.pivotToAngle(angleGoal);
   }
 
