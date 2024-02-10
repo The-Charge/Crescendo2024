@@ -22,7 +22,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.AutonConstants;
+import frc.robot.subsystems.vision.VisionSubsystem;
+
 import java.io.File;
 import java.util.function.DoubleSupplier;
 import swervelib.SwerveController;
@@ -497,6 +500,11 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * Add a fake vision reading for testing purposes.
    */
+  public void addVisionReading(){
+    Pose2d setpose;
+    setpose = RobotContainer.getLimelight().getRobotFieldPose();
+    swerveDrive.addVisionMeasurement(setpose, Timer.getFPGATimestamp());
+  }
   public void addFakeVisionReading()
   {
     swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());

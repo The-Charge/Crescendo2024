@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.ApriltagConstants;
 import frc.robot.commands.leds.LEDAprilTag;
 import frc.robot.commands.leds.RunLEDExample;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
@@ -41,7 +42,7 @@ public class RobotContainer
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve"));
   public final LEDStripSubsystem ledStrip = new LEDStripSubsystem();
-  private final VisionSubsystem limelight1 = new VisionSubsystem();
+  private static final VisionSubsystem limelight1 = new VisionSubsystem();
 
 
  
@@ -90,12 +91,14 @@ public class RobotContainer
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
     new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    new JoystickButton(driverXbox, XboxController.Button.kY.value).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
+    new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::addVisionReading)));
+
     new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(
-        Commands.deferredProxy(() -> drivebase.driveToPose(
-                                   new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                              ));
+        Commands.deferredProxy(() -> drivebase.driveToPose(Constants.ApriltagConstants.ID9_POSE)));
+     
+    
     new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+    
   }
 
   /**
@@ -117,5 +120,8 @@ public class RobotContainer
   public void setMotorBrake(boolean brake)
   {
     drivebase.setMotorBrake(brake);
+  }
+  public static VisionSubsystem getLimelight(){
+    return limelight1;
   }
 }
