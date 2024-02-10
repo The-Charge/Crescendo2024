@@ -18,7 +18,7 @@ public class ShooterSubsystem extends SubsystemBase {
         RelativeEncoder encoder = flywheel.getEncoder();
 
         pidController.setOutputRange(-1, 1);
-        pidController.setP(0.001);
+        pidController.setP(0.01);
         pidController.setI(0);
         pidController.setD(0);
         pidController.setIZone(0);

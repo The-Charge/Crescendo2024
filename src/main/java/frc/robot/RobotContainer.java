@@ -11,6 +11,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -31,6 +33,8 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -44,11 +48,12 @@ public class RobotContainer
                                                                          "swerve"));
                                                                          
   // CommandJoystick rotationController = new CommandJoystick(1);
-  private final PivotSubsystem m_pivot = new PivotSubsystem();
+  // private final PivotSubsystem m_pivot = new PivotSubsystem();
 
-  private final ShooterSubsystem m_shooter = new ShooterSubsystem();
+  // private final ShooterSubsystem m_shooter = new ShooterSubsystem();
 
-  private final IndexerSubsystem m_indexer = new IndexerSubsystem();
+  // private final IndexerSubsystem m_indexer = new IndexerSubsystem();
+  private final SendableChooser<Command> autoChooser;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   CommandJoystick driverController = new CommandJoystick(1);
@@ -64,6 +69,8 @@ public class RobotContainer
   {
     // Configure the trigger bindings
     configureBindings();
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
 
     if (RobotBase.isSimulation()) {
       rotationXboxAxis = 2;
@@ -89,13 +96,13 @@ public class RobotContainer
   private void configureBindings()
   {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    driverController.button(1).onTrue(new MoveToAngle(m_pivot, 50));
-    driverController.button(2).onTrue(new MoveToAngle(m_pivot, 0));
-    driverController.button(4).onTrue(new SpinShooter(m_shooter));
-    driverController.button(3).onTrue(new SenseNote(m_indexer)); //never ends
+    // driverController.button(1).onTrue(new MoveToAngle(m_pivot, 50));
+    // driverController.button(2).onTrue(new MoveToAngle(m_pivot, 0));
+    // driverController.button(4).onTrue(new SpinShooter(m_shooter));
+    // driverController.button(3).onTrue(new SenseNote(m_indexer)); //never ends
     
-    //new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    //new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+    new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
   /**
@@ -106,7 +113,8 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
+    return autoChooser.getSelected();
+
   }
 
   public void setDriveMode()

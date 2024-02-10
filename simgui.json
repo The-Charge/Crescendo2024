@@ -50,6 +50,9 @@
         "header": {
           "open": true
         }
+      },
+      "window": {
+        "visible": false
       }
     }
   },
@@ -60,6 +63,7 @@
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
       "/LiveWindow/Ungrouped/Pigeon 2 [13]": "Gyro",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/SmartDashboard/Auto Chooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Pigeon 2 (v6) [13]": "Gyro",
       "/SmartDashboard/Pigeon 2 [13]": "Gyro",
@@ -101,6 +105,11 @@
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
+        "Auto Chooser": {
+          "string[]##v_/SmartDashboard/Auto Chooser/options": {
+            "open": true
+          }
+        },
         "Field": {
           "open": true
         },
@@ -112,6 +121,14 @@
     }
   },
   "NetworkTables Info": {
-    "visible": true
+    "Clients": {
+      "open": true
+    },
+    "shuffleboard@1": {
+      "open": true
+    }
+  },
+  "NetworkTables View": {
+    "visible": false
   }
 }
