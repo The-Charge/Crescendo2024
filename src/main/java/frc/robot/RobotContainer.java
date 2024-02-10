@@ -40,8 +40,8 @@ public class RobotContainer
 {
 
   // The robot's subsystems and commands are defined here...
-  /*private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-                                                                         "swerve"));*/
+  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+                                                                         "swerve"));
                                                                          
   // CommandJoystick rotationController = new CommandJoystick(1);
   private final PivotSubsystem m_pivot = new PivotSubsystem();
@@ -69,14 +69,14 @@ public class RobotContainer
       rotationXboxAxis = 2;
     }
 
-    /*TeleopDrive teleopDrive = new TeleopDrive(drivebase,
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
+    TeleopDrive teleopDrive = new TeleopDrive(drivebase,
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
             OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
             OperatorConstants.LEFT_X_DEADBAND),
         () -> -driverXbox.getRawAxis(rotationXboxAxis));
     
-    drivebase.setDefaultCommand(teleopDrive);*/
+    drivebase.setDefaultCommand(teleopDrive);
   }
 
   /**
@@ -106,8 +106,7 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    //return drivebase.getAutonomousCommand("New Path", true);
-    return null;
+    return drivebase.getAutonomousCommand("New Auto");
   }
 
   public void setDriveMode()
