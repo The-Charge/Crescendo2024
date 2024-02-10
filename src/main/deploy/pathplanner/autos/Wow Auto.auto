@@ -20,19 +20,19 @@
         {
           "type": "named",
           "data": {
-            "name": "spinflywheel"
+            "name": "leds"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 2.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "stopflywheel"
+            "name": "leds"
           }
         },
         {
@@ -44,19 +44,19 @@
         {
           "type": "named",
           "data": {
-            "name": "spinflywheel"
+            "name": "leds"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 2.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "stopflywheel"
+            "name": "leds"
           }
         }
       ]
