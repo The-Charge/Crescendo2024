@@ -94,8 +94,8 @@ public class RobotContainer
     new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::addVisionReading)));
 
     new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(
-        Commands.deferredProxy(() -> drivebase.driveToPose(Constants.ApriltagConstants.ID9_POSE)));
-     
+        Commands.deferredProxy(() -> drivebase.driveToPose(Constants.ApriltagConstants.APRILTAG_POSE[(int)limelight1.gettid()]))
+    );
     
     new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
     

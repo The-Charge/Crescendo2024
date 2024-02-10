@@ -14,12 +14,18 @@ import frc.robot.RobotContainer;
 public class VisionSubsystem extends SubsystemBase{
   
     public boolean targetIdentified = false;
-    public double tx;
-    public double ty;
-    public double tv;
-    public double ta;
-    public Pose2d robotpose;
-    public Pose3d targetCamPose;
+    public double tx;               //X-offset
+    public double ty;               //Y-offset
+    public double tv;               //Target Identification
+    public double ta;               //Area of tag
+    public double tid;              //Tag id
+    public double tl;               //latency contribution
+    public double cl;               //Capture pipeline latency
+    public double getpipe;                 //get current pipeline
+    public double limelightlatency; //tl + cl
+    public Pose2d robotpose;        //Robot in Fieldspace (blue side)
+    public Pose3d targetCamPose;    //Target in Cameraspace
+
     public VisionSubsystem(){
         
     }
@@ -36,18 +42,24 @@ public class VisionSubsystem extends SubsystemBase{
         tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
         ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
         ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
-        
+        tid = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDouble(0);
+        tl = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tl").getDouble(0);
+        cl = NetworkTableInstance.getDefault().getTable("limelight").getEntry("cl").getDouble(0);
+        getpipe = NetworkTableInstance.getDefault().getTable("limelight").getEntry("getpipe").getDouble(0);
         //Read pose-specific values
         robotpose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
         targetCamPose = LimelightHelpers.getTargetPose3d_RobotSpace("limelight");
         
+        //Update rest of vars with simple logic
+        updateTargetIdentified();
+        limelightlatency = tl + cl;
 
-         updateTargetIdentified();
         //SmartDashboard stuff
         SmartDashboard.putNumber("LimeLight TV", tv);
         SmartDashboard.putNumber("LimeLight TX", tx);
         SmartDashboard.putNumber("LimeLight TY", ty);
         SmartDashboard.putNumber("LimeLight TA", ta);
+        SmartDashboard.putNumber("Tag Id", tid);
         SmartDashboard.putBoolean("Target Identified?", targetIdentified);
         SmartDashboard.putNumber("Robot Orientation", robotpose.getRotation().getDegrees());
         SmartDashboard.putNumber("Robotx", robotpose.getX());
@@ -72,11 +84,19 @@ public class VisionSubsystem extends SubsystemBase{
       // This method will be called once per scheduler run during simulation
     }
 
+
+    //Getters
     public double gettx(){
         return tx;
     }
     public double gettv(){
         return tv;
+    }
+    public double gettid(){
+        return tid;
+    }
+    public double getLimelightLatency(){
+        return limelightlatency;
     }
     public Pose2d getRobotFieldPose(){
         return robotpose;
