@@ -55,6 +55,8 @@ public final class Constants
   }
 
   public static class ApriltagConstants{
+    //Apriltag poses relative to bottom left corner of field
+    //0 is left empty for easy row-referencing in code
     public static final Pose2d[] APRILTAG_POSE = {
       new Pose2d(new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(0)), Rotation2d.fromDegrees(0)),
       new Pose2d(new Translation2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68)), Rotation2d.fromDegrees(120)),

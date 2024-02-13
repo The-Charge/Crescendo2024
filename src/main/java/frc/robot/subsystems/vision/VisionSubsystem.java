@@ -23,8 +23,8 @@ public class VisionSubsystem extends SubsystemBase{
     public double cl;               //Capture pipeline latency
     public double getpipe;                 //get current pipeline
     public double limelightlatency; //tl + cl
+    public double thor;
     public Pose2d robotpose;        //Robot in Fieldspace (blue side)
-    public Pose3d targetCamPose;    //Target in Cameraspace
 
     public VisionSubsystem(){
         
@@ -46,9 +46,10 @@ public class VisionSubsystem extends SubsystemBase{
         tl = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tl").getDouble(0);
         cl = NetworkTableInstance.getDefault().getTable("limelight").getEntry("cl").getDouble(0);
         getpipe = NetworkTableInstance.getDefault().getTable("limelight").getEntry("getpipe").getDouble(0);
+        thor = NetworkTableInstance.getDefault().getTable("limelight").getEntry("thor").getDouble(0);
         //Read pose-specific values
         robotpose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
-        targetCamPose = LimelightHelpers.getTargetPose3d_RobotSpace("limelight");
+        
         
         //Update rest of vars with simple logic
         updateTargetIdentified();
@@ -64,10 +65,11 @@ public class VisionSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("Robot Orientation", robotpose.getRotation().getDegrees());
         SmartDashboard.putNumber("Robotx", robotpose.getX());
         SmartDashboard.putNumber("Roboty", robotpose.getY());
+        SmartDashboard.putNumber("Current pipeline", getpipe);
+        SmartDashboard.putNumber("horizontal countour length", thor);
     }
     
     //convert tv value to boolean
-    //added led on when detected for tracking purposes.
     public boolean updateTargetIdentified(){
         if (tv > 0) {
             targetIdentified = true;
@@ -89,26 +91,29 @@ public class VisionSubsystem extends SubsystemBase{
     public double gettx(){
         return tx;
     }
+    public double getty(){
+        return ty;
+    }
     public double gettv(){
         return tv;
     }
+    public double getta(){
+        return ta;
+    }
     public double gettid(){
         return tid;
+    }
+    public double getthor(){
+        return thor;
+    }
+    public double getcurrentpipeline(){
+        return getpipe;
     }
     public double getLimelightLatency(){
         return limelightlatency;
     }
     public Pose2d getRobotFieldPose(){
         return robotpose;
-    }
-    public Pose3d gettargetCamPose(){
-        return targetCamPose;
-    }
-    public double getTargetRobotx(){
-        return targetCamPose.getX();
-    }
-    public double getTargetRoboty(){
-        return targetCamPose.getY();
     }
 }
 

@@ -497,16 +497,18 @@ public class SwerveSubsystem extends SubsystemBase
     return swerveDrive.getPitch();
   }
 
-  /**
-   * Add a fake vision reading for testing purposes.
-   */
+
   public void addVisionReading(){
     Pose2d setpose;
     double latency;
     setpose = RobotContainer.getLimelight().getRobotFieldPose();
     latency = RobotContainer.getLimelight().getLimelightLatency();
-    swerveDrive.addVisionMeasurement(setpose, latency);
+    swerveDrive.addVisionMeasurement(setpose, Timer.getFPGATimestamp() - latency);
+    
   }
+    /**
+   * Add a fake vision reading for testing purposes.
+   */
   public void addFakeVisionReading()
   {
     swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());

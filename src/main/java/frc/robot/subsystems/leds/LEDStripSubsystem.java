@@ -47,8 +47,9 @@ public class LEDStripSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("green color", getPixelColor(0).green);
   }
   @Override
-  public void simulationPeriodic() {}
-
+  public void simulationPeriodic() {
+    
+  }
   public void setBufferPixel(int pixel, Color col) {
     // buffer.setLED(pixel, col);
     setBufferRGB(pixel, (int) (col.red * 255), (int) (col.green * 255), (int) (col.blue * 255));

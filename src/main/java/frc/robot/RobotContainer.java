@@ -23,6 +23,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ApriltagConstants;
 import frc.robot.commands.leds.LEDAprilTag;
 import frc.robot.commands.leds.RunLEDExample;
+import frc.robot.commands.swervedrive.drivebase.CheckNotePosition;
+import frc.robot.commands.swervedrive.drivebase.DriveToNote;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 
 import frc.robot.subsystems.leds.LEDStripSubsystem;
@@ -77,6 +79,7 @@ public class RobotContainer
 
     LEDAprilTag startLEDAprilTag = new LEDAprilTag(ledStrip, ()-> limelight1.gettv(), ()-> limelight1.gettx());
     ledStrip.setDefaultCommand(startLEDAprilTag);
+   
   }
 
   /**
@@ -93,10 +96,11 @@ public class RobotContainer
     new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::addVisionReading)));
 
+    if (limelight1.gettv() > 0){
     new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(
         Commands.deferredProxy(() -> drivebase.driveToPose(Constants.ApriltagConstants.APRILTAG_POSE[(int)limelight1.gettid()]))
     );
-    
+    }
     new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
     
   }
