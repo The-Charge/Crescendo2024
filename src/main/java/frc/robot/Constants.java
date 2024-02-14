@@ -49,13 +49,13 @@ public final class Constants
   }
 
   public static final class Intake {
-    public static final double topIntakeId = 0;
-    public static final double bottomIntakeId = 1;
+    public static final int topIntakeId = 0;
+    public static final int bottomIntakeId = 1;
   }
 
   public static final class Shooter {
-    public static final double leftShooterId = 0;
-    public static final double rightShooterId = 1;
+    public static final int leftShooterId = 6;
+    public static final int rightShooterId = 1;
   }
 
   public static final class Indexer {
@@ -75,9 +75,7 @@ public final class Constants
   }
 
   public static final class Climber {
-    public static final double climberId = 0;
-
-
+    public static final int climberId = 0;
   }
 
   public static class OperatorConstants
@@ -88,6 +86,8 @@ public final class Constants
     public static final double LEFT_Y_DEADBAND  = 0.1;
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
+
+    public static final double DRIVER_2_Y_DEADBAND = 0.1;
   }
 
   
