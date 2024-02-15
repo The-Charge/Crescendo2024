@@ -13,31 +13,38 @@ public class SpinShooter extends Command {
 
   private final ShooterSubsystem m_shooter;
   private CANSparkMax flywheel;
+  public DoubleSupplier speedGoal;
 
-  public SpinShooter(ShooterSubsystem subsystem) {
+  public SpinShooter(ShooterSubsystem subsystem, DoubleSupplier speed) {
     m_shooter = subsystem;
     addRequirements(subsystem);
+    speedGoal = speed;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    flywheel = m_shooter.getFlywheel();
+    m_shooter.setVelocity(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // double target = 0.3;
+    double target = speedGoal.getAsDouble();
 
     // flywheel.set(target);
-    m_shooter.setVelocity(120); //rpm!!
+    //m_shooter.setVelocity(); //rpm!!
+
+    if(Math.abs(target) <= 0.1) target = 0;
+
+
+    m_shooter.setVelocity(target * 5000);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-   m_shooter.setVelocity(0);
+  //  m_shooter.setVelocity(0);
   }
 
   // Returns true when the command should end.

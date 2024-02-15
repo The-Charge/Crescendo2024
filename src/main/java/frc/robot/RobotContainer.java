@@ -40,8 +40,8 @@ public class RobotContainer
 {
 
   // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-                                                                         "swerve"));
+  // private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+  //                                                                        "swerve"));
                                                                          
   // CommandJoystick rotationController = new CommandJoystick(1);
   private final PivotSubsystem m_pivot = new PivotSubsystem();
@@ -65,18 +65,18 @@ public class RobotContainer
     // Configure the trigger bindings
     configureBindings();
 
-    if (RobotBase.isSimulation()) {
-      rotationXboxAxis = 2;
-    }
+    // if (RobotBase.isSimulation()) {
+    //   rotationXboxAxis = 2;
+    // }
 
-    TeleopDrive teleopDrive = new TeleopDrive(drivebase,
-        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
-            OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
-            OperatorConstants.LEFT_X_DEADBAND),
-        () -> -driverXbox.getRawAxis(rotationXboxAxis));
+    // TeleopDrive teleopDrive = new TeleopDrive(drivebase,
+    //     () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
+    //         OperatorConstants.LEFT_Y_DEADBAND),
+    //     () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
+    //         OperatorConstants.LEFT_X_DEADBAND),
+    //     () -> -driverXbox.getRawAxis(rotationXboxAxis));
     
-    drivebase.setDefaultCommand(teleopDrive);
+    // drivebase.setDefaultCommand(teleopDrive);
   }
 
   /**
@@ -91,8 +91,9 @@ public class RobotContainer
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     driverController.button(1).onTrue(new MoveToAngle(m_pivot, 50));
     driverController.button(2).onTrue(new MoveToAngle(m_pivot, 0));
-    driverController.button(4).onTrue(new SpinShooter(m_shooter));
     driverController.button(3).onTrue(new SenseNote(m_indexer)); //never ends
+    
+    m_shooter.setDefaultCommand(new SpinShooter(m_shooter, () -> (-driverXbox.getLeftY())));
     
     //new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     //new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
@@ -103,11 +104,11 @@ public class RobotContainer
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand()
-  {
-    // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
-  }
+  // public Command getAutonomousCommand()
+  // {
+  //   // An example command will be run in autonomous
+  //   // return drivebase.getAutonomousCommand("New Auto");
+  // }
 
   public void setDriveMode()
   {
