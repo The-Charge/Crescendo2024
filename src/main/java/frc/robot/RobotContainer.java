@@ -23,10 +23,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ApriltagConstants;
 import frc.robot.commands.leds.LEDAprilTag;
 import frc.robot.commands.leds.RunLEDExample;
-import frc.robot.commands.swervedrive.drivebase.CheckNotePosition;
-import frc.robot.commands.swervedrive.drivebase.DriveToNote;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
-
+import frc.robot.commands.vision.swapPipeline;
 import frc.robot.subsystems.leds.LEDStripSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
@@ -53,7 +51,7 @@ public class RobotContainer
   CommandJoystick driverController = new CommandJoystick(1);
 
   // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
-  XboxController driverXbox = new XboxController(0);
+  XboxController driverXbox = new XboxController(1);
 
   private int rotationXboxAxis = 4;
   /**
@@ -94,15 +92,18 @@ public class RobotContainer
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
     new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::addVisionReading)));
+    new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::addFakeVisionReading)));
 
     if (limelight1.gettv() > 0){
     new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(
         Commands.deferredProxy(() -> drivebase.driveToPose(Constants.ApriltagConstants.APRILTAG_POSE[(int)limelight1.gettid()]))
     );
     }
+
+
+    new JoystickButton(driverXbox, XboxController.Button.kRightBumper.value).onTrue(new swapPipeline(limelight1));
     new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
-    
+
   }
 
   /**

@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.LimelightHelpers;
@@ -25,6 +26,7 @@ public class VisionSubsystem extends SubsystemBase{
     public double limelightlatency; //tl + cl
     public double thor;
     public Pose2d robotpose;        //Robot in Fieldspace (blue side)
+    public double x_error, y_error;
 
     public VisionSubsystem(){
         
@@ -55,18 +57,17 @@ public class VisionSubsystem extends SubsystemBase{
         updateTargetIdentified();
         limelightlatency = tl + cl;
 
+        /*Update note pose
+        x_error = Math.pow((1.82 * ta),(-0.468));
+        SmartDashboard.putNumber("x_Error", x_error);
+        notepose = new Pose2d(new Translation2d(robotpose.getX() + x_error ,robotpose.getY() + y_error), robotpose.getRotation());
+        */
         //SmartDashboard stuff
-        SmartDashboard.putNumber("LimeLight TV", tv);
-        SmartDashboard.putNumber("LimeLight TX", tx);
-        SmartDashboard.putNumber("LimeLight TY", ty);
-        SmartDashboard.putNumber("LimeLight TA", ta);
-        SmartDashboard.putNumber("Tag Id", tid);
-        SmartDashboard.putBoolean("Target Identified?", targetIdentified);
+        
         SmartDashboard.putNumber("Robot Orientation", robotpose.getRotation().getDegrees());
         SmartDashboard.putNumber("Robotx", robotpose.getX());
         SmartDashboard.putNumber("Roboty", robotpose.getY());
-        SmartDashboard.putNumber("Current pipeline", getpipe);
-        SmartDashboard.putNumber("horizontal countour length", thor);
+
     }
     
     //convert tv value to boolean
@@ -81,12 +82,20 @@ public class VisionSubsystem extends SubsystemBase{
         return targetIdentified;
     }
  
+
     @Override
     public void simulationPeriodic() {
       // This method will be called once per scheduler run during simulation
     }
 
-
+    public void swapPipeline(){
+        if (getpipe == 0.0){
+            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(1.0);
+        }
+        else{
+            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0.0);
+        }
+    }
     //Getters
     public double gettx(){
         return tx;

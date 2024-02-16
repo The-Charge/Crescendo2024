@@ -500,10 +500,10 @@ public class SwerveSubsystem extends SubsystemBase
 
   public void addVisionReading(){
     Pose2d setpose;
-    double latency;
+    //double latency;
     setpose = RobotContainer.getLimelight().getRobotFieldPose();
-    latency = RobotContainer.getLimelight().getLimelightLatency();
-    swerveDrive.addVisionMeasurement(setpose, Timer.getFPGATimestamp() - latency);
+    //latency = RobotContainer.getLimelight().getLimelightLatency();
+    swerveDrive.addVisionMeasurement(setpose, Timer.getFPGATimestamp());
     
   }
     /**
@@ -511,6 +511,6 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public void addFakeVisionReading()
   {
-    swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());
+    swerveDrive.addVisionMeasurement(new Pose2d(1, 1, Rotation2d.fromDegrees(0)), Timer.getFPGATimestamp());
   }
 }
