@@ -91,9 +91,12 @@ public class RobotContainer
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     driverController.button(1).onTrue(new MoveToAngle(m_pivot, 50));
     driverController.button(2).onTrue(new MoveToAngle(m_pivot, 0));
-    driverController.button(3).onTrue(new SenseNote(m_indexer)); //never ends
-    
-    m_shooter.setDefaultCommand(new SpinShooter(m_shooter, () -> (-driverXbox.getLeftY())));
+   // driverController.button(3).onTrue(new SenseNote(m_indexer)); //never ends
+    new JoystickButton(driverXbox, 4).onTrue(new SpinShooter(m_shooter, 6000));
+    new JoystickButton(driverXbox, 3).onTrue(new SpinShooter(m_shooter, 0));
+    //new Trigger(() -> driverXbox.getYButton()).onTrue(new SpinShooter(m_shooter, 0));
+    // new JoystickButton(driverXbox, XboxController.button(1)).onTrue(new SpinShooter(m_shooter, 5000));
+    //m_shooter.setDefaultCommand(new SpinShooter(m_shooter, () -> (-driverXbox.getLeftY())));
     
     //new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     //new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
