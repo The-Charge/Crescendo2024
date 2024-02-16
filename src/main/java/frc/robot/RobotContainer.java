@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.led.*;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
-import frc.robot.subsystems.led.LEDStripSubsystem;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 
@@ -42,7 +42,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
       "swerve"));
-  private final LEDStripSubsystem ledStrip = new LEDStripSubsystem();
+  private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem();
   // CommandJoystick rotationController = new CommandJoystick(1);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   CommandJoystick driverController = new CommandJoystick(1);
@@ -98,6 +98,20 @@ public class RobotContainer {
             new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))));
     new JoystickButton(driverXbox, XboxController.Button.kX.value)
         .whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+
+    driverController.button(1).onTrue(new SetLEDBrightness(m_ledSubsystem, 0.25));
+    driverController.button(2).onTrue(new SetLEDBrightness(m_ledSubsystem, 1));
+    
+    driverController.button(3).onTrue(new DisableLEDs(m_ledSubsystem));
+
+    driverController.button(4).onTrue(new LEDRainbow(m_ledSubsystem, () -> driverController.getHID().getRawButton(5))); //end when button 5 is pressed
+    
+    driverController.button(7).onTrue(new SetLEDRange(m_ledSubsystem, 0, 23, new Color("#FF0000")));
+    driverController.button(8).onTrue(new SetLEDRange(m_ledSubsystem, 0, 23, new Color("#00FF00")));
+    driverController.button(9).onTrue(new SetLEDRange(m_ledSubsystem, 23, 45, new Color("#0000FF")));
+    driverController.button(10).onTrue(new SetLEDRange(m_ledSubsystem, 23, 45, new Color("#FFFF00")));
+    driverController.button(11).onTrue(new SetLEDRange(m_ledSubsystem, 0, 45, new Color("#00FFFF")));
+    driverController.button(12).onTrue(new SetLEDRange(m_ledSubsystem, 0, 45, new Color("#FF00FF")));
   }
 
   /**
@@ -117,4 +131,6 @@ public class RobotContainer {
   public void setMotorBrake(boolean brake) {
     drivebase.setMotorBrake(brake);
   }
+
+  public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}
 }

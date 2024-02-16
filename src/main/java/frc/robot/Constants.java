@@ -41,6 +41,11 @@ public final class Constants {
     public static final double WHEEL_LOCK_TIME = 10; // seconds
   }
 
+  public static final class LEDConstants {
+    public static final int portId = 9;
+    public static final int totalLength = 45; //in pixels
+  }
+
   public static class OperatorConstants {
     // Joystick Deadband
     public static final double LEFT_X_DEADBAND = 0.01;

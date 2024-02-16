@@ -1,28 +1,25 @@
 package frc.robot.commands.led;
 
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LEDStripSubsystem;
 
-public class SetLEDBrightness extends Command {
+public class DisableLEDs extends Command {
     
     private final LEDStripSubsystem strip;
-    private final double bright;
 
     /**
-     * Sets the brightness modifier of the LED strip
-     * @param nStrip LED strip subsystem
-     * @param brightness Range of 0 - 1
+     * Disables all of the LEDs (sets them to #000000)
      */
-    public SetLEDBrightness(LEDStripSubsystem nStrip, double brightness) {
+    public DisableLEDs(LEDStripSubsystem nStrip) {
         strip = nStrip;
-        bright = brightness;
 
         addRequirements(strip);
     }
 
     @Override
     public void initialize() {
-        strip.setBrightness(bright);
+        strip.fill(new Color(0, 0, 0));
     }
     @Override
     public void execute() {}

@@ -2,7 +2,7 @@ package frc.robot.commands.led;
 
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.led.LEDStripSubsystem;
+import frc.robot.subsystems.LEDStripSubsystem;
 
 public class SetLEDRange extends Command {
     
@@ -28,9 +28,7 @@ public class SetLEDRange extends Command {
 
     @Override
     public void initialize() {
-        for(int i = start; i < end; i++) {
-            strip.setPixelColor(i, col);
-        }
+        strip.setRange(start, end, col);
     }
     @Override
     public void execute() {}
@@ -39,6 +37,10 @@ public class SetLEDRange extends Command {
 
     @Override
     public boolean isFinished() {
+        return true;
+    }
+    @Override
+    public boolean runsWhenDisabled() {
         return true;
     }
 }
