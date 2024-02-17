@@ -11,38 +11,41 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.Pivot;
-import frc.robot.commands.Indexer.SenseNote;
-import frc.robot.commands.Pivot.MoveToAngle;
-import frc.robot.commands.Shooter.SpinShooter;
+import frc.robot.Constants;
+import frc.robot.commands.led.*;
+import frc.robot.commands.Indexer.*;
+import frc.robot.commands.Pivot.*;
+import frc.robot.commands.Shooter.*;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
-import frc.robot.subsystems.IndexerSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.*;
 import java.io.File;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
- * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
- * Instead, the structure of the robot (including subsystems, commands, and trigger mappings) should be declared here.
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a "declarative" paradigm, very
+ * little robot logic should actually be handled in the {@link Robot} periodic
+ * methods (other than the scheduler calls).
+ * Instead, the structure of the robot (including subsystems, commands, and
+ * trigger mappings) should be declared here.
  */
-public class RobotContainer
-{
+public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-                                                                         "swerve"));
-                                                                         
+      "swerve"));
+  private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem();
   // CommandJoystick rotationController = new CommandJoystick(1);
   private final PivotSubsystem m_pivot = new PivotSubsystem();
 
@@ -53,15 +56,16 @@ public class RobotContainer
   // Replace with CommandPS4Controller or CommandJoystick if needed
   CommandJoystick driverController = new CommandJoystick(1);
 
-  // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
+  // CommandJoystick driverController = new
+  // CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   XboxController driverXbox = new XboxController(0);
 
   private int rotationXboxAxis = 4;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  public RobotContainer()
-  {
+  public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
 
@@ -75,19 +79,24 @@ public class RobotContainer
         () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
             OperatorConstants.LEFT_X_DEADBAND),
         () -> -driverXbox.getRawAxis(rotationXboxAxis));
-    
+
     drivebase.setDefaultCommand(teleopDrive);
   }
 
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary predicate, or via the
-   * named factories in {@link edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-   * {@link CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4}
-   * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
+   * Use this method to define your trigger->command mappings. Triggers can be
+   * created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
+   * an arbitrary predicate, or via the
+   * named factories in
+   * {@link edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses
+   * for
+   * {@link CommandXboxController
+   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4}
+   * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick
+   * Flight joysticks}.
    */
-  private void configureBindings()
-  {
+  private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     driverController.button(1).onTrue(new MoveToAngle(m_pivot, 50));
     driverController.button(2).onTrue(new MoveToAngle(m_pivot, 0));
@@ -103,19 +112,19 @@ public class RobotContainer
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand()
-  {
+  public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return drivebase.getAutonomousCommand("New Auto");
   }
 
-  public void setDriveMode()
-  {
-    //drivebase.setDefaultCommand();
+  public void setDriveMode() {
+    // drivebase.setDefaultCommand();
   }
 
   public void setMotorBrake(boolean brake)
   {
     //drivebase.setMotorBrake(brake);
   }
+
+  public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}
 }
