@@ -4,6 +4,7 @@ import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -13,8 +14,9 @@ public class SpinShooter extends Command {
 
   private final ShooterSubsystem m_shooter;
   private CANSparkMax flywheel;
+  private int speed;
 
-  public SpinShooter(ShooterSubsystem subsystem) {
+  public SpinShooter(ShooterSubsystem subsystem, int speed) {
     m_shooter = subsystem;
     addRequirements(subsystem);
   }
@@ -31,7 +33,8 @@ public class SpinShooter extends Command {
     // double target = 0.3;
 
     // flywheel.set(target);
-    m_shooter.setVelocity(120); //rpm!!
+    m_shooter.setVelocity(speed); //rpm!!
+   SmartDashboard.putNumber("motor speed", speed);
   }
 
   // Called once the command ends or is interrupted.
