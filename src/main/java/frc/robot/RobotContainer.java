@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
@@ -51,7 +52,7 @@ public class RobotContainer
   CommandJoystick driverController = new CommandJoystick(1);
 
   // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
-  XboxController driverXbox = new XboxController(1);
+  XboxController driverXbox = new XboxController(0);
 
   private int rotationXboxAxis = 4;
   /**
@@ -92,16 +93,16 @@ public class RobotContainer
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
     new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::addFakeVisionReading)));
+    new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::addVisionReading)));
 
     if (limelight1.gettv() > 0){
     new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(
-        Commands.deferredProxy(() -> drivebase.driveToPose(Constants.ApriltagConstants.APRILTAG_POSE[(int)limelight1.gettid()]))
-    );
+    Commands.deferredProxy(() -> drivebase.driveToPose(Constants.ApriltagConstants.APRILTAG_POSE[(int)limelight1.gettid()])));
+    
     }
-
-
-    new JoystickButton(driverXbox, XboxController.Button.kRightBumper.value).onTrue(new swapPipeline(limelight1));
+    //Constants.ApriltagConstants.APRILTAG_POSE[(int)limelight1.gettid()])
+    //new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).whileTrue(); 
+    new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).onTrue(new swapPipeline(limelight1));
     new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
 
   }
