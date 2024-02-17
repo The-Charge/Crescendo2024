@@ -57,26 +57,27 @@ public final class Constants
   public static class ApriltagConstants{
     //Apriltag poses relative to bottom left corner of field
     //0 is left empty for easy row-referencing in code
-    public static final double camoffset = 20; 
+    public static final double camoffset = 30; 
     public static final Pose2d[] APRILTAG_POSE = {
       
       new Pose2d(new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(0)), Rotation2d.fromDegrees(0)),
-      new Pose2d(new Translation2d(Units.inchesToMeters(593.68 - camoffset * Math.sin(Units.degreesToRadians(120))), Units.inchesToMeters(9.68- camoffset * Math.cos(Units.degreesToRadians(120)))), Rotation2d.fromDegrees(120)),
-      new Pose2d(new Translation2d(Units.inchesToMeters(637.21- camoffset * Math.sin(Units.degreesToRadians(120))), Units.inchesToMeters(34.79 - camoffset * Math.cos(Units.degreesToRadians(120)))), Rotation2d.fromDegrees(120)),
-      new Pose2d(new Translation2d(Units.inchesToMeters(652.73 - 36.125 - camoffset), Units.inchesToMeters(196.17)), Rotation2d.fromDegrees(180)),
-      new Pose2d(new Translation2d(Units.inchesToMeters(652.73 - 36.125 - camoffset), Units.inchesToMeters(218.42)), Rotation2d.fromDegrees(180)),
-      new Pose2d(new Translation2d(Units.inchesToMeters(578.77), Units.inchesToMeters(323.00 - camoffset)), Rotation2d.fromDegrees(270)),
-      new Pose2d(new Translation2d(Units.inchesToMeters(72.5), Units.inchesToMeters(323.00 - camoffset)), Rotation2d.fromDegrees(270)),
-      new Pose2d(new Translation2d(Units.inchesToMeters(-1.50 + 37 + camoffset), Units.inchesToMeters(218.42)), Rotation2d.fromDegrees(0)),
-      new Pose2d(new Translation2d(Units.inchesToMeters(-1.50 + 37 + camoffset), Units.inchesToMeters(196.17)), Rotation2d.fromDegrees(0)),
-      new Pose2d(new Translation2d(Units.inchesToMeters(14.02 + camoffset * Math.sin(Units.degreesToRadians(60))), Units.inchesToMeters(34.79 + camoffset * Math.cos(Units.degreesToRadians(60)))), Rotation2d.fromDegrees(60)),
-      new Pose2d(new Translation2d(Units.inchesToMeters(57.54 + camoffset * Math.sin(Units.degreesToRadians(60))), Units.inchesToMeters(9.68 + camoffset * Math.cos(Units.degreesToRadians(60)))), Rotation2d.fromDegrees(60)),
-      new Pose2d(new Translation2d(Units.inchesToMeters(468.69), Units.inchesToMeters(146.19)), Rotation2d.fromDegrees(300)),
-      new Pose2d(new Translation2d(Units.inchesToMeters(468.69), Units.inchesToMeters(177.10)), Rotation2d.fromDegrees(60)),
-      new Pose2d(new Translation2d(Units.inchesToMeters(441.74), Units.inchesToMeters(161.62)), Rotation2d.fromDegrees(180)),
-      new Pose2d(new Translation2d(Units.inchesToMeters(209.48), Units.inchesToMeters(161.62)), Rotation2d.fromDegrees(0)),
-      new Pose2d(new Translation2d(Units.inchesToMeters(182.73), Units.inchesToMeters(177.10)), Rotation2d.fromDegrees(120)),
-      new Pose2d(new Translation2d(Units.inchesToMeters(182.73), Units.inchesToMeters(146.19)), Rotation2d.fromDegrees(240)),
+      new Pose2d(new Translation2d(Units.inchesToMeters(593.68 - camoffset * Math.sin(Units.degreesToRadians(120))), Units.inchesToMeters(9.68- camoffset * Math.cos(Units.degreesToRadians(120)))), Rotation2d.fromDegrees(120+180)),
+      new Pose2d(new Translation2d(Units.inchesToMeters(637.21- camoffset * Math.sin(Units.degreesToRadians(120))), Units.inchesToMeters(34.79 - camoffset * Math.cos(Units.degreesToRadians(120)))), Rotation2d.fromDegrees(120+180)),
+      new Pose2d(new Translation2d(Units.inchesToMeters(652.73 - 50 - camoffset), Units.inchesToMeters(196.17)), Rotation2d.fromDegrees(180+180)),
+      new Pose2d(new Translation2d(Units.inchesToMeters(652.73 - 50 - camoffset), Units.inchesToMeters(218.42)), Rotation2d.fromDegrees(180+180)),
+      new Pose2d(new Translation2d(Units.inchesToMeters(578.77), Units.inchesToMeters(323.00 - camoffset)), Rotation2d.fromDegrees(270+180)),
+      new Pose2d(new Translation2d(Units.inchesToMeters(72.5), Units.inchesToMeters(323.00 - camoffset)), Rotation2d.fromDegrees(270+180)),
+      new Pose2d(new Translation2d(Units.inchesToMeters(-1.50 + 50 + camoffset), Units.inchesToMeters(218.42)), Rotation2d.fromDegrees(0+180)),
+      new Pose2d(new Translation2d(Units.inchesToMeters(-1.50 + 50 + camoffset), Units.inchesToMeters(196.17)), Rotation2d.fromDegrees(0+180)),
+      new Pose2d(new Translation2d(Units.inchesToMeters(14.02 + camoffset * Math.sin(Units.degreesToRadians(60))), Units.inchesToMeters(34.79 + camoffset * Math.cos(Units.degreesToRadians(60)))), Rotation2d.fromDegrees(60+180)),
+      new Pose2d(new Translation2d(Units.inchesToMeters(57.54 + camoffset * Math.sin(Units.degreesToRadians(60))), Units.inchesToMeters(9.68 + camoffset * Math.cos(Units.degreesToRadians(60)))), Rotation2d.fromDegrees(60+180)),
+      new Pose2d(new Translation2d(Units.inchesToMeters(468.69), Units.inchesToMeters(146.19)), Rotation2d.fromDegrees(300+180)),
+      new Pose2d(new Translation2d(Units.inchesToMeters(468.69), Units.inchesToMeters(177.10)), Rotation2d.fromDegrees(60+180)),
+      new Pose2d(new Translation2d(Units.inchesToMeters(441.74), Units.inchesToMeters(161.62)), Rotation2d.fromDegrees(180+180)),
+      new Pose2d(new Translation2d(Units.inchesToMeters(209.48), Units.inchesToMeters(161.62)), Rotation2d.fromDegrees(0+180)),
+      new Pose2d(new Translation2d(Units.inchesToMeters(182.73), Units.inchesToMeters(177.10)), Rotation2d.fromDegrees(120+180)),
+      new Pose2d(new Translation2d(Units.inchesToMeters(182.73), Units.inchesToMeters(146.19)), Rotation2d.fromDegrees(240+180)),
     };
+    public static final Pose2d TAGPOSE9 =  new Pose2d(new Translation2d(Units.inchesToMeters(72.5), Units.inchesToMeters(323.00 - camoffset)), Rotation2d.fromDegrees(270));
   }
 }

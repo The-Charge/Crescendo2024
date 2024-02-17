@@ -25,6 +25,7 @@ import frc.robot.Constants.ApriltagConstants;
 import frc.robot.commands.leds.LEDAprilTag;
 import frc.robot.commands.leds.RunLEDExample;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
+import frc.robot.commands.vision.DriveToTag;
 import frc.robot.commands.vision.swapPipeline;
 import frc.robot.subsystems.leds.LEDStripSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -95,14 +96,13 @@ public class RobotContainer
     new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::addVisionReading)));
 
-    if (limelight1.gettv() > 0){
     new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(
-    Commands.deferredProxy(() -> drivebase.driveToPose(Constants.ApriltagConstants.APRILTAG_POSE[(int)limelight1.gettid()])));
+    new RepeatCommand(new DriveToTag(limelight1, drivebase)));
     
-    }
+    
     //Constants.ApriltagConstants.APRILTAG_POSE[(int)limelight1.gettid()])
     //new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).whileTrue(); 
-    new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).onTrue(new swapPipeline(limelight1));
+    //new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).onTrue(new swapPipeline(limelight1));
     new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
 
   }
