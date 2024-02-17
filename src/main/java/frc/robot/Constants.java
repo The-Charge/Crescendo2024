@@ -40,6 +40,49 @@ public final class Constants {
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds
   }
+  public static final class Elevator {
+    public static final double setpoint = 2;
+    public static final int leftId = 0;
+    public static final int rightId = 1;
+    public static final PIDFConfig elevatorPID   = new PIDFConfig(0.4, 0, 0.01);
+
+    
+  }
+
+  public static final class Intake {
+    public static final int topIntakeId = 0;
+    public static final int bottomIntakeId = 1;
+  }
+
+  public static final class Shooter {
+    public static final int leftShooterId = 0;
+    public static final int rightShooterId = 1;
+  }
+
+  public static final class Indexer {
+    public static final int leftIndexerId = 0;
+    public static final int rightIndexerId = 1;
+    public static final double limitSwitchIndexer = 2;
+  }
+
+  public static final class Pivot {
+    public static final int PivotId = 7; 
+    public static final double kFeedForward = 0;
+    public static final PIDFConfig pivotPID = new PIDFConfig(0.7, 0, 0, kFeedForward);
+    public static final double pivotkS = 0.25;
+    public static final double pivotkV = 0.12;
+    public static final int kPIDLoopIdx = 0;
+    public static final int kTimeoutMs = 30;
+
+
+
+  }
+
+  public static final class Climber {
+    public static final int climberId = 0;
+
+
+  }
 
   public static final class LEDConstants {
     public static final int portId = 9;
@@ -48,9 +91,11 @@ public final class Constants {
 
   public static class OperatorConstants {
     // Joystick Deadband
-    public static final double LEFT_X_DEADBAND = 0.01;
-    public static final double LEFT_Y_DEADBAND = 0.01;
-    public static final double RIGHT_X_DEADBAND = 0.01;
-    public static final double TURN_CONSTANT = 6;
+    public static final double LEFT_X_DEADBAND  = 0.1;
+    public static final double LEFT_Y_DEADBAND  = 0.1;
+    public static final double RIGHT_X_DEADBAND = 0.1;
+    public static final double TURN_CONSTANT    = 6;
   }
+
+  
 }
