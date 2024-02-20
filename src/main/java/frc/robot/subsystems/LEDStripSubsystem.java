@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class LEDStripSubsystem extends SubsystemBase {
 
@@ -71,6 +72,15 @@ public class LEDStripSubsystem extends SubsystemBase {
     buffer.setRGB(pixel, (int) (g * (ignoreBrightness ? 1 : brightness)), (int) (r * (ignoreBrightness ? 1 : brightness)), (int) (b * (ignoreBrightness ? 1 : brightness)));
 
     hasChanged = true;
+  }
+
+  public void setVisionPixelRGB(){
+    if (RobotContainer.getLimelight().gettv() > 0){
+      setRange(0, getStripLength(), Color.kGreen);
+    }
+    else{
+      setRange(0, getStripLength(), Color.kRed);
+    }
   }
 
   public void setRange(int start, int end, Color col) {

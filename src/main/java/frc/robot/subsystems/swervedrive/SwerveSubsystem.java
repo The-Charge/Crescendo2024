@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AutonConstants;
-import frc.robot.subsystems.vision.VisionSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 import java.io.File;
 import java.util.function.DoubleSupplier;

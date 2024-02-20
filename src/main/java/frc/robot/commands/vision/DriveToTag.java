@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.subsystems.vision.VisionSubsystem;
 
 
 /**
@@ -37,12 +37,7 @@ public class DriveToTag extends InstantCommand {
 
   @Override
   public void execute() {
-    if (limelight.gettv() > 0){
-        Commands.deferredProxy(() -> swerve.driveToPose(Constants.ApriltagConstants.APRILTAG_POSE[(int)limelight.gettid()]));
-    }
-    else{
-        System.out.println("No tag found");
-    }
+    
   }
 
   // Called once the command ends or is interrupted.

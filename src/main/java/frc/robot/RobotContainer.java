@@ -24,25 +24,17 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-<<<<<<< HEAD
-import frc.robot.Constants.ApriltagConstants;
-import frc.robot.commands.leds.LEDAprilTag;
-import frc.robot.commands.leds.RunLEDExample;
-import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
-import frc.robot.commands.vision.DriveToTag;
-import frc.robot.commands.vision.swapPipeline;
-import frc.robot.subsystems.leds.LEDStripSubsystem;
-=======
 import frc.robot.Constants;
 import frc.robot.commands.led.*;
 import frc.robot.commands.Indexer.*;
 import frc.robot.commands.Pivot.*;
 import frc.robot.commands.Shooter.*;
+import frc.robot.Constants.ApriltagConstants;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.subsystems.*;
->>>>>>> Development
+import frc.robot.commands.vision.DriveToTag;
+import frc.robot.commands.vision.swapPipeline;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.subsystems.vision.VisionSubsystem;
 
 import java.io.File;
 
@@ -54,45 +46,29 @@ import java.io.File;
  * Instead, the structure of the robot (including subsystems, commands, and
  * trigger mappings) should be declared here.
  */
-<<<<<<< HEAD
 public class RobotContainer
 {
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-                                                                         "swerve"));
-  public final LEDStripSubsystem ledStrip = new LEDStripSubsystem();
+      "swerve"));
+  private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem();
   private static final VisionSubsystem limelight1 = new VisionSubsystem();
 
 
  
-=======
-public class RobotContainer {
-
-  // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-      "swerve"));
-  private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem();
->>>>>>> Development
   // CommandJoystick rotationController = new CommandJoystick(1);
-  private final PivotSubsystem m_pivot = new PivotSubsystem();
-
-  private final ShooterSubsystem m_shooter = new ShooterSubsystem();
-
-  private final IndexerSubsystem m_indexer = new IndexerSubsystem();
-
   // Replace with CommandPS4Controller or CommandJoystick if needed
   CommandJoystick driverController = new CommandJoystick(1);
 
-  // CommandJoystick driverController = new
-  // CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
+  // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   XboxController driverXbox = new XboxController(0);
 
   private int rotationXboxAxis = 4;
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  public RobotContainer() {
+  public RobotContainer()
+  {
     // Configure the trigger bindings
     configureBindings();
 
@@ -107,10 +83,10 @@ public class RobotContainer {
             OperatorConstants.LEFT_X_DEADBAND),
         () -> -driverXbox.getRawAxis(rotationXboxAxis));
 
+    LEDAprilTag startLEDAprilTag = new LEDAprilTag(m_ledSubsystem, ()-> limelight1.gettv());
     drivebase.setDefaultCommand(teleopDrive);
+    m_ledSubsystem.setDefaultCommand(startLEDAprilTag);
 
-    LEDAprilTag startLEDAprilTag = new LEDAprilTag(ledStrip, ()-> limelight1.gettv(), ()-> limelight1.gettx());
-    ledStrip.setDefaultCommand(startLEDAprilTag);
    
   }
 
@@ -129,29 +105,19 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-<<<<<<< HEAD
 
     new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::addVisionReading)));
 
+    
     new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(
-    new RepeatCommand(new DriveToTag(limelight1, drivebase)));
+      Commands.deferredProxy(() -> drivebase.driveToPose(Constants.ApriltagConstants.OFFSET_APRILTAG_POSE[(int)limelight1.gettid()])));
     
     
     //Constants.ApriltagConstants.APRILTAG_POSE[(int)limelight1.gettid()])
-    //new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).whileTrue(); 
-    //new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).onTrue(new swapPipeline(limelight1));
+    new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).onTrue(new swapPipeline(limelight1));
     new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
 
-=======
-    driverController.button(1).onTrue(new MoveToAngle(m_pivot, 50));
-    driverController.button(2).onTrue(new MoveToAngle(m_pivot, 0));
-    driverController.button(4).onTrue(new SpinShooter(m_shooter));
-    driverController.button(3).onTrue(new SenseNote(m_indexer)); //never ends
-    
-    //new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    //new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
->>>>>>> Development
   }
 
   /**
@@ -161,7 +127,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
+    return drivebase.getAutonomousCommand("New Path");
   }
 
   public void setDriveMode() {
@@ -170,15 +136,11 @@ public class RobotContainer {
 
   public void setMotorBrake(boolean brake)
   {
-    //drivebase.setMotorBrake(brake);
+    drivebase.setMotorBrake(brake);
   }
-<<<<<<< HEAD
+
+  public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}
   public static VisionSubsystem getLimelight(){
     return limelight1;
   }
 }
-=======
-
-  public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}
-}
->>>>>>> Development
