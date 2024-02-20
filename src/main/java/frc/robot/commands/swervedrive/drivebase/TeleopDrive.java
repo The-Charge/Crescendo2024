@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import swervelib.SwerveController;
 import swervelib.math.SwerveMath;
@@ -23,6 +24,7 @@ public class TeleopDrive extends Command {
 
   private final SwerveSubsystem swerve;
   private final DoubleSupplier vX, vY, heading;
+  private final BooleanSupplier shiftHalf, shiftQuarter;
   private double rotationSpeed;
 
   /**
@@ -47,11 +49,13 @@ public class TeleopDrive extends Command {
    * @param heading DoubleSupplier that supplies the robot's heading angle.
    */
   public TeleopDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY,
-      DoubleSupplier heading) {
+      DoubleSupplier heading, BooleanSupplier shiftHalf, BooleanSupplier shiftQuarter) {
     this.swerve = swerve;
     this.vX = vX;
     this.vY = vY;
     this.heading = heading;
+    this.shiftHalf = shiftHalf;
+    this.shiftQuarter = shiftQuarter;
     
     rotationSpeed = 0;
 
@@ -66,7 +70,6 @@ public class TeleopDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     if (Math.abs(heading.getAsDouble()) > swerve.getSwerveController().config.angleJoyStickRadiusDeadband) {
       rotationSpeed = heading.getAsDouble()*swerve.getSwerveController().config.maxAngularVelocity;
     }
@@ -76,6 +79,9 @@ public class TeleopDrive extends Command {
 
     ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble(), vY.getAsDouble(), new Rotation2d(rotationSpeed));
     
+    double multiplier = shiftQuarter.getAsBoolean() ? 0.25 : (shiftHalf.getAsBoolean() ? 0.5 : 1);
+    desiredSpeeds = desiredSpeeds.times(multiplier);
+
     // Limit velocity to prevent tippy
     Translation2d translation = SwerveController.getTranslation2d(desiredSpeeds);
     translation = SwerveMath.limitVelocity(translation, swerve.getFieldVelocity(), swerve.getPose(),
