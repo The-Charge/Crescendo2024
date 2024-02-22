@@ -24,8 +24,10 @@ public class TeleopDrive extends Command {
 
   private final SwerveSubsystem swerve;
   private final DoubleSupplier vX, vY, heading;
-  private final BooleanSupplier shiftHalf, shiftQuarter;
+  private final BooleanSupplier shiftHalf, shiftQuarter, centricToggle;
   private double rotationSpeed;
+  private boolean isFieldCentric = true;
+
 
   /**
    * Used to drive a swerve robot in full field-centric mode. vX and vY supply
@@ -49,13 +51,15 @@ public class TeleopDrive extends Command {
    * @param heading DoubleSupplier that supplies the robot's heading angle.
    */
   public TeleopDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY,
-      DoubleSupplier heading, BooleanSupplier shiftHalf, BooleanSupplier shiftQuarter) {
+      DoubleSupplier heading, BooleanSupplier shiftHalf, BooleanSupplier shiftQuarter, BooleanSupplier centricToggle) {
     this.swerve = swerve;
     this.vX = vX;
     this.vY = vY;
     this.heading = heading;
     this.shiftHalf = shiftHalf;
     this.shiftQuarter = shiftQuarter;
+    this.centricToggle = centricToggle;
+
     
     rotationSpeed = 0;
 
@@ -82,6 +86,9 @@ public class TeleopDrive extends Command {
     double multiplier = shiftQuarter.getAsBoolean() ? 0.25 : (shiftHalf.getAsBoolean() ? 0.5 : 1);
     desiredSpeeds = desiredSpeeds.times(multiplier);
 
+    if(centricToggle.getAsBoolean()) {
+      isFieldCentric = !isFieldCentric;
+    }
     // Limit velocity to prevent tippy
     Translation2d translation = SwerveController.getTranslation2d(desiredSpeeds);
     translation = SwerveMath.limitVelocity(translation, swerve.getFieldVelocity(), swerve.getPose(),
@@ -91,7 +98,7 @@ public class TeleopDrive extends Command {
     SmartDashboard.putString("Translation", translation.toString());
 
     // Make the robot move
-    swerve.drive(translation, rotationSpeed, true);
+    swerve.drive(translation, rotationSpeed, isFieldCentric);
   }
 
   // Called once the command ends or is interrupted.
