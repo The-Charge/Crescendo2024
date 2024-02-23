@@ -7,18 +7,22 @@ package frc.robot.commands.swervedrive.drivebase;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.*;
+import frc.robot.commands.Elevator.MoveElevatorToSetpoint;
+import frc.robot.commands.Pivot.MoveToAngle;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.List;
-import java.util.function.DoubleSupplier;
+import java.util.function.*;
+import frc.robot.Constants;
+import frc.robot.Constants.StateLocations;
+
 import swervelib.SwerveController;
 import swervelib.math.SwerveMath;
 
-/**
- * An example command that uses an example subsystem.
- */
 public class TeleopDrive extends Command {
 
   private final SwerveSubsystem swerve;
@@ -46,13 +50,12 @@ public class TeleopDrive extends Command {
    *                station glass.
    * @param heading DoubleSupplier that supplies the robot's heading angle.
    */
-  public TeleopDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY,
-      DoubleSupplier heading) {
+  public TeleopDrive(SwerveSubsystem swerve, ElevatorSubsystem elevSub, PivotSubsystem pivSub, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading) {
     this.swerve = swerve;
     this.vX = vX;
     this.vY = vY;
     this.heading = heading;
-    
+
     rotationSpeed = 0;
 
     addRequirements(swerve);
@@ -86,6 +89,8 @@ public class TeleopDrive extends Command {
 
     // Make the robot move
     swerve.drive(translation, rotationSpeed, true);
+
+    handleStateMachine();
   }
 
   // Called once the command ends or is interrupted.
@@ -98,5 +103,4 @@ public class TeleopDrive extends Command {
   public boolean isFinished() {
     return false;
   }
-
 }

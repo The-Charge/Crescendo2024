@@ -101,4 +101,9 @@ public final class Constants {
     
     public static final double joystickDeadband = 0.1;
   }
+
+  public static abstract class StateLocations {
+    public static final double elevPos1 = 1000;
+    public static final double pivPos1 = 70;
+  }
 }
