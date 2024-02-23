@@ -6,15 +6,18 @@ package frc.robot.commands.vision;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.VisionSubsystem;
+
+
 /**
  * An example command that uses an example subsystem.
  */
 
-public class swapPipeline extends InstantCommand {
+public class SetPipeline extends InstantCommand {
     private final VisionSubsystem limelight;
-  
-    public swapPipeline(VisionSubsystem limelight){
+    private final double index;
+    public SetPipeline(VisionSubsystem limelight, double index){
         this.limelight = limelight;
+        this.index = index;
         addRequirements(limelight);
     }
 
@@ -27,7 +30,7 @@ public class swapPipeline extends InstantCommand {
 
   @Override
   public void execute() {
-    limelight.swapPipeline();
+    limelight.setPipeline(index);
   }
 
   // Called once the command ends or is interrupted.

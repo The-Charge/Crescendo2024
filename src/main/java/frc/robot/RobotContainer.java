@@ -32,6 +32,7 @@ import frc.robot.commands.Shooter.*;
 import frc.robot.Constants.ApriltagConstants;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.subsystems.*;
+import frc.robot.commands.vision.DriveToNote;
 import frc.robot.commands.vision.DriveToTag;
 import frc.robot.commands.vision.DriveToTagCommandGroup;
 import frc.robot.commands.vision.swapPipeline;
@@ -84,7 +85,7 @@ public class RobotContainer
             OperatorConstants.LEFT_X_DEADBAND),
         () -> -driverXbox.getRawAxis(rotationXboxAxis));
 
-    LEDAprilTag startLEDAprilTag = new LEDAprilTag(m_ledSubsystem, ()-> limelight1.gettv());
+    LEDVision startLEDAprilTag = new LEDVision(m_ledSubsystem, ()-> limelight1.gettv());
     drivebase.setDefaultCommand(teleopDrive);
     m_ledSubsystem.setDefaultCommand(startLEDAprilTag);
    
@@ -111,8 +112,8 @@ public class RobotContainer
         
     new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(new DriveToTagCommandGroup(limelight1, drivebase));
     
-
-    new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).onTrue(new swapPipeline(limelight1));
+    new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).whileTrue(new DriveToNote(limelight1, drivebase));
+    new JoystickButton(driverXbox, XboxController.Button.kRightBumper.value).onTrue(new swapPipeline(limelight1));
     new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
 
   }

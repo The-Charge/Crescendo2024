@@ -91,14 +91,19 @@ public class VisionSubsystem extends SubsystemBase{
     }
 
     public void swapPipeline(){
-        if (getpipe == 0.0){
-            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(1.0);
-        }
-        else{
+        if (getpipe != 0.0){
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0.0);
         }
+        else{
+            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(1.0);
+        }
+        
     }
 
+    public void setPipeline(double index){
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(index);
+    }
+    
     //Getters
     public double gettx(){
         return tx;

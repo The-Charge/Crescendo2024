@@ -14,13 +14,13 @@ import frc.robot.subsystems.LEDStripSubsystem;
 /**
  * An example command that uses an example subsystem.
  */
-public class LEDAprilTag extends Command {
+public class LEDVision extends Command {
 
   private final LEDStripSubsystem strip;
   private final DoubleSupplier tv;
     private int stripSize;
 
-  public LEDAprilTag(LEDStripSubsystem sub1, DoubleSupplier tv) {
+  public LEDVision(LEDStripSubsystem sub1, DoubleSupplier tv) {
     strip = sub1;
     this.tv = tv;
     addRequirements(sub1);

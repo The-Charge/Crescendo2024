@@ -4,6 +4,9 @@
 
 package frc.robot.commands.vision;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
@@ -15,11 +18,9 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
  * An example command that uses an example subsystem.
  */
 
-public class DriveToTag extends InstantCommand {
+public class RotateToTarget extends InstantCommand {
     private final SwerveSubsystem swerve;
-    private Command drivetoPose;
-  
-    public DriveToTag(SwerveSubsystem swerve){
+    public RotateToTarget(SwerveSubsystem swerve){
         this.swerve = swerve;
         addRequirements(swerve);
     }
@@ -29,18 +30,20 @@ public class DriveToTag extends InstantCommand {
 
 @Override
   public void initialize() {
-    if (RobotContainer.getLimelight().gettv() > 0.0){
-      drivetoPose = swerve.driveToPose(Constants.ApriltagConstants.OFFSET_APRILTAG_POSE[(int)RobotContainer.getLimelight().gettid()]);
-      drivetoPose.schedule();
-    }
-    
+
 }
 
   @Override
   public void execute() {
-
-    
-  }
+    double tx = RobotContainer.getLimelight().gettx();
+    //ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(0, 0, new Rotation2d());
+        if (tx < 0){
+        swerve.drive(new Translation2d(0, 0), 0.05 * swerve.getSwerveController().config.maxAngularVelocity, false);
+    }
+    else{
+        swerve.drive(new Translation2d(0, 0), -0.05 * swerve.getSwerveController().config.maxAngularVelocity, false);
+    }
+}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -49,7 +52,7 @@ public class DriveToTag extends InstantCommand {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return drivetoPose != null && drivetoPose.isFinished();
+    return swerve.rotationWithinTargetThreshold();
   }
 
 }

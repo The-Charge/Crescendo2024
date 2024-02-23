@@ -102,6 +102,15 @@ public final class Constants {
     public static final double TURN_CONSTANT    = 6;
   }
 
+  public static class VisionConstants{
+    //pipeline indexes
+    public static final double APRILTAG_PIPELINE = 0.0;
+    public static final double NEURAL_NETWORK_PIPELINE = 1.0;
+    public static final double TARGET_LOCK_PIPELINE = 2.0; 
+
+    //note tolerances
+    public static final double TX_THRESHOLD = 0.5;  //degrees
+  }
   public static class FieldConstants{
     //Fixed Apriltag poses as given by field drawings
     public static final Pose2d[] FIXED_APRILTAG_POSE = {
@@ -194,14 +203,12 @@ public final class Constants {
   public static class ApriltagConstants{
     //Updating robot pose accuracy threshold
     public static final double BOTPOSE_THRESHOLD_TRANSLATION = Units.inchesToMeters(1);
-    public static final double BOTPOSE_THRESHOLD_ROTATION = 1;
+    public static final double BOTPOSE_THRESHOLD_ROTATION = 1;  //degrees
 
     //Offset for drive to tag-related commands
-    public static final double CAMERA_OFFSET = 30; 
-    public static final double SUBWOOFER_OFFSET = 36.125;
+    public static final double CAMERA_OFFSET = 30; //inches
+    public static final double SUBWOOFER_OFFSET = 36.125; //inches
     public static final Pose2d[] OFFSET_APRILTAG_POSE = {
-      
-    
       new Pose2d(new Translation2d(
         Units.inchesToMeters(0), 
         Units.inchesToMeters(0)), 

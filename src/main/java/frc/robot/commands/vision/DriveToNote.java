@@ -14,13 +14,13 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
  * An example command that uses an example subsystem.
  */
 
-public class DriveToTagCommandGroup extends SequentialCommandGroup{
-    public DriveToTagCommandGroup(VisionSubsystem limelight, SwerveSubsystem swerve){
+public class DriveToNote extends SequentialCommandGroup{
+    public DriveToNote(VisionSubsystem limelight, SwerveSubsystem swerve){
 
             addCommands(
-                new SetPipeline(limelight, VisionConstants.APRILTAG_PIPELINE),
-                new UpdateRobotPose(swerve),
-                new DriveToTag(swerve)
+                new SetPipeline(limelight, VisionConstants.NEURAL_NETWORK_PIPELINE),
+                new RotateToTarget(swerve),
+                new DriveToTarget(swerve)
             );  
             
            

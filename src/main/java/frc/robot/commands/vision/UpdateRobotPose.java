@@ -4,11 +4,7 @@
 
 package frc.robot.commands.vision;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 
@@ -44,6 +40,7 @@ public class UpdateRobotPose extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    //Ensures robot pose estimator is within pose given by limelight
     return swerve.updatedPoseWithinThreshold();
   }
 

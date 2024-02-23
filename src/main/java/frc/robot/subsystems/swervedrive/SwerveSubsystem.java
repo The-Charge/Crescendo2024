@@ -22,9 +22,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ApriltagConstants;
 import frc.robot.Constants.AutonConstants;
+import frc.robot.Constants.VisionConstants;
+
 import java.io.File;
 import java.util.function.DoubleSupplier;
 import swervelib.SwerveController;
@@ -512,6 +515,13 @@ public class SwerveSubsystem extends SubsystemBase
     withinThreshold &= Math.abs(swerveDrive.getPose().getRotation().getDegrees() - setpose.getRotation().getDegrees()) < 1;
     return withinThreshold;
   }
+  public boolean rotationWithinTargetThreshold(){
+    boolean withinThreshold;
+    double tx = RobotContainer.getLimelight().gettx();
+    withinThreshold = (tx > (-1 * VisionConstants.TX_THRESHOLD)) && (tx < (VisionConstants.TX_THRESHOLD));
+    return withinThreshold;
+  }
+
     /**
    * Add a fake vision reading for testing purposes.
    */
