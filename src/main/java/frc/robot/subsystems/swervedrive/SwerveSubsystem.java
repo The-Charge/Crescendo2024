@@ -9,7 +9,6 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,15 +23,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.ApriltagConstants;
 import frc.robot.Constants.AutonConstants;
-import frc.robot.subsystems.VisionSubsystem;
-
 import java.io.File;
 import java.util.function.DoubleSupplier;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
-import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveControllerConfiguration;
 import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveParser;
@@ -500,10 +497,20 @@ public class SwerveSubsystem extends SubsystemBase
   public void addVisionReading(){
     Pose2d setpose;
     //double latency;
-    setpose = RobotContainer.getLimelight().getRobotFieldPose();
-    //latency = RobotContainer.getLimelight().getLimelightLatency();
+    if (RobotContainer.getLimelight().gettv() > 0.0){
+      setpose = RobotContainer.getLimelight().getRobotFieldPose();
+      //latency = RobotContainer.getLimelight().getLimelightLatency();
     swerveDrive.addVisionMeasurement(setpose, Timer.getFPGATimestamp());
-    
+    }
+  }
+  public boolean updatedPoseWithinThreshold(){
+    boolean withinThreshold;
+    Pose2d setpose;
+    setpose = RobotContainer.getLimelight().getRobotFieldPose();
+    withinThreshold = Math.abs(swerveDrive.getPose().getX() - setpose.getX()) < ApriltagConstants.BOTPOSE_THRESHOLD_TRANSLATION;
+    withinThreshold &= Math.abs(swerveDrive.getPose().getY() - setpose.getY()) < ApriltagConstants.BOTPOSE_THRESHOLD_ROTATION;
+    withinThreshold &= Math.abs(swerveDrive.getPose().getRotation().getDegrees() - setpose.getRotation().getDegrees()) < 1;
+    return withinThreshold;
   }
     /**
    * Add a fake vision reading for testing purposes.

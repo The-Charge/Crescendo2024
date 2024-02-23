@@ -192,6 +192,10 @@ public final class Constants {
     };
   }
   public static class ApriltagConstants{
+    //Updating robot pose accuracy threshold
+    public static final double BOTPOSE_THRESHOLD_TRANSLATION = Units.inchesToMeters(1);
+    public static final double BOTPOSE_THRESHOLD_ROTATION = 1;
+
     //Offset for drive to tag-related commands
     public static final double CAMERA_OFFSET = 30; 
     public static final double SUBWOOFER_OFFSET = 36.125;
