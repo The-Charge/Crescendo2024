@@ -78,9 +78,7 @@ public final class Constants
   }
 
   public static final class Climber {
-    public static final int climberId = 0;
-
-
+    public static final int climberId = -1;
   }
 
   public static class OperatorConstants
@@ -91,6 +89,4 @@ public final class Constants
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
   }
-
-  
 }
