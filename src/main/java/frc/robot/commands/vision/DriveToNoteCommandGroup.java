@@ -4,6 +4,7 @@
 
 package frc.robot.commands.vision;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.VisionSubsystem;
@@ -14,12 +15,11 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
  * An example command that uses an example subsystem.
  */
 
-public class DriveToNote extends SequentialCommandGroup{
-    public DriveToNote(VisionSubsystem limelight, SwerveSubsystem swerve){
+public class DriveToNoteCommandGroup extends SequentialCommandGroup{
+    public DriveToNoteCommandGroup(VisionSubsystem limelight, SwerveSubsystem swerve){
 
             addCommands(
                 new SetPipeline(limelight, VisionConstants.NEURAL_NETWORK_PIPELINE),
-                new RotateToTarget(swerve),
                 new DriveToTarget(swerve)
             );  
             

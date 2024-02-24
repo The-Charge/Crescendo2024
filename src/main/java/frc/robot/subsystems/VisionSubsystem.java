@@ -30,6 +30,7 @@ public class VisionSubsystem extends SubsystemBase{
     public double thor;
     public Pose2d robotpose;        //Robot in Fieldspace (blue side)
     public double x_error, y_error;
+    public double distance;
     public VisionSubsystem(){
     
     }
@@ -58,7 +59,7 @@ public class VisionSubsystem extends SubsystemBase{
         //Update rest of vars with simple logic
         updateTargetIdentified();
         limelightlatency = tl + cl;
-
+        distance = Math.pow((ta * 1.82), -0.468);
         /*Update note pose
         x_error = Math.pow((1.82 * ta),(-0.468));
         SmartDashboard.putNumber("x_Error", x_error);
@@ -122,6 +123,9 @@ public class VisionSubsystem extends SubsystemBase{
     }
     public double getthor(){
         return thor;
+    }
+    public double getdistance(){
+        return distance;
     }
     public double getcurrentpipeline(){
         return getpipe;

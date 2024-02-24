@@ -518,7 +518,8 @@ public class SwerveSubsystem extends SubsystemBase
   public boolean rotationWithinTargetThreshold(){
     boolean withinThreshold;
     double tx = RobotContainer.getLimelight().gettx();
-    withinThreshold = (tx > (-1 * VisionConstants.TX_THRESHOLD)) && (tx < (VisionConstants.TX_THRESHOLD));
+    withinThreshold = tx > (-1 * VisionConstants.TX_THRESHOLD);
+    withinThreshold &= tx < (VisionConstants.TX_THRESHOLD);
     return withinThreshold;
   }
 

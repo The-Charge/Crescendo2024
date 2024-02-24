@@ -103,10 +103,13 @@ public final class Constants {
   }
 
   public static class VisionConstants{
+    //DriveToNote PIDs
+    public static final PIDFConfig VISION_DRIVE_PID = new PIDFConfig(1, 0.0, 0.0);
+    public static final PIDFConfig VISION_ROTATION_PID = new PIDFConfig(0.01, 0.0, 0.0);
     //pipeline indexes
     public static final double APRILTAG_PIPELINE = 0.0;
     public static final double NEURAL_NETWORK_PIPELINE = 1.0;
-    public static final double TARGET_LOCK_PIPELINE = 2.0; 
+    public static final double SPEAKER_LOCK_PIPELINE = 2.0; 
 
     //note tolerances
     public static final double TX_THRESHOLD = 0.5;  //degrees
