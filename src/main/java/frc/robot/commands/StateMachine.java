@@ -12,31 +12,33 @@ public class StateMachine extends Command {
     
     private final ElevatorSubsystem elevSub;
     private final PivotSubsystem pivSub;
-    private final BooleanSupplier state1, state2, state3, state4, state5, state6, state7;
+    private final BooleanSupplier startup, pickupfloor, pickupsource, shootAmpTrap, shoothighrear, shoothighfront, shootlowfront;
     private State currentState;
+    
 
     private enum State {
-        STATE1,
-        STATE2,
-        STATE3,
-        STATE4,
-        STATE5,
-        STATE6,
-        STATE7
+        STARTUP, //startup (inside)
+        PICKUPFLOOR, // startup floor
+        PICKUPSOURCE, // startup source
+        SHOOTAMPTRAP, // shoot amp and trap
+        SHOOTHIGHREAR, // shoot amp and trap
+        SHOOTHIGHFRONT,
+        SHOOTLOWFRONT
     }
 
-    public StateMachine(ElevatorSubsystem elevSub, PivotSubsystem pivSub, BooleanSupplier state1, BooleanSupplier state2, BooleanSupplier state3, BooleanSupplier state4, BooleanSupplier state5, BooleanSupplier state6, BooleanSupplier state7) {
+    public StateMachine(ElevatorSubsystem elevSub, PivotSubsystem pivSub, BooleanSupplier startup, BooleanSupplier pickupfloor, BooleanSupplier pickupsource, BooleanSupplier shootAmpTrap, BooleanSupplier shoothighrear, BooleanSupplier shoothighfront, BooleanSupplier shootlowfront) {
         this.elevSub = elevSub;
         this.pivSub = pivSub;
 
-        this.state1 = state1;
-        this.state2 = state2;
-        this.state3 = state3;
-        this.state4 = state4;
-        this.state5 = state5;
-        this.state6 = state6;
-        this.state7 = state7;
-        currentState = State.STATE1;
+        this.startup = startup;
+        this.pickupfloor = pickupfloor;
+        this.pickupsource = pickupsource;
+        this.shootAmpTrap = shootAmpTrap;
+        this.shoothighrear = shoothighrear;
+        this.shoothighfront = shoothighfront;
+        this.shootlowfront = shootlowfront;
+
+        currentState = State.STARTUP;
     }
 
     @Override
@@ -46,39 +48,39 @@ public class StateMachine extends Command {
         if(desiredState == null) return;
 
         switch(desiredState) {
-            case STATE1:
+            case STARTUP:
             gotoState1();
-            currentState = State.STATE1;
+            currentState = State.STARTUP;
             break;
 
-            case STATE2:
+            case PICKUPFLOOR:
             gotoState2();
-            currentState = State.STATE2;
+            currentState = State.PICKUPFLOOR;
             break;
 
-            case STATE3:
+            case PICKUPSOURCE:
             gotoState3();
-            currentState = State.STATE3;
+            currentState = State.PICKUPSOURCE;
             break;
 
-            case STATE4:
+            case SHOOTAMPTRAP:
             gotoState4();
-            currentState = State.STATE4;
+            currentState = State.SHOOTAMPTRAP;
             break;
 
-            case STATE5:
+            case SHOOTHIGHREAR:
             gotoState5();
-            currentState = State.STATE5;
+            currentState = State.SHOOTHIGHREAR;
             break;
 
-            case STATE6:
+            case SHOOTHIGHFRONT:
             gotoState6();
-            currentState = State.STATE6;
+            currentState = State.SHOOTHIGHFRONT;
             break;
 
-            case STATE7:
+            case SHOOTLOWFRONT:
             gotoState7();
-            currentState = State.STATE7;
+            currentState = State.SHOOTLOWFRONT;
             break;
         }
     }
@@ -96,207 +98,496 @@ public class StateMachine extends Command {
     }
 
     private State getRequestedState() {
-        if(state1.getAsBoolean()) return State.STATE1;
-        else if(state2.getAsBoolean()) return State.STATE2;
-        else if(state3.getAsBoolean()) return State.STATE3;
-        else if(state4.getAsBoolean()) return State.STATE4;
-        else if(state5.getAsBoolean()) return State.STATE5;
-        else if(state6.getAsBoolean()) return State.STATE6;
-        else if(state7.getAsBoolean()) return State.STATE7;
+        if(startup.getAsBoolean()) return State.STARTUP;
+        else if(pickupfloor.getAsBoolean()) return State.PICKUPFLOOR;
+        else if(pickupsource.getAsBoolean()) return State.PICKUPSOURCE;
+        else if(shootAmpTrap.getAsBoolean()) return State.SHOOTAMPTRAP;
+        else if(shoothighrear.getAsBoolean()) return State.SHOOTHIGHREAR;
+        else if(shoothighfront.getAsBoolean()) return State.SHOOTHIGHFRONT;
+        else if(shootlowfront.getAsBoolean()) return State.SHOOTLOWFRONT;
 
         return null;
     }
     private void gotoState1() {
         switch(currentState) {
-            case STATE2:
+            case PICKUPFLOOR:
+            if(startup.getAsBoolean()) {
+                new SequentialCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivToStartup),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevToStartup)
+                ).schedule();
+                currentState = State.STARTUP;
+            }
+            break;
+
+            case PICKUPSOURCE:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.elevToStartup),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevToStartup)
+                ).schedule();
+                currentState = State.STARTUP;
+            }
             
             break;
 
-            case STATE3:
+            case SHOOTAMPTRAP:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivToStartup),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevToStartup)
+                ).schedule();
+                currentState = State.STARTUP;
+            }
             
             break;
 
-            case STATE4:
+            case SHOOTHIGHREAR:
+                if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivToStartup),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevToStartup)
+                ).schedule();
+                currentState = State.STARTUP;
+            }
             
             break;
 
-            case STATE5:
-            
+            case SHOOTHIGHFRONT:
+                if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivToStartup),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevToStartup)
+                ).schedule();
+                currentState = State.STARTUP;
+            }
             break;
 
-            case STATE6:
-            
-            break;
+            case SHOOTLOWFRONT:
+                if(startup.getAsBoolean()) {
+                new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevToStartup),
+                new MoveToAngle(pivSub, StateLocations.pivToStartup)
 
-            case STATE7:
+                ).schedule();
+                currentState = State.STARTUP;
+            }
             
             break;
         }
     }
     private void gotoState2() {
         switch(currentState) {
-            case STATE1:
+            case STARTUP:
             //example
-            // if(vY.getAsDouble() > 0.1) {
-            //     new SequentialCommandGroup(
-            //     new MoveElevatorToSetpoint(elevSub, StateLocations.elevPos1),
-            //     new MoveToAngle(pivSub, StateLocations.pivPos1)
-            //     ).schedule();
-            // }
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotPickupFloorPos),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupFloorPos)
+                ).schedule();
+                currentState = State.PICKUPFLOOR;
+            }
+
             break;
 
-            case STATE3:
+            case PICKUPSOURCE:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotPickupFloorPos),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupFloorPos)
+                ).schedule();
+                currentState = State.PICKUPFLOOR;
+            }
             
             break;
 
-            case STATE4:
+            case SHOOTAMPTRAP:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotPickupFloorPos),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupFloorPos)
+                ).schedule();
+                currentState = State.PICKUPFLOOR;
+            }
             
             break;
 
-            case STATE5:
+            case SHOOTHIGHREAR:
+            if(startup.getAsBoolean()) {
+                new SequentialCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotPickupFloorPos),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupFloorPos)
+                ).schedule();
+                currentState = State.PICKUPFLOOR;
+            }
             
             break;
 
-            case STATE6:
+            case SHOOTHIGHFRONT:
+            if(startup.getAsBoolean()) {
+                new SequentialCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotPickupFloorPos),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupFloorPos)
+                ).schedule();
+                currentState = State.PICKUPFLOOR;
+            }
             
             break;
 
-            case STATE7:
+            case SHOOTLOWFRONT:
+            if(startup.getAsBoolean()) {
+                new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupFloorPos),
+                new MoveToAngle(pivSub, StateLocations.pivotPickupFloorPos)
+
+                ).schedule();
+                currentState = State.PICKUPFLOOR;
+            }
             
             break;
         }
     }
     private void gotoState3() {
         switch(currentState) {
-            case STATE1:
+            case STARTUP:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotPickUpSource),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickUpSource)
+                ).schedule();
+                currentState = State.PICKUPSOURCE;
+            }
+            break;
+
+            case PICKUPFLOOR:
+                if(startup.getAsBoolean()) {
+                new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickUpSource),
+                new MoveToAngle(pivSub, StateLocations.pivotPickUpSource)
+  
+                ).schedule();
+                }
+                currentState = State.PICKUPSOURCE;
             
             break;
 
-            case STATE2:
+            case SHOOTAMPTRAP:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotPickUpSource),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickUpSource)
+                ).schedule();
+                currentState = State.PICKUPSOURCE;
+            }
             
             break;
 
-            case STATE4:
+            case SHOOTHIGHREAR:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotPickUpSource),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickUpSource)
+                ).schedule();
+                currentState = State.PICKUPSOURCE;
+            }
             
             break;
 
-            case STATE5:
+            case SHOOTHIGHFRONT:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotPickUpSource),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickUpSource)
+                ).schedule();
+                currentState = State.PICKUPSOURCE;
+            }
             
             break;
 
-            case STATE6:
-            
-            break;
-
-            case STATE7:
+            case SHOOTLOWFRONT:
+            if(startup.getAsBoolean()) {
+                new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickUpSource),
+                new MoveToAngle(pivSub, StateLocations.pivotPickUpSource)
+                
+                ).schedule();
+                currentState = State.PICKUPSOURCE;
+            }
             
             break;
         }
     }
     private void gotoState4() {
         switch(currentState) {
-            case STATE1:
+            case STARTUP:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotShootAmp),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevShootAmp)
+                ).schedule();
+                currentState = State.SHOOTAMPTRAP;
+            }
+            break;
+
+            case PICKUPFLOOR:
+            if(startup.getAsBoolean()) {
+                new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevShootAmp),
+                new MoveToAngle(pivSub, StateLocations.pivotShootAmp)
+  
+                ).schedule();
+                currentState = State.SHOOTAMPTRAP;
+            }
+            break;
+
+            case PICKUPSOURCE:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotShootAmp),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevShootAmp)
+                ).schedule();
+                currentState = State.SHOOTAMPTRAP;
+            }
             
             break;
 
-            case STATE2:
+            case SHOOTHIGHREAR:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotShootAmp),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevShootAmp)
+                ).schedule();
+                currentState = State.SHOOTAMPTRAP;
+            }
             
             break;
 
-            case STATE3:
+            case SHOOTHIGHFRONT:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotShootAmp),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevShootAmp)
+                ).schedule();
+                currentState = State.SHOOTAMPTRAP;
+            }
             
             break;
 
-            case STATE5:
-            
-            break;
-
-            case STATE6:
-            
-            break;
-
-            case STATE7:
+            case SHOOTLOWFRONT:
+            if(startup.getAsBoolean()) {
+                new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevShootAmp),
+                new MoveToAngle(pivSub, StateLocations.pivotShootAmp)
+                
+                ).schedule();
+                currentState = State.SHOOTAMPTRAP;
+            }
             
             break;
         }
     }
     private void gotoState5() {
         switch(currentState) {
-            case STATE1:
+            case STARTUP:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotHighRear),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighRear)
+                ).schedule();
+                currentState = State.SHOOTHIGHREAR;
+            }
+            break;
+
+            case PICKUPFLOOR:
+                if(startup.getAsBoolean()) {
+                new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighRear),
+                new MoveToAngle(pivSub, StateLocations.pivotHighRear)
+
+                ).schedule();
+                currentState = State.SHOOTHIGHREAR;
+            }
+            break;
+
+            case PICKUPSOURCE:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotHighRear),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighRear)
+                ).schedule();
+                currentState = State.SHOOTHIGHREAR;
+            }
             
             break;
 
-            case STATE2:
+            case SHOOTAMPTRAP:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotHighRear),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighRear)
+                ).schedule();
+                currentState = State.SHOOTHIGHREAR;
+            }
             
             break;
 
-            case STATE3:
+            case SHOOTHIGHFRONT:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotHighRear),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighRear)
+                ).schedule();
+                currentState = State.SHOOTHIGHREAR;
+            }
             
             break;
 
-            case STATE4:
-            
-            break;
-
-            case STATE6:
-            
-            break;
-
-            case STATE7:
+            case SHOOTLOWFRONT:
+            if(startup.getAsBoolean()) {
+                new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighRear),
+                new MoveToAngle(pivSub, StateLocations.pivotHighRear)
+                ).schedule();
+                currentState = State.SHOOTHIGHREAR;
+            }
             
             break;
         }
     }
     private void gotoState6() {
         switch(currentState) {
-            case STATE1:
+            case STARTUP:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotHighFront),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighFront)
+                ).schedule();
+                currentState = State.SHOOTHIGHFRONT;
+            }
+            break;
+
+            case PICKUPFLOOR:
+            if(startup.getAsBoolean()) {
+                new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighFront),
+                new MoveToAngle(pivSub, StateLocations.pivotHighFront)
+
+                ).schedule();
+                currentState = State.SHOOTHIGHFRONT;
+            }
             
             break;
 
-            case STATE2:
+            case PICKUPSOURCE:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotHighFront),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighFront)
+                ).schedule();
+                currentState = State.SHOOTHIGHFRONT;
+            }
             
             break;
 
-            case STATE3:
+            case SHOOTAMPTRAP:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotHighFront),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighFront)
+                ).schedule();
+                currentState = State.SHOOTHIGHFRONT;
+            }
             
             break;
 
-            case STATE4:
+            case SHOOTHIGHREAR:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotHighFront),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighFront)
+                ).schedule();
+                currentState = State.SHOOTHIGHFRONT;
+            }
             
             break;
 
-            case STATE5:
-            
-            break;
-
-            case STATE7:
+            case SHOOTLOWFRONT:
+            if(startup.getAsBoolean()) {
+                new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighFront),
+                new MoveToAngle(pivSub, StateLocations.pivotHighFront)
+                
+                ).schedule();
+                currentState = State.SHOOTHIGHFRONT;
+            }
             
             break;
         }
     }
     private void gotoState7() {
         switch(currentState) {
-            case STATE1:
+            case STARTUP:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivotLowFront),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevLowFront)
+                ).schedule();
+                currentState = State.SHOOTLOWFRONT;
+            }
+            break;
+
+            case PICKUPFLOOR:
+            if(startup.getAsBoolean()) {
+                new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevLowFront),
+                new MoveToAngle(pivSub, StateLocations.pivotLowFront)
+                ).schedule();
+                currentState = State.SHOOTLOWFRONT;
+            }
             
             break;
 
-            case STATE2:
+            case PICKUPSOURCE:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevLowFront),
+                new MoveToAngle(pivSub, StateLocations.pivotLowFront)
+                ).schedule();
+                currentState = State.SHOOTLOWFRONT;
+            }
             
             break;
 
-            case STATE3:
+            case SHOOTAMPTRAP:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevLowFront),
+                new MoveToAngle(pivSub, StateLocations.pivotLowFront)
+                ).schedule();
+                currentState = State.SHOOTLOWFRONT;
+            }
             
             break;
 
-            case STATE4:
+            case SHOOTHIGHREAR:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevLowFront),
+                new MoveToAngle(pivSub, StateLocations.pivotLowFront)
+                ).schedule();
+                currentState = State.SHOOTLOWFRONT;
+            }
             
             break;
 
-            case STATE5:
-            
-            break;
-
-            case STATE6:
+            case SHOOTHIGHFRONT:
+            if(startup.getAsBoolean()) {
+                new ParallelCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevLowFront),
+                new MoveToAngle(pivSub, StateLocations.pivotLowFront)
+                ).schedule();
+                currentState = State.SHOOTLOWFRONT;
+            }
             
             break;
         }
