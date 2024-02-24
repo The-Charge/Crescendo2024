@@ -33,8 +33,8 @@ public class DriveToTarget extends InstantCommand {
         heading_controller.setTolerance(VisionConstants.TX_THRESHOLD);
         heading_controller.setSetpoint(0.0);
 
-        drive_controller = new PIDController(1, 0.0, 0.0);
-        drive_controller.setTolerance(0.5);
+        drive_controller = new PIDController(0.5, 0.0, 0.0);
+        drive_controller.setTolerance(0.1);
         drive_controller.setSetpoint(0.0);
 
     }
@@ -51,16 +51,25 @@ public class DriveToTarget extends InstantCommand {
   public void execute() {
     double tx = RobotContainer.getLimelight().gettx();
     double distance = RobotContainer.getLimelight().getdistance();
+    heading_controller.reset();
+    heading_controller.reset();
     double RotationVal = MathUtil.clamp(heading_controller.calculate(tx, 0.0), -0.4, 0.4);
-    double TranslationVal = MathUtil.clamp(drive_controller.calculate(distance, 0.0), -0.1, 0.1);
+    double TranslationVal = MathUtil.clamp(drive_controller.calculate(distance, 0.0), -0.05, 0.05);
     SmartDashboard.putNumber("TranslationVal VISION:", TranslationVal);
-    swerve.drive(new Translation2d(-1 * TranslationVal * 14.5,0), RotationVal * swerve.getSwerveController().config.maxAngularVelocity, false);
+    if (RobotContainer.getLimelight().gettv() > 0.0){
+      swerve.drive(new Translation2d(-1 * TranslationVal * 14.5,0), RotationVal * swerve.getSwerveController().config.maxAngularVelocity, false);
+    }
+    else{
+      swerve.lock();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    swerve.drive(new Translation2d(0,0), 0,false);
+    heading_controller.reset();
+    heading_controller.reset();
+    swerve.lock();
   }
 
   // Returns true when the command should end.

@@ -5,38 +5,21 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants;
 import frc.robot.commands.led.*;
-import frc.robot.commands.Indexer.*;
-import frc.robot.commands.Pivot.*;
-import frc.robot.commands.Shooter.*;
-import frc.robot.Constants.ApriltagConstants;
-import frc.robot.commands.swervedrive.drivebase.TargetLockDrive;
 import frc.robot.commands.swervedrive.drivebase.TargetLockDriveCommandGroup;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.subsystems.*;
-import frc.robot.commands.vision.DriveToNoteCommandGroup;
-import frc.robot.commands.vision.DriveToTag;
 import frc.robot.commands.vision.DriveToTagCommandGroup;
 import frc.robot.commands.vision.swapPipeline;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -114,11 +97,14 @@ public class RobotContainer
     new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::addVisionReading)));
         
     new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(new DriveToTagCommandGroup(limelight1, drivebase));
-    new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).whileTrue(new TargetLockDriveCommandGroup(limelight1, drivebase,        
-       () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
+    new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).whileTrue(new TargetLockDriveCommandGroup
+        (limelight1, drivebase,        
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
             OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
-            OperatorConstants.LEFT_X_DEADBAND)));
+            OperatorConstants.LEFT_X_DEADBAND),
+        () -> -driverXbox.getRawAxis(rotationXboxAxis))
+            );
     //new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).whileTrue(new DriveToNoteCommandGroup(limelight1, drivebase));
     new JoystickButton(driverXbox, XboxController.Button.kRightBumper.value).onTrue(new swapPipeline(limelight1));
     new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));

@@ -20,11 +20,11 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
  */
 
 public class TargetLockDriveCommandGroup extends SequentialCommandGroup{
-    public TargetLockDriveCommandGroup(VisionSubsystem limelight, SwerveSubsystem swerve,  DoubleSupplier vX, DoubleSupplier vY){
+    public TargetLockDriveCommandGroup(VisionSubsystem limelight, SwerveSubsystem swerve,  DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading){
 
             addCommands(
                 new SetPipeline(limelight, VisionConstants.SPEAKER_LOCK_PIPELINE),
-                new TargetLockDrive(swerve, vX, vY)
+                new TargetLockDrive(swerve, vX, vY, heading, true)
             );  
             
            

@@ -4,6 +4,7 @@
 
 package frc.robot.commands.vision;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.VisionSubsystem;
@@ -20,7 +21,8 @@ public class DriveToTagCommandGroup extends SequentialCommandGroup{
             addCommands(
                 new SetPipeline(limelight, VisionConstants.APRILTAG_PIPELINE),
                 new UpdateRobotPose(swerve),
-                new DriveToTag(swerve)
+                new DriveToTag(swerve),
+                new InstantCommand(swerve::zeroGyro)
             );  
             
            

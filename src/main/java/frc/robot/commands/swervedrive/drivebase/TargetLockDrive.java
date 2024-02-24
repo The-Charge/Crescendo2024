@@ -27,9 +27,10 @@ import swervelib.math.SwerveMath;
 public class TargetLockDrive extends Command {
 
   private final SwerveSubsystem swerve;
-  private final DoubleSupplier vX, vY;
+  private final DoubleSupplier vX, vY, heading;
   private double rotationSpeed;
 private final PIDController heading_controller;
+private final boolean fieldRelative;
   /**
    * Used to drive a swerve robot in full field-centric mode. vX and vY supply
    * translation inputs, where x is
@@ -51,12 +52,14 @@ private final PIDController heading_controller;
    *                station glass.
    * @param heading DoubleSupplier that supplies the robot's heading angle.
    */
-  public TargetLockDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY) {
+  public TargetLockDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading, boolean fieldRelative) {
     this.swerve = swerve;
     this.vX = vX;
     this.vY = vY;
+    this.heading = heading;
+    this.fieldRelative = fieldRelative;
     rotationSpeed = 0;
-    heading_controller = new PIDController(0.02, 0.0003, 0.00001);
+    heading_controller = new PIDController(0.02, 0.0002, 0.0001);
     heading_controller.setTolerance(0.1);
     heading_controller.setSetpoint(0.0);
     addRequirements(swerve);
@@ -74,7 +77,10 @@ private final PIDController heading_controller;
     double RotationVal = MathUtil.clamp(heading_controller.calculate(tx, 0.0), -1, 1);
     if (RobotContainer.getLimelight().gettv() > 0.0)
     rotationSpeed = RotationVal * swerve.getSwerveController().config.maxAngularVelocity;
-    else{
+    else if (Math.abs(heading.getAsDouble()) > swerve.getSwerveController().config.angleJoyStickRadiusDeadband) {
+      rotationSpeed = heading.getAsDouble()*swerve.getSwerveController().config.maxAngularVelocity;
+    }
+    else {
       rotationSpeed = 0;
     }
     ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble() * 0.75, vY.getAsDouble() * 0.75, new Rotation2d(rotationSpeed));
@@ -88,7 +94,7 @@ private final PIDController heading_controller;
     SmartDashboard.putString("Translation", translation.toString());
 
     // Make the robot move
-    swerve.drive(translation, rotationSpeed, true);
+    swerve.drive(translation, rotationSpeed, fieldRelative);
   }
 
   // Called once the command ends or is interrupted.
