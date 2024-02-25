@@ -59,7 +59,7 @@ public class Robot extends TimedRobot
     disabledTimer = new Timer();
     
     /* example code found in limelight documentation
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTable table = NetworkTableInstance.getDefault().getTable(limelightname);
   NetworkTableEntry tx = table.getEntry("tx");
   NetworkTableEntry ty = table.getEntry("ty");
   NetworkTableEntry ta = table.getEntry("ta");

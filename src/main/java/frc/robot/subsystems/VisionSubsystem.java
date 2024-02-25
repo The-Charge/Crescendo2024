@@ -16,7 +16,7 @@ import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
 
 public class VisionSubsystem extends SubsystemBase{
-  
+    public String limelightname;
     public boolean targetIdentified = false;
     public double tx;               //X-offset
     public double ty;               //Y-offset
@@ -31,8 +31,9 @@ public class VisionSubsystem extends SubsystemBase{
     public Pose2d robotpose;        //Robot in Fieldspace (blue side)
     public double x_error, y_error;
     public double distance;
-    public VisionSubsystem(){
-    
+    public VisionSubsystem(String limelightname){
+        this.limelightname = limelightname;
+       
     }
     @Override
     public void periodic() {
@@ -41,19 +42,19 @@ public class VisionSubsystem extends SubsystemBase{
     }
   
     //updates limelight tracked values and puts on SmartDashboard
-    public void updateLimelightTracking(){
-        //Read basic values 
-        tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
-        tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
-        ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
-        ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
-        tid = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDouble(0);
-        tl = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tl").getDouble(0);
-        cl = NetworkTableInstance.getDefault().getTable("limelight").getEntry("cl").getDouble(0);
-        getpipe = NetworkTableInstance.getDefault().getTable("limelight").getEntry("getpipe").getDouble(0);
-        thor = NetworkTableInstance.getDefault().getTable("limelight").getEntry("thor").getDouble(0);
+    public void updateLimelightTracking(){ 
+        tv = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("tv").getDouble(0);
+        tx = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("tx").getDouble(0);
+        ty = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("ty").getDouble(0);
+        ta = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("ta").getDouble(0);
+        tid = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("tid").getDouble(0);
+        tl = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("tl").getDouble(0);
+        cl = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("cl").getDouble(0);
+        getpipe = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("getpipe").getDouble(0);
+        thor = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("thor").getDouble(0);
+        
         //Read pose-specific values
-        robotpose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
+        robotpose = LimelightHelpers.getBotPose2d_wpiBlue(limelightname);
         
         
         //Update rest of vars with simple logic
@@ -93,16 +94,16 @@ public class VisionSubsystem extends SubsystemBase{
 
     public void swapPipeline(){
         if (getpipe != 0.0){
-            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0.0);
+            NetworkTableInstance.getDefault().getTable(limelightname).getEntry("pipeline").setNumber(0.0);
         }
         else{
-            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(1.0);
+            NetworkTableInstance.getDefault().getTable(limelightname).getEntry("pipeline").setNumber(1.0);
         }
         
     }
 
     public void setPipeline(double index){
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(index);
+        NetworkTableInstance.getDefault().getTable(limelightname).getEntry("pipeline").setNumber(index);
     }
     
     //Getters
