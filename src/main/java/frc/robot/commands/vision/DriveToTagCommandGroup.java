@@ -4,9 +4,9 @@
 
 package frc.robot.commands.vision;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.subsystems.LEDStripSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
@@ -16,12 +16,13 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
  */
 
 public class DriveToTagCommandGroup extends SequentialCommandGroup{
-    public DriveToTagCommandGroup(VisionSubsystem limelight, SwerveSubsystem swerve, LEDStripSubsystem led){
+    public DriveToTagCommandGroup(VisionSubsystem limelight, SwerveSubsystem swerve){
 
             addCommands(
                 new SetPipeline(limelight, VisionConstants.APRILTAG_PIPELINE),
                 new UpdateRobotPose(swerve),
-                new DriveToTag(swerve)
+                new DriveToTag(swerve),
+                new InstantCommand(swerve::zeroGyro)
             );  
             
            

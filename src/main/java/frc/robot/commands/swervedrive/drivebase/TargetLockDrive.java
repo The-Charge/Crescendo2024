@@ -12,6 +12,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.List;
@@ -48,7 +50,7 @@ private final boolean fieldRelative;
    *                deadband already accounted for. Positive Y is towards the left
    *                wall when looking through the driver
    *                station glass.
-   * @param heading DoubleSupplier that supplies the robot's heading angle. Will be corrected with rotation in this.
+   * @param heading DoubleSupplier that supplies the robot's heading angle.
    */
   public TargetLockDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading, boolean fieldRelative) {
     this.swerve = swerve;
@@ -71,9 +73,9 @@ private final boolean fieldRelative;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double tx = RobotContainer.getlimelightShooter().gettx();
+    double tx = RobotContainer.getLimelight().gettx();
     double RotationVal = MathUtil.clamp(heading_controller.calculate(tx, 0.0), -1, 1);
-    if (RobotContainer.getlimelightShooter().gettv() > 0.0)
+    if (RobotContainer.getLimelight().gettv() > 0.0)
     rotationSpeed = RotationVal * swerve.getSwerveController().config.maxAngularVelocity;
     else if (Math.abs(heading.getAsDouble()) > swerve.getSwerveController().config.angleJoyStickRadiusDeadband) {
       rotationSpeed = heading.getAsDouble()*swerve.getSwerveController().config.maxAngularVelocity;

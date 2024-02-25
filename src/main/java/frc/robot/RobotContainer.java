@@ -21,8 +21,6 @@ import frc.robot.commands.swervedrive.drivebase.TargetLockDriveCommandGroup;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.subsystems.*;
 import frc.robot.commands.vision.DriveToTagCommandGroup;
-import frc.robot.commands.vision.UpdateCameraPose;
-import frc.robot.commands.vision.UpdateRobotPose;
 import frc.robot.commands.vision.swapPipeline;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
@@ -42,9 +40,8 @@ public class RobotContainer
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
       "swerve"));
   private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem();
-  private static final VisionSubsystem m_limelightshooter = new VisionSubsystem("limelightshooter");
-   private static final VisionSubsystem m_limelightnote = new VisionSubsystem("limelightnote");
-  
+  private static final VisionSubsystem limelight1 = new VisionSubsystem();
+
 
  
   // CommandJoystick rotationController = new CommandJoystick(1);
@@ -74,14 +71,10 @@ public class RobotContainer
             OperatorConstants.LEFT_X_DEADBAND),
         () -> -driverXbox.getRawAxis(rotationXboxAxis));
 
-    LEDVision LEDLimelight = new LEDVision(m_ledSubsystem);
-    UpdateCameraPose DefaultUpdateCameraPose_SHOOTER = new UpdateCameraPose(m_limelightshooter);
-    UpdateCameraPose DefaultUpdateCameraPose_NOTE = new UpdateCameraPose(m_limelightnote);
-    
+    LEDVision startLEDAprilTag = new LEDVision(m_ledSubsystem, ()-> limelight1.gettv());
     drivebase.setDefaultCommand(teleopDrive);
-    m_ledSubsystem.setDefaultCommand(LEDLimelight);
-    m_limelightnote.setDefaultCommand(DefaultUpdateCameraPose_NOTE);
-    m_limelightshooter.setDefaultCommand(DefaultUpdateCameraPose_NOTE);
+    m_ledSubsystem.setDefaultCommand(startLEDAprilTag);
+   
   }
 
   /**
@@ -103,19 +96,19 @@ public class RobotContainer
     new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::addVisionReading)));
         
-    new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(new DriveToTagCommandGroup(m_limelightshooter, drivebase, m_ledSubsystem));
-    new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).whileTrue(new TargetLockDriveCommandGroup(
-        m_limelightshooter,
-        drivebase,        
+    new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(new DriveToTagCommandGroup(limelight1, drivebase));
+    new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).whileTrue(new TargetLockDriveCommandGroup
+        (limelight1, drivebase,        
         () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
             OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
             OperatorConstants.LEFT_X_DEADBAND),
         () -> -driverXbox.getRawAxis(rotationXboxAxis))
             );
-    //new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).whileTrue(new DriveToNoteCommandGroup(m_limelightshooter, drivebase));
-    new JoystickButton(driverXbox, XboxController.Button.kRightBumper.value).onTrue(new swapPipeline(m_limelightshooter));
+    //new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).whileTrue(new DriveToNoteCommandGroup(limelight1, drivebase));
+    new JoystickButton(driverXbox, XboxController.Button.kRightBumper.value).onTrue(new swapPipeline(limelight1));
     new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+    
   }
 
   /**
@@ -137,14 +130,8 @@ public class RobotContainer
     drivebase.setMotorBrake(brake);
   }
 
-  public LEDStripSubsystem getLEDSubsystem() {
-    return m_ledSubsystem;
+  public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}
+  public static VisionSubsystem getLimelight(){
+    return limelight1;
   }
-  public static VisionSubsystem getlimelightShooter(){
-    return m_limelightshooter;
-  }
-  public static VisionSubsystem getlimelightNote(){
-    return m_limelightnote;
-  }
-
 }
