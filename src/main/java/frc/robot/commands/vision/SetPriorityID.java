@@ -12,11 +12,12 @@ import frc.robot.subsystems.VisionSubsystem;
  * An example command that uses an example subsystem.
  */
 
-public class UpdateCameraPose extends Command {
+public class SetPriorityID extends Command {
     private final VisionSubsystem limelight;
+    private final double id;    //most likely will be tag 8, set to -1 if none
   
-  
-    public UpdateCameraPose(VisionSubsystem limelight){
+    public SetPriorityID(VisionSubsystem limelight, double id){
+        this.id = id;
         this.limelight = limelight;
         addRequirements(limelight);
     }
@@ -30,7 +31,7 @@ public class UpdateCameraPose extends Command {
 
   @Override
   public void execute() {
-    limelight.setCameraPose();
+    limelight.setPriorityID(id);
   }
 
   // Called once the command ends or is interrupted.

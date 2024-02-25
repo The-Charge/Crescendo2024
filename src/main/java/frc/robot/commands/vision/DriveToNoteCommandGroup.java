@@ -4,7 +4,6 @@
 
 package frc.robot.commands.vision;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.VisionSubsystem;
@@ -20,7 +19,7 @@ public class DriveToNoteCommandGroup extends SequentialCommandGroup{
 
             addCommands(
                 new SetPipeline(limelight, VisionConstants.NEURAL_NETWORK_PIPELINE),
-                new DriveToTarget(swerve)
+                new DriveToNote(swerve)
             );  
             
            

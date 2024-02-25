@@ -22,7 +22,7 @@ import swervelib.math.SwerveMath;
 /**
  * An example command that uses an example subsystem.
  */
-public class TargetLockDrive extends Command {
+public class TargetLockAimDrive extends Command {
 
   private final SwerveSubsystem swerve;
   private final DoubleSupplier vX, vY, heading;
@@ -50,7 +50,7 @@ private final boolean fieldRelative;
    *                station glass.
    * @param heading DoubleSupplier that supplies the robot's heading angle. Will be corrected with rotation in this.
    */
-  public TargetLockDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading, boolean fieldRelative) {
+  public TargetLockAimDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading, boolean fieldRelative) {
     this.swerve = swerve;
     this.vX = vX;
     this.vY = vY;
@@ -72,6 +72,8 @@ private final boolean fieldRelative;
   @Override
   public void execute() {
     double tx = RobotContainer.getlimelightShooter().gettx();
+    double ty = RobotContainer.getlimelightShooter().getty();
+
     double RotationVal = MathUtil.clamp(heading_controller.calculate(tx, 0.0), -1, 1);
     if (RobotContainer.getlimelightShooter().gettv() > 0.0)
     rotationSpeed = RotationVal * swerve.getSwerveController().config.maxAngularVelocity;
@@ -93,6 +95,8 @@ private final boolean fieldRelative;
 
     // Make the robot move
     swerve.drive(translation, rotationSpeed, fieldRelative);
+
+    
   }
 
   // Called once the command ends or is interrupted.

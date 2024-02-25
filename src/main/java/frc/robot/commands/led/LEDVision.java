@@ -17,12 +17,10 @@ import frc.robot.subsystems.LEDStripSubsystem;
 public class LEDVision extends Command {
 
   private final LEDStripSubsystem strip;
-  private final DoubleSupplier tv;
-    private int stripSize;
+  private int stripSize;
 
-  public LEDVision(LEDStripSubsystem sub1, DoubleSupplier tv) {
+  public LEDVision(LEDStripSubsystem sub1) {
     strip = sub1;
-    this.tv = tv;
     addRequirements(sub1);
   }
 

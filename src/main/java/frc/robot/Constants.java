@@ -6,7 +6,6 @@ package frc.robot;
 
 import com.pathplanner.lib.util.PIDConstants;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -103,10 +102,7 @@ public final class Constants {
   }
 
   public static class VisionConstants{
-    //DriveToNote PIDs
-    public static final PIDFConfig VISION_DRIVE_PID = new PIDFConfig(1, 0.0, 0.0);
-    public static final PIDFConfig VISION_ROTATION_PID = new PIDFConfig(0.01, 0.0, 0.0);
-    //pipeline indexes
+    //pipeline indexes - delete later
     public static final double APRILTAG_PIPELINE = 0.0;
     public static final double NEURAL_NETWORK_PIPELINE = 1.0;
     public static final double SPEAKER_LOCK_PIPELINE = 2.0; 
@@ -203,14 +199,65 @@ public final class Constants {
         Rotation2d.fromDegrees(240)),
     };
   }
+
+  public static class ShooterLLConstants{
+    //pipelines
+    public static final double APRILTAG_PIPELINE = 0;
+    public static final double NEURAL_NETWORK_PIPELINE = 1;
+
+    //default position of limelight in robotspace when in rest position
+    public static final double DEFAULT_X_POSITION = 0;
+    public static final double DEFAULT_Y_POSITION = 0;
+    public static final double DEFAULT_Z_POSITION = 0;
+    public static final double DEFAULT_ROLL_POSITION = 0;
+    public static final double DEFAULT_PITCH_POSITION = 0;
+    public static final double DEFAULT_YAW_POSITON = 0;
+
+  }
+  public static class NoteLLConstants{
+    //pipelines
+    public static final double APRILTAG_PIPELINE = 0;
+    public static final double NEURAL_NETWORK_PIPELINE = 1;
+
+    //default position of limelight in robotspace when in rest position
+    public static final double DEFAULT_X_POSITION = 0;
+    public static final double DEFAULT_Y_POSITION = 0;
+    public static final double DEFAULT_Z_POSITION = 0;
+    public static final double DEFAULT_ROLL_POSITION = 0;
+    public static final double DEFAULT_PITCH_POSITION = 0;
+    public static final double DEFAULT_YAW_POSITON = 0;
+
+    
+  }
   public static class ApriltagConstants{
     //Updating robot pose accuracy threshold
-    public static final double BOTPOSE_THRESHOLD_TRANSLATION = Units.inchesToMeters(1);
-    public static final double BOTPOSE_THRESHOLD_ROTATION = 1;  //degrees
+    public static final double BOTPOSE_THRESHOLD_TRANSLATION = Units.inchesToMeters(1); //meters
+    public static final double BOTPOSE_THRESHOLD_ROTATION = 2;  //degrees
 
     //Offset for drive to tag-related commands
-    public static final double CAMERA_OFFSET = 30; //inches
-    public static final double SUBWOOFER_OFFSET = 36.125; //inches
+    public static final double CAMERA_OFFSET = 30; //inches, needs tuning
+    public static final double SUBWOOFER_OFFSET = 36.125; //inches, keep constant
+
+    //Tag ids for each tags location
+    public static final double BLUE_SOURCE_RIGHT_TAG = 1;
+    public static final double BLUE_SOURCE_LEFT_TAG = 2;
+    public static final double RED_SPEAKER_SIDE_TAG = 3;
+    public static final double RED_SPEAKER_CENTER_TAG = 4;
+    public static final double RED_AMP_TAG = 5;
+    public static final double BLUE_AMP_TAG = 6;
+    public static final double BLUE_SPEAKER_CENTER_TAG = 7;
+    public static final double BLUE_SPEAKER_SIDE_TAG = 8;
+    public static final double RED_SOURCE_RIGHT_TAG = 9;
+    public static final double RED_SOURCE_LEFT_TAG = 10;
+    public static final double RED_STAGE_SOURCESIDE_TAG = 11;
+    public static final double RED_STAGE_AMPSIDE_TAG = 12;
+    public static final double RED_STAGE_CENTERSIDE_TAG = 13;
+    public static final double BLUE_STAGE_CENTERSIDE_TAG = 14;
+    public static final double BLUE_STAGE_AMPSIDE_TAG = 15;
+    public static final double BLUE_STAGE_SOURCE_TAG = 16;
+
+
+
     public static final Pose2d[] OFFSET_APRILTAG_POSE = {
       new Pose2d(new Translation2d(
         Units.inchesToMeters(0), 
