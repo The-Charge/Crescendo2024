@@ -4,7 +4,12 @@
 
 package frc.robot.commands.vision;
 
+import java.util.Optional;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ApriltagConstants;
 import frc.robot.subsystems.VisionSubsystem;
 
 
@@ -12,17 +17,13 @@ import frc.robot.subsystems.VisionSubsystem;
  * An example command that uses an example subsystem.
  */
 
-public class UpdateCameraPose extends Command {
+public class SetCenterSpeakerPriorityID extends Command {
     private final VisionSubsystem limelight;
   
-  
-    public UpdateCameraPose(VisionSubsystem limelight){
+    public SetCenterSpeakerPriorityID(VisionSubsystem limelight){
         this.limelight = limelight;
         addRequirements(limelight);
     }
-
- 
-
 
 @Override
   public void initialize() {
@@ -30,7 +31,13 @@ public class UpdateCameraPose extends Command {
 
   @Override
   public void execute() {
-    limelight.setCameraPose();
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    if (ally.get() == Alliance.Red){
+      limelight.setPriorityID(ApriltagConstants.RED_SPEAKER_CENTER_TAG);
+    }
+    if (ally.get() == Alliance.Blue){
+      limelight.setPriorityID(ApriltagConstants.BLUE_SPEAKER_CENTER_TAG);
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -75,12 +75,29 @@ public class LEDStripSubsystem extends SubsystemBase {
   }
 
   public void setVisionPixelRGB(){
-    if (RobotContainer.getLimelight().gettv() > 0){
-      setRange(0, getStripLength(), Color.kGreen);
+    double tv = RobotContainer.getlimelightShooter().gettv();
+    
+    switch ((int) RobotContainer.getlimelightShooter().getcurrentpipeline()){
+      case 0: //General Apriltag
+       if (tv > 0){
+          setRange(0, getStripLength(), Color.kGreen);
+        }
+       else{
+          setRange(0, getStripLength(), Color.kRed);
+        }
+      break;
+      
+      case 1: //Neural Network
+        if (tv > 0){
+          setRange(0, getStripLength(), Color.kGreen);
+        }
+       else{
+          setRange(0, getStripLength(), Color.kRed);
+        }
+      break;
     }
-    else{
-      setRange(0, getStripLength(), Color.kRed);
-    }
+
+   
   }
 
   public void setRange(int start, int end, Color col) {

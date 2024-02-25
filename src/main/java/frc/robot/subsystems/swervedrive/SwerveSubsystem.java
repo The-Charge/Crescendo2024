@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.LimelightHelpers;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ApriltagConstants;
@@ -500,24 +501,25 @@ public class SwerveSubsystem extends SubsystemBase
   public void addVisionReading(){
     Pose2d setpose;
     //double latency;
-    if (RobotContainer.getLimelight().gettv() > 0.0){
-      setpose = RobotContainer.getLimelight().getRobotFieldPose();
-      //latency = RobotContainer.getLimelight().getLimelightLatency();
+    if (RobotContainer.getlimelightShooter().gettv() > 0.0){
+      setpose = RobotContainer.getlimelightShooter().getRobotFieldPose();
+      //latency = RobotContainer.getlimelightshooter().getlimelightshooterLatency();
     swerveDrive.addVisionMeasurement(setpose, Timer.getFPGATimestamp());
     }
   }
   public boolean updatedPoseWithinThreshold(){
     boolean withinThreshold;
     Pose2d setpose;
-    setpose = RobotContainer.getLimelight().getRobotFieldPose();
+    setpose = RobotContainer.getlimelightShooter().getRobotFieldPose();
     withinThreshold = Math.abs(swerveDrive.getPose().getX() - setpose.getX()) < ApriltagConstants.BOTPOSE_THRESHOLD_TRANSLATION;
-    withinThreshold &= Math.abs(swerveDrive.getPose().getY() - setpose.getY()) < ApriltagConstants.BOTPOSE_THRESHOLD_ROTATION;
-    withinThreshold &= Math.abs(swerveDrive.getPose().getRotation().getDegrees() - setpose.getRotation().getDegrees()) < 1;
+    withinThreshold &= Math.abs(swerveDrive.getPose().getY() - setpose.getY()) < ApriltagConstants.BOTPOSE_THRESHOLD_TRANSLATION;
+    withinThreshold &= Math.abs(swerveDrive.getPose().getRotation().getDegrees() - setpose.getRotation().getDegrees()) < ApriltagConstants.BOTPOSE_THRESHOLD_ROTATION;
     return withinThreshold;
   }
+
   public boolean rotationWithinTargetThreshold(){
     boolean withinThreshold;
-    double tx = RobotContainer.getLimelight().gettx();
+    double tx = RobotContainer.getlimelightShooter().gettx();
     withinThreshold = tx > (-1 * VisionConstants.TX_THRESHOLD);
     withinThreshold &= tx < (VisionConstants.TX_THRESHOLD);
     return withinThreshold;
