@@ -20,6 +20,7 @@ import frc.robot.commands.led.*;
 import frc.robot.commands.swervedrive.drivebase.TargetLockDriveCommandGroup;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.subsystems.*;
+import frc.robot.commands.vision.DriveToNoteCommandGroup;
 import frc.robot.commands.vision.DriveToTagCommandGroup;
 import frc.robot.commands.vision.UpdateCameraPose;
 import frc.robot.commands.vision.UpdateRobotPose;
@@ -43,7 +44,7 @@ public class RobotContainer
       "swerve"));
   private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem();
   private static final VisionSubsystem m_limelightshooter = new VisionSubsystem("limelightshooter");
-   private static final VisionSubsystem m_limelightnote = new VisionSubsystem("limelightnote");
+  private static final VisionSubsystem m_limelightnote = new VisionSubsystem("limelightnote");
   
 
  
@@ -80,8 +81,8 @@ public class RobotContainer
     
     drivebase.setDefaultCommand(teleopDrive);
     m_ledSubsystem.setDefaultCommand(LEDLimelight);
+    m_limelightshooter.setDefaultCommand(DefaultUpdateCameraPose_SHOOTER);
     m_limelightnote.setDefaultCommand(DefaultUpdateCameraPose_NOTE);
-    m_limelightshooter.setDefaultCommand(DefaultUpdateCameraPose_NOTE);
   }
 
   /**
@@ -101,9 +102,11 @@ public class RobotContainer
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
     new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
     new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::addVisionReading)));
-        
-    new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(new DriveToTagCommandGroup(m_limelightshooter, drivebase, m_ledSubsystem));
+    
+    new JoystickButton(driverXbox, XboxController.Button.kStart.value).whileTrue(new DriveToTagCommandGroup(m_limelightshooter, drivebase, m_ledSubsystem));
+    new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(new DriveToNoteCommandGroup(m_limelightshooter, drivebase));
     new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).whileTrue(new TargetLockDriveCommandGroup(
         m_limelightshooter,
         drivebase,        
@@ -113,9 +116,9 @@ public class RobotContainer
             OperatorConstants.LEFT_X_DEADBAND),
         () -> -driverXbox.getRawAxis(rotationXboxAxis))
             );
-    //new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).whileTrue(new DriveToNoteCommandGroup(m_limelightshooter, drivebase));
+
     new JoystickButton(driverXbox, XboxController.Button.kRightBumper.value).onTrue(new swapPipeline(m_limelightshooter));
-    new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+    
   }
 
   /**
