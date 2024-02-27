@@ -27,6 +27,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Shooter.SpinShooter;
 import frc.robot.commands.led.*;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
+import frc.robot.commands.swervedrive.drivebase.TurnXDegrees;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -73,7 +74,9 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    Command turn = new TurnXDegrees(drivebase, 90);
     NamedCommands.registerCommand("print hello", Commands.print("hello"));
+    NamedCommands.registerCommand("turn 90", turn);
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -81,7 +84,7 @@ public class RobotContainer {
     configureBindings();
 
     if (RobotBase.isSimulation()) {
-      rotationXboxAxis = 2;
+      // rotationXboxAxis = 2;
     }
 
     TeleopDrive teleopDrive = new TeleopDrive(drivebase,
