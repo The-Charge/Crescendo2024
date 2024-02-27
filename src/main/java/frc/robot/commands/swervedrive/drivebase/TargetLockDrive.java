@@ -27,8 +27,9 @@ public class TargetLockDrive extends Command {
   private final SwerveSubsystem swerve;
   private final DoubleSupplier vX, vY, heading;
   private double rotationSpeed;
-private final PIDController heading_controller;
-private final boolean fieldRelative;
+  private final PIDController heading_controller;
+  private final boolean fieldRelative;
+  private final String limelightname;
   /**
    * Used to drive a swerve robot in full field-centric mode. vX and vY supply
    * translation inputs, where x is
@@ -50,12 +51,13 @@ private final boolean fieldRelative;
    *                station glass.
    * @param heading DoubleSupplier that supplies the robot's heading angle. Will be corrected with rotation in this.
    */
-  public TargetLockDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading, boolean fieldRelative) {
+  public TargetLockDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading, boolean fieldRelative, String limelightname) {
     this.swerve = swerve;
     this.vX = vX;
     this.vY = vY;
     this.heading = heading;
     this.fieldRelative = fieldRelative;
+    this.limelightname = limelightname;
     rotationSpeed = 0;
     heading_controller = new PIDController(0.02, 0.0002, 0.0001);
     heading_controller.setTolerance(0.1);
@@ -71,9 +73,9 @@ private final boolean fieldRelative;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double tx = RobotContainer.getlimelightShooter().gettx();
+    double tx = RobotContainer.getlimelight(limelightname).gettx();
     double RotationVal = MathUtil.clamp(heading_controller.calculate(tx, 0.0), -1, 1);
-    if (RobotContainer.getlimelightShooter().gettv() > 0.0)
+    if (RobotContainer.getlimelight(limelightname).gettv() > 0.0)
     rotationSpeed = RotationVal * swerve.getSwerveController().config.maxAngularVelocity;
     else if (Math.abs(heading.getAsDouble()) > swerve.getSwerveController().config.angleJoyStickRadiusDeadband) {
       rotationSpeed = heading.getAsDouble()*swerve.getSwerveController().config.maxAngularVelocity;

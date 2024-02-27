@@ -19,11 +19,13 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 public class DriveToNote extends InstantCommand {
     private final SwerveSubsystem swerve;
+    private final String limelightname;
     private final PIDController heading_controller;
     private final PIDController drive_controller;
 
-    public DriveToNote(SwerveSubsystem swerve){
+    public DriveToNote(SwerveSubsystem swerve, String limelightname){
         this.swerve = swerve;
+        this.limelightname = limelightname;
         addRequirements(swerve);
         heading_controller = new PIDController(0.01, 0.0, 0.0);
         heading_controller.setTolerance(VisionConstants.TX_THRESHOLD);
@@ -45,12 +47,14 @@ public class DriveToNote extends InstantCommand {
 
   @Override
   public void execute() {
-    double tx = RobotContainer.getlimelightShooter().gettx();
-    double distance = RobotContainer.getlimelightShooter().getdistance();
-    double RotationVal = MathUtil.clamp(heading_controller.calculate(tx, 0.0), -0.4, 0.4);
+    double tx = RobotContainer.getlimelight(limelightname).gettx();
+    double distance = RobotContainer.getlimelight(limelightname).getdistance();
+    heading_controller.reset();
+    drive_controller.reset();
+    double RotationVal = MathUtil.clamp(heading_controller.calculate(tx, 0.0), -1, 1);
     double TranslationVal = MathUtil.clamp(drive_controller.calculate(distance, 0.0), -0.1, 0.1);
 
-    if (RobotContainer.getlimelightShooter().gettv() > 0.0){
+    if (RobotContainer.getlimelight(limelightname).gettv() > 0.0){
       swerve.drive(new Translation2d(-1 * TranslationVal * 14.5,0), RotationVal * swerve.getSwerveController().config.maxAngularVelocity, false);
     }
     else{
@@ -62,14 +66,14 @@ public class DriveToNote extends InstantCommand {
   @Override
   public void end(boolean interrupted) {
     heading_controller.reset();
-    heading_controller.reset();
+    drive_controller.reset();
     swerve.lock();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.getlimelightShooter().gettv() < 1.0;
+    return RobotContainer.getlimelight(limelightname).gettv() < 1.0;
   }
 
 }

@@ -71,11 +71,11 @@ private final boolean fieldRelative;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double tx = RobotContainer.getlimelightShooter().gettx();
-    double ty = RobotContainer.getlimelightShooter().getty();
+    double tx = RobotContainer.getlimelight("limelightfixed").gettx();
+    double ty = RobotContainer.getlimelight("limelightfixed").getty();
 
     double RotationVal = MathUtil.clamp(heading_controller.calculate(tx, 0.0), -1, 1);
-    if (RobotContainer.getlimelightShooter().gettv() > 0.0)
+    if (RobotContainer.getlimelight("limelightfixed").gettv() > 0.0)
     rotationSpeed = RotationVal * swerve.getSwerveController().config.maxAngularVelocity;
     else if (Math.abs(heading.getAsDouble()) > swerve.getSwerveController().config.angleJoyStickRadiusDeadband) {
       rotationSpeed = heading.getAsDouble()*swerve.getSwerveController().config.maxAngularVelocity;

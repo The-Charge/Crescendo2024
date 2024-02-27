@@ -108,7 +108,7 @@ public final class Constants {
     public static final double SPEAKER_LOCK_PIPELINE = 2.0; 
 
     //note tolerances
-    public static final double TX_THRESHOLD = 0.5;  //degrees
+    public static final double TX_THRESHOLD = 5;  //degrees
   }
   public static class FieldConstants{
     //Fixed Apriltag poses as given by field drawings
@@ -200,7 +200,7 @@ public final class Constants {
     };
   }
 
-  public static class ShooterLLConstants{
+  public static class FixedLLConstants{
     //pipelines
     public static final double APRILTAG_PIPELINE = 0;
     public static final double NEURAL_NETWORK_PIPELINE = 1;

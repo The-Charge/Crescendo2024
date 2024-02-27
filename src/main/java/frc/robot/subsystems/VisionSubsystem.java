@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.LimelightHelpers;
 import frc.robot.Constants.VisionConstants;
@@ -21,7 +20,7 @@ public class VisionSubsystem extends SubsystemBase{
     public double cl;               //Capture pipeline latency
     public double getpipe;          //get current pipeline
     public double limelightlatency; //tl + cl
-    public double distance;
+    public double distance;         //distance to target
     public Pose2d robotpose;        //Robot in Fieldspace (blue side)
     public double[] campose = new double[6];          //3D tranform of thecamerai n the coordinate system of the robot
     
@@ -31,7 +30,7 @@ public class VisionSubsystem extends SubsystemBase{
     }
 
     @Override
-    public void periodic() {
+    public void periodic(){
       // This method will be called once per scheduler run
       updateLimelightTracking();
     }
@@ -47,9 +46,10 @@ public class VisionSubsystem extends SubsystemBase{
         tl = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("tl").getDouble(0);
         cl = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("cl").getDouble(0);
         getpipe = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("getpipe").getDouble(0);
-        campose = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("camerapose_robotspace").getDoubleArray(new double[6]);
+        
 
         //Read pose-specific values
+        campose = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("camerapose_robotspace").getDoubleArray(new double[6]);
         robotpose = LimelightHelpers.getBotPose2d_wpiBlue(limelightname);
 
         //Update rest of variables
@@ -57,7 +57,7 @@ public class VisionSubsystem extends SubsystemBase{
         distance = Math.pow((ta * 1.82), -0.468);   //formula: 1.82x^-0.468, in meters
 
 
-        //SmartDashboard stuff
+        //SmartDashboard updates
         SmartDashboard.putNumber("Distance To Target", distance);
         SmartDashboard.putNumber("Robot Orientation", robotpose.getRotation().getDegrees());
         SmartDashboard.putNumber("Robotx", robotpose.getX());
@@ -128,6 +128,9 @@ public class VisionSubsystem extends SubsystemBase{
     }
     public Pose2d getRobotFieldPose(){
         return robotpose;
+    }
+    public double[] getCampose(){
+        return campose;
     }
 }
 

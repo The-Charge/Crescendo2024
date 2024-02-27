@@ -18,9 +18,10 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 public class DriveToTag extends InstantCommand {
     private final SwerveSubsystem swerve;
     private Command drivetoPose;
-  
-    public DriveToTag(SwerveSubsystem swerve){
+    private final String limelightname;
+    public DriveToTag(SwerveSubsystem swerve, String limelightname){
         this.swerve = swerve;
+        this.limelightname = limelightname;
         addRequirements(swerve);
     }
 
@@ -29,8 +30,8 @@ public class DriveToTag extends InstantCommand {
 
 @Override
   public void initialize() {
-    if (RobotContainer.getlimelightShooter().gettv() > 0.0){
-      drivetoPose = swerve.driveToPose(Constants.ApriltagConstants.OFFSET_APRILTAG_POSE[(int)RobotContainer.getlimelightShooter().gettid()]);
+    if (RobotContainer.getlimelight(limelightname).gettv() > 0.0){
+      drivetoPose = swerve.driveToPose(Constants.ApriltagConstants.OFFSET_APRILTAG_POSE[(int)RobotContainer.getlimelight(limelightname).gettid()]);
       drivetoPose.schedule();
     }
     

@@ -43,8 +43,8 @@ public class RobotContainer
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
       "swerve"));
   private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem();
-  private static final VisionSubsystem m_limelightshooter = new VisionSubsystem("limelightshooter");
-  private static final VisionSubsystem m_limelightnote = new VisionSubsystem("limelightnote");
+  private static final VisionSubsystem m_limelightfixed = new VisionSubsystem("limelight-fixed");
+  //private static final VisionSubsystem m_limelightshooter = new VisionSubsystem("limelight-shooter");
   
 
  
@@ -76,13 +76,13 @@ public class RobotContainer
         () -> -driverXbox.getRawAxis(rotationXboxAxis));
 
     LEDVision LEDLimelight = new LEDVision(m_ledSubsystem);
-    UpdateCameraPose DefaultUpdateCameraPose_SHOOTER = new UpdateCameraPose(m_limelightshooter);
-    UpdateCameraPose DefaultUpdateCameraPose_NOTE = new UpdateCameraPose(m_limelightnote);
+    //UpdateCameraPose DefaultUpdateCameraPose_SHOOTER = new UpdateCameraPose(m_limelightfixed);
+    //UpdateCameraPose DefaultUpdateCameraPose_NOTE = new UpdateCameraPose(m_limelightshooter);
     
     drivebase.setDefaultCommand(teleopDrive);
     m_ledSubsystem.setDefaultCommand(LEDLimelight);
-    m_limelightshooter.setDefaultCommand(DefaultUpdateCameraPose_SHOOTER);
-    m_limelightnote.setDefaultCommand(DefaultUpdateCameraPose_NOTE);
+    //m_limelightfixed.setDefaultCommand(DefaultUpdateCameraPose_SHOOTER);
+    //m_limelightshooter.setDefaultCommand(DefaultUpdateCameraPose_NOTE);
   }
 
   /**
@@ -105,19 +105,20 @@ public class RobotContainer
     new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
     new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::addVisionReading)));
     
-    new JoystickButton(driverXbox, XboxController.Button.kStart.value).whileTrue(new DriveToTagCommandGroup(m_limelightshooter, drivebase, m_ledSubsystem));
-    new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(new DriveToNoteCommandGroup(m_limelightshooter, drivebase));
+    new JoystickButton(driverXbox, XboxController.Button.kStart.value).whileTrue(new DriveToTagCommandGroup(m_limelightfixed, drivebase, "limelight-fixed"));
+    new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(new DriveToNoteCommandGroup(m_limelightfixed, drivebase, "limelight-fixed"));
     new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).whileTrue(new TargetLockDriveCommandGroup(
-        m_limelightshooter,
+        m_limelightfixed,
         drivebase,        
         () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
             OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
             OperatorConstants.LEFT_X_DEADBAND),
-        () -> -driverXbox.getRawAxis(rotationXboxAxis))
+        () -> -driverXbox.getRawAxis(rotationXboxAxis),
+        "limelight-fixed")
             );
 
-    new JoystickButton(driverXbox, XboxController.Button.kRightBumper.value).onTrue(new swapPipeline(m_limelightshooter));
+    new JoystickButton(driverXbox, XboxController.Button.kRightBumper.value).onTrue(new swapPipeline(m_limelightfixed));
     
   }
 
@@ -143,11 +144,19 @@ public class RobotContainer
   public LEDStripSubsystem getLEDSubsystem() {
     return m_ledSubsystem;
   }
-  public static VisionSubsystem getlimelightShooter(){
+  public static VisionSubsystem getlimelight(String limelightname){
+    if (limelightname == "limelight-fixed"){
+      return m_limelightfixed;
+    }
+    else{
+      return m_limelightfixed;  //change later
+    }
+  }
+  /*public static VisionSubsystem getlimelightShooter(){
     return m_limelightshooter;
   }
-  public static VisionSubsystem getlimelightNote(){
-    return m_limelightnote;
-  }
+   * 
+   */
+  
 
 }
