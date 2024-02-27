@@ -24,7 +24,7 @@ public class TeleopDrive extends Command {
   private final SwerveSubsystem swerve;
   private final DoubleSupplier vX, vY, heading, POV;
   private double rotationSpeed;
-  private boolean resetHeading = false;
+  private boolean resetHeading = false, usePOV;
 
   /**
    * Used to drive a swerve robot in full field-centric mode. vX and vY supply
@@ -63,6 +63,7 @@ public class TeleopDrive extends Command {
   @Override
   public void initialize() {
     resetHeading = true;
+    usePOV = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -102,25 +103,30 @@ public class TeleopDrive extends Command {
         break;
     }
 
+    if (POV.getAsDouble() != -1) {
+      usePOV = true;
+    }
+
     if (Math.abs(heading.getAsDouble()) > swerve.getSwerveController().config.angleJoyStickRadiusDeadband) {
       rotationSpeed = heading.getAsDouble() * swerve.getSwerveController().config.maxAngularVelocity;
+      usePOV = false;
     } else {
       rotationSpeed = 0;
     }
 
     // Prevent Movement After Auto
-    if (resetHeading) {
-      if (headingX == 0 && headingY == 0 && Math.abs(rotationSpeed) > 0) {
-        // Get the curret Heading
-        Rotation2d currentHeading = swerve.getHeading();
+    // if (resetHeading) {
+    //   if (headingX == 0 && headingY == 0 && Math.abs(rotationSpeed) > 0) {
+    //     // Get the curret Heading
+    //     Rotation2d currentHeading = swerve.getHeading();
 
-        // Set the Current Heading to the desired Heading
-        headingX = currentHeading.getSin();
-        headingY = currentHeading.getCos();
-      }
-      // Dont reset Heading Again
-      resetHeading = false;
-    }
+    //     // Set the Current Heading to the desired Heading
+    //     headingX = currentHeading.getSin();
+    //     headingY = currentHeading.getCos();
+    //   }
+    //   // Dont reset Heading Again
+    //   resetHeading = false;
+    // }
 
     ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble(), vY.getAsDouble(), headingX, headingY);
 
@@ -133,11 +139,11 @@ public class TeleopDrive extends Command {
     SmartDashboard.putString("Translation", translation.toString());
 
     // Make the robot move
-    if (headingX == 0 && headingY == 0 && Math.abs(rotationSpeed) > 0) {
-      resetHeading = true;
-      swerve.drive(translation, (Constants.OperatorConstants.TURN_CONSTANT * -rotationSpeed), true);
-    } else {
+    if (usePOV) {
       swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true);
+    } else {
+      // resetHeading = true;
+      swerve.drive(translation, rotationSpeed, true);
     }
   }
 
