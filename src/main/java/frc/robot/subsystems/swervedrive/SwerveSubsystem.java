@@ -498,19 +498,19 @@ public class SwerveSubsystem extends SubsystemBase
   }
 
 
-  public void addVisionReading(){
+  public void addVisionReading(String limelightname){
     Pose2d setpose;
     //double latency;
-    if (RobotContainer.getlimelight("limelightfixed").gettv() > 0.0){
-      setpose = RobotContainer.getlimelight("limelightfixed").getRobotFieldPose();
+    if (RobotContainer.getlimelight(limelightname).gettv() > 0.0){
+      setpose = RobotContainer.getlimelight(limelightname).getRobotFieldPose();
       //latency = RobotContainer.getlimelightshooter().getlimelightshooterLatency();
     swerveDrive.addVisionMeasurement(setpose, Timer.getFPGATimestamp());
     }
   }
-  public boolean updatedPoseWithinThreshold(){
+  public boolean updatedPoseWithinThreshold(String limelightname){
     boolean withinThreshold;
     Pose2d setpose;
-    setpose = RobotContainer.getlimelight("limelightfixed").getRobotFieldPose();
+    setpose = RobotContainer.getlimelight(limelightname).getRobotFieldPose();
     withinThreshold = Math.abs(swerveDrive.getPose().getX() - setpose.getX()) < ApriltagConstants.BOTPOSE_THRESHOLD_TRANSLATION;
     withinThreshold &= Math.abs(swerveDrive.getPose().getY() - setpose.getY()) < ApriltagConstants.BOTPOSE_THRESHOLD_TRANSLATION;
     withinThreshold &= Math.abs(swerveDrive.getPose().getRotation().getDegrees() - setpose.getRotation().getDegrees()) < ApriltagConstants.BOTPOSE_THRESHOLD_ROTATION;
@@ -519,7 +519,7 @@ public class SwerveSubsystem extends SubsystemBase
 
   public boolean rotationWithinTargetThreshold(){
     boolean withinThreshold;
-    double tx = RobotContainer.getlimelight("limelightfixed").gettx();
+    double tx = RobotContainer.getlimelight("limelight-fixed").gettx();
     withinThreshold = tx > (-1 * VisionConstants.TX_THRESHOLD);
     withinThreshold &= tx < (VisionConstants.TX_THRESHOLD);
     return withinThreshold;

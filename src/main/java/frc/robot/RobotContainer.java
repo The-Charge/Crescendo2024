@@ -22,6 +22,7 @@ import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.subsystems.*;
 import frc.robot.commands.vision.DriveToNoteCommandGroup;
 import frc.robot.commands.vision.DriveToTagCommandGroup;
+import frc.robot.commands.vision.SetCenterSpeakerPriorityID;
 import frc.robot.commands.vision.UpdateCameraPose;
 import frc.robot.commands.vision.UpdateRobotPose;
 import frc.robot.commands.vision.swapPipeline;
@@ -42,7 +43,7 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
       "swerve"));
-  private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem();
+  private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem(); 
   private static final VisionSubsystem m_limelightfixed = new VisionSubsystem("limelight-fixed");
   //private static final VisionSubsystem m_limelightshooter = new VisionSubsystem("limelight-shooter");
   
@@ -103,7 +104,7 @@ public class RobotContainer
 
     new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
-    new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::addVisionReading)));
+    new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new RepeatCommand(new UpdateRobotPose(drivebase, "limelight-fixed")));
     
     new JoystickButton(driverXbox, XboxController.Button.kStart.value).whileTrue(new DriveToTagCommandGroup(m_limelightfixed, drivebase, "limelight-fixed"));
     new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(new DriveToNoteCommandGroup(m_limelightfixed, drivebase, "limelight-fixed"));

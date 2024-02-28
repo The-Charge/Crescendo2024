@@ -21,8 +21,8 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 public class TargetLockDriveCommandGroup extends SequentialCommandGroup{
     public TargetLockDriveCommandGroup(VisionSubsystem limelight, SwerveSubsystem swerve,  DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading, String limelightname){
             addCommands(
-                new SetPipeline(limelight, VisionConstants.SPEAKER_LOCK_PIPELINE),
-                //new SetCenterSpeakerPriorityID(limelight),
+                new SetPipeline(limelight, VisionConstants.APRILTAG_PIPELINE),
+                new SetCenterSpeakerPriorityID(limelight),
                 new TargetLockDrive(swerve, vX, vY, heading, true, limelightname)  
                 //Field relative moves "freely", robot relative creates a radius around speaker depending on where command is initiated
             );  

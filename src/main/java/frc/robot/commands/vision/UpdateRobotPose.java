@@ -5,6 +5,7 @@
 package frc.robot.commands.vision;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 
@@ -14,10 +15,10 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 public class UpdateRobotPose extends Command {
     private final SwerveSubsystem swerve;
-  
-  
-    public UpdateRobotPose(SwerveSubsystem swerve){
+    private final String limelightname;
+    public UpdateRobotPose(SwerveSubsystem swerve, String limelightname){
         this.swerve = swerve;
+        this.limelightname = limelightname;
         addRequirements(swerve);
     }
 
@@ -30,18 +31,19 @@ public class UpdateRobotPose extends Command {
 
   @Override
   public void execute() {
-    swerve.addVisionReading();
+    swerve.addVisionReading(limelightname);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     //Ensures robot pose estimator is within pose given by limelight
-    return swerve.updatedPoseWithinThreshold();
+    return swerve.updatedPoseWithinThreshold(limelightname);
   }
 
 }
