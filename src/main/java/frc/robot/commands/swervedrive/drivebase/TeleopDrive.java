@@ -24,7 +24,7 @@ public class TeleopDrive extends Command {
   private final SwerveSubsystem swerve;
   private final DoubleSupplier vX, vY, heading, POV;
   private double rotationSpeed;
-  private boolean resetHeading = false, usePOV;
+  private boolean usePOV;
 
   /**
    * Used to drive a swerve robot in full field-centric mode. vX and vY supply
@@ -62,7 +62,6 @@ public class TeleopDrive extends Command {
 
   @Override
   public void initialize() {
-    resetHeading = true;
     usePOV = false;
   }
 
@@ -74,30 +73,38 @@ public class TeleopDrive extends Command {
 
     switch ((int) (POV.getAsDouble())) {
       case 0:
+        //Face Forward
         headingY = 1;
         break;
       case 45:
+        //Face Forward-Right
         headingX = -1;
         headingY = 1;
         break;
       case 90:
+        //Face Right
         headingX = -1;
         break;
       case 135:
+        //Face Back-Right
         headingX = -1;
         headingY = -1;
         break;
       case 180:
+        //Face Back
         headingY = -1;
         break;
       case 225:
+        //Face Back-Left
         headingX = 1;
         headingY = -1;
         break;
       case 270:
+        //Face Left
         headingX = 1;
         break;
       case 315:
+        //Face Forward-Left
         headingX = 1;
         headingY = 1;
         break;
@@ -114,20 +121,6 @@ public class TeleopDrive extends Command {
       rotationSpeed = 0;
     }
 
-    // Prevent Movement After Auto
-    // if (resetHeading) {
-    //   if (headingX == 0 && headingY == 0 && Math.abs(rotationSpeed) > 0) {
-    //     // Get the curret Heading
-    //     Rotation2d currentHeading = swerve.getHeading();
-
-    //     // Set the Current Heading to the desired Heading
-    //     headingX = currentHeading.getSin();
-    //     headingY = currentHeading.getCos();
-    //   }
-    //   // Dont reset Heading Again
-    //   resetHeading = false;
-    // }
-
     ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble(), vY.getAsDouble(), headingX, headingY);
 
     // Limit velocity to prevent tippy
@@ -142,7 +135,6 @@ public class TeleopDrive extends Command {
     if (usePOV) {
       swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true);
     } else {
-      // resetHeading = true;
       swerve.drive(translation, rotationSpeed, true);
     }
   }
