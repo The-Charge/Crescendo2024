@@ -103,7 +103,19 @@ public final class Constants {
   }
 
   public static abstract class StateLocations {
-    public static final double elevPos1 = 1000;
-    public static final double pivPos1 = 70;
+    public static final double elevStartup = -1;
+    public static final double pivStartup = -1;
+    public static final double elevPickupFloor = -1;
+    public static final double pivPickupFloor = -1;
+    public static final double elevPickupSource = -1;
+    public static final double pivPickupSource = -1;
+    public static final double elevShootAmp = -1;
+    public static final double pivShootAmp = -1;
+    public static final double elevHighRear = -1;
+    public static final double pivHighRear = -1;
+    public static final double elevHighFront = -1;
+    public static final double pivHighFront = -1;
+    public static final double elevLowFront = -1;
+    public static final double pivLowFront = -1;
   }
 }

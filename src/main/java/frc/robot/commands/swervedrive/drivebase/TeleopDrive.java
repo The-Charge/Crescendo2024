@@ -11,12 +11,16 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.*;
+import frc.robot.commands.StateMachine;
 import frc.robot.commands.Elevator.MoveElevatorToSetpoint;
 import frc.robot.commands.Pivot.MoveToAngle;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.List;
 import java.util.function.*;
+
+import javax.naming.spi.StateFactory;
+
 import frc.robot.Constants;
 import frc.robot.Constants.StateLocations;
 
@@ -26,8 +30,11 @@ import swervelib.math.SwerveMath;
 public class TeleopDrive extends Command {
 
   private final SwerveSubsystem swerve;
+  private final ElevatorSubsystem elev;
+  private final PivotSubsystem pivot;
   private final DoubleSupplier vX, vY, heading;
   private double rotationSpeed;
+  private final BooleanSupplier startup, pickupFloor, pickupSource, shootAmpTrap, shootHighRear, shootHighFront, shootLowFront;
 
   /**
    * Used to drive a swerve robot in full field-centric mode. vX and vY supply
@@ -50,8 +57,10 @@ public class TeleopDrive extends Command {
    *                station glass.
    * @param heading DoubleSupplier that supplies the robot's heading angle.
    */
-  public TeleopDrive(SwerveSubsystem swerve, ElevatorSubsystem elevSub, PivotSubsystem pivSub, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading) {
+  public TeleopDrive(SwerveSubsystem swerve, ElevatorSubsystem elevSub, PivotSubsystem pivSub, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading, BooleanSupplier goToStartup, BooleanSupplier goToPickupFloor, BooleanSupplier goToPickupSource, BooleanSupplier goToShootAmpTrap, BooleanSupplier goToShootHighRear, BooleanSupplier goToShootHighFront, BooleanSupplier goToShootLowFront) {
     this.swerve = swerve;
+    this.elev = elevSub;
+    this.pivot = pivSub;
     this.vX = vX;
     this.vY = vY;
     this.heading = heading;
@@ -59,6 +68,14 @@ public class TeleopDrive extends Command {
     rotationSpeed = 0;
 
     addRequirements(swerve);
+
+    this.startup = goToStartup;
+    this.pickupFloor = goToPickupFloor;
+    this.pickupSource = goToPickupSource;
+    this.shootAmpTrap = goToShootAmpTrap;
+    this.shootHighRear = goToShootHighRear;
+    this.shootHighFront = goToShootHighFront;
+    this.shootLowFront = goToShootLowFront;
   }
 
   @Override
@@ -90,7 +107,13 @@ public class TeleopDrive extends Command {
     // Make the robot move
     swerve.drive(translation, rotationSpeed, true);
 
-    handleStateMachine();
+    if(startup.getAsBoolean()) new StateMachine(elev, pivot, StateMachine.State.STARTUP);
+    else if(pickupFloor.getAsBoolean()) new StateMachine(elev, pivot, StateMachine.State.PICKUPFLOOR);
+    else if(pickupSource.getAsBoolean()) new StateMachine(elev, pivot, StateMachine.State.PICKUPSOURCE);
+    else if(shootAmpTrap.getAsBoolean()) new StateMachine(elev, pivot, StateMachine.State.SHOOTAMPTRAP);
+    else if(shootHighRear.getAsBoolean()) new StateMachine(elev, pivot, StateMachine.State.SHOOTHIGHREAR);
+    else if(shootHighFront.getAsBoolean()) new StateMachine(elev, pivot, StateMachine.State.SHOOTHIGHFRONT);
+    else if(shootLowFront.getAsBoolean()) new StateMachine(elev, pivot, StateMachine.State.SHOOTLOWFRONT);
   }
 
   // Called once the command ends or is interrupted.

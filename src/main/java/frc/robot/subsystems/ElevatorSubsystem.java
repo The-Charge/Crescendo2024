@@ -95,6 +95,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         double error = lastTarget - leftDriver.getPosition().getValueAsDouble();
 
         if(Math.abs(error) <= Constants.Elevator.rangeSize) inRangeCounter++;
+        else inRangeCounter = 0;
 
         if(inRangeCounter >= Constants.Elevator.rangeTime) return true;
 
