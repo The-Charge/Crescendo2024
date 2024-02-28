@@ -74,7 +74,7 @@ public class RobotContainer {
       drivebase, m_elevator, m_pivot, 
       () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
       () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-      () -> -driverXbox.getRawAxis(rotationXboxAxis),
+      () -> -driverXbox.getRawAxis(rotationXboxAxis)
 
     );
 
