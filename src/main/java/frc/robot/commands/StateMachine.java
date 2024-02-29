@@ -25,8 +25,9 @@ public class StateMachine extends Command {
         PICKUPSOURCE, // startup source
         SHOOTAMPTRAP, // shoot amp and trap
         SHOOTHIGHREAR, // shoot amp and trap
-        SHOOTHIGHFRONT,
-        SHOOTLOWFRONT
+        SHOOOTSHALLOWFRONT,
+        SHOOTSTEEPFRONT,
+        TRAVEL
     }
 
     public StateMachine(ElevatorSubsystem elevSub, PivotSubsystem pivSub, State targetState) {
@@ -76,14 +77,19 @@ public class StateMachine extends Command {
             currentState = State.SHOOTHIGHREAR;
             break;
 
-            case SHOOTHIGHFRONT:
-            task = goToHighFront();
-            currentState = State.SHOOTHIGHFRONT;
+            case SHOOOTSHALLOWFRONT:
+            task = goToShallowFront();
+            currentState = State.SHOOOTSHALLOWFRONT;
             break;
 
-            case SHOOTLOWFRONT:
-            task = goToLowFront();
-            currentState = State.SHOOTLOWFRONT;
+            case SHOOTSTEEPFRONT:
+            task = goToSteepFront();
+            currentState = State.SHOOTSTEEPFRONT;
+            break;
+
+            case TRAVEL:
+            task = goToTravel();
+            currentState = State.TRAVEL;
             break;
         }
 
@@ -107,13 +113,13 @@ public class StateMachine extends Command {
     private Command goToStartup() {
         switch(currentState) {
             case PICKUPFLOOR:
-            return new SequentialCommandGroup(
+            return new ParallelCommandGroup(
                 new MoveToAngle(pivSub, StateLocations.pivStartup),
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevStartup)
             );
 
             case PICKUPSOURCE:
-            return new ParallelCommandGroup(
+            return new SequentialCommandGroup(
                 new MoveToAngle(pivSub, StateLocations.elevStartup),
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevStartup)
             );
@@ -130,16 +136,23 @@ public class StateMachine extends Command {
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevStartup)
             );
 
-            case SHOOTHIGHFRONT:
-            return new ParallelCommandGroup(
+            case SHOOOTSHALLOWFRONT:
+            return new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevTurnHight),
                 new MoveToAngle(pivSub, StateLocations.pivStartup),
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevStartup)
             );
 
-            case SHOOTLOWFRONT:
+            case SHOOTSTEEPFRONT:
             return new SequentialCommandGroup(
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevStartup),
                 new MoveToAngle(pivSub, StateLocations.pivStartup)
+            );
+
+            case TRAVEL:
+            return new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivStartup),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevStartup)
             );
 
             default:
@@ -155,7 +168,7 @@ public class StateMachine extends Command {
             );
 
             case PICKUPSOURCE:
-            return new ParallelCommandGroup(
+            return new SequentialCommandGroup(
                 new MoveToAngle(pivSub, StateLocations.pivPickupFloor),
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupFloor)
             );
@@ -167,21 +180,28 @@ public class StateMachine extends Command {
             );
 
             case SHOOTHIGHREAR:
+            return new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivPickupFloor),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupFloor)
+            );
+
+            case SHOOOTSHALLOWFRONT:
             return new SequentialCommandGroup(
                 new MoveToAngle(pivSub, StateLocations.pivPickupFloor),
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupFloor)
             );
 
-            case SHOOTHIGHFRONT:
+            case SHOOTSTEEPFRONT:
             return new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevTurnHight),
                 new MoveToAngle(pivSub, StateLocations.pivPickupFloor),
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupFloor)
             );
 
-            case SHOOTLOWFRONT:
+            case TRAVEL:
             return new SequentialCommandGroup(
-                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupFloor),
-                new MoveToAngle(pivSub, StateLocations.pivPickupFloor)
+                new MoveToAngle(pivSub, StateLocations.pivPickupFloor),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupFloor)
             );
 
             default:
@@ -191,9 +211,9 @@ public class StateMachine extends Command {
     private Command goToPickupSource() {
         switch(currentState) {
             case STARTUP:
-            return new ParallelCommandGroup(
-                new MoveToAngle(pivSub, StateLocations.pivPickupSource),
-                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupSource)
+            return new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupSource),
+                new MoveToAngle(pivSub, StateLocations.pivPickupSource)
             );
 
             case PICKUPFLOOR:
@@ -214,16 +234,22 @@ public class StateMachine extends Command {
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupSource)
             );
 
-            case SHOOTHIGHFRONT:
+            case SHOOOTSHALLOWFRONT:
             return new ParallelCommandGroup(
                 new MoveToAngle(pivSub, StateLocations.pivPickupSource),
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupSource)
             );
 
-            case SHOOTLOWFRONT:
+            case SHOOTSTEEPFRONT:
             return new SequentialCommandGroup(
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupSource),
                 new MoveToAngle(pivSub, StateLocations.pivPickupSource)
+            );
+
+            case TRAVEL:
+            return new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivPickupSource),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevPickupSource)
             );
 
             default:
@@ -233,13 +259,13 @@ public class StateMachine extends Command {
     private Command goToShootAmpTrap() {
         switch(currentState) {
             case STARTUP:
-            return new ParallelCommandGroup(
-                new MoveToAngle(pivSub, StateLocations.pivShootAmp),
-                new MoveElevatorToSetpoint(elevSub, StateLocations.elevShootAmp)
+            return new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevShootAmp),
+                new MoveToAngle(pivSub, StateLocations.pivShootAmp)
             );
 
             case PICKUPFLOOR:
-            return new SequentialCommandGroup(
+            return new ParallelCommandGroup(
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevShootAmp),
                 new MoveToAngle(pivSub, StateLocations.pivShootAmp)
             );
@@ -256,16 +282,22 @@ public class StateMachine extends Command {
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevShootAmp)
             );
 
-            case SHOOTHIGHFRONT:
+            case SHOOOTSHALLOWFRONT:
             return new ParallelCommandGroup(
                 new MoveToAngle(pivSub, StateLocations.pivShootAmp),
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevShootAmp)
             );
 
-            case SHOOTLOWFRONT:
+            case SHOOTSTEEPFRONT:
             return new SequentialCommandGroup(
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevShootAmp),
                 new MoveToAngle(pivSub, StateLocations.pivShootAmp)
+            );
+
+            case TRAVEL:
+            return new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivShootAmp),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevShootAmp)
             );
 
             default:
@@ -275,13 +307,13 @@ public class StateMachine extends Command {
     private Command goToHighRear() {
         switch(currentState) {
             case STARTUP:
-            return new ParallelCommandGroup(
-                new MoveToAngle(pivSub, StateLocations.pivHighRear),
-                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighRear)
+            return new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighRear),
+                new MoveToAngle(pivSub, StateLocations.pivHighRear)
             );
 
             case PICKUPFLOOR:
-            return new SequentialCommandGroup(
+            return new ParallelCommandGroup(
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighRear),
                 new MoveToAngle(pivSub, StateLocations.pivHighRear)
             );
@@ -298,100 +330,168 @@ public class StateMachine extends Command {
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighRear)
             );
 
-            case SHOOTHIGHFRONT:
+            case SHOOOTSHALLOWFRONT:
             return new ParallelCommandGroup(
                 new MoveToAngle(pivSub, StateLocations.pivHighRear),
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighRear)
             );
 
-            case SHOOTLOWFRONT:
+            case SHOOTSTEEPFRONT:
             return new SequentialCommandGroup(
                 new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighRear),
                 new MoveToAngle(pivSub, StateLocations.pivHighRear)
             );
 
-            default:
-            return null;
-        }
-    }
-    private Command goToHighFront() {
-        switch(currentState) {
-            case STARTUP:
+            case TRAVEL:
             return new ParallelCommandGroup(
-                new MoveToAngle(pivSub, StateLocations.pivHighFront),
-                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighFront)
-            );
-
-            case PICKUPFLOOR:
-            return new SequentialCommandGroup(
-                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighFront),
-                new MoveToAngle(pivSub, StateLocations.pivHighFront)
-            );
-
-            case PICKUPSOURCE:
-            return new ParallelCommandGroup(
-                new MoveToAngle(pivSub, StateLocations.pivHighFront),
-                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighFront)
-            );
-
-            case SHOOTAMPTRAP:
-            return new ParallelCommandGroup(
-                new MoveToAngle(pivSub, StateLocations.pivHighFront),
-                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighFront)
-            );
-
-            case SHOOTHIGHREAR:
-            return new ParallelCommandGroup(
-                new MoveToAngle(pivSub, StateLocations.pivHighFront),
-                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighFront)
-            );
-
-            case SHOOTLOWFRONT:
-            return new SequentialCommandGroup(
-                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighFront),
-                new MoveToAngle(pivSub, StateLocations.pivHighFront)
+                new MoveToAngle(pivSub, StateLocations.pivHighRear),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevHighRear)
             );
 
             default:
             return null;
         }
     }
-    private Command goToLowFront() {
+    private Command goToShallowFront() {
         switch(currentState) {
             case STARTUP:
-            return new ParallelCommandGroup(
-                new MoveToAngle(pivSub, StateLocations.pivLowFront),
-                new MoveElevatorToSetpoint(elevSub, StateLocations.elevLowFront)
+            return new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevShallowFront),
+                new MoveToAngle(pivSub, StateLocations.pivShallowFront)
             );
 
             case PICKUPFLOOR:
-            return new SequentialCommandGroup(
-                new MoveElevatorToSetpoint(elevSub, StateLocations.elevLowFront),
-                new MoveToAngle(pivSub, StateLocations.pivLowFront)
+            return new ParallelCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevShallowFront),
+                new MoveToAngle(pivSub, StateLocations.pivShallowFront)
             );
 
             case PICKUPSOURCE:
             return new ParallelCommandGroup(
-                new MoveElevatorToSetpoint(elevSub, StateLocations.elevLowFront),
-                new MoveToAngle(pivSub, StateLocations.pivLowFront)
+                new MoveToAngle(pivSub, StateLocations.pivShallowFront),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevShallowFront)
             );
 
             case SHOOTAMPTRAP:
             return new ParallelCommandGroup(
-                new MoveElevatorToSetpoint(elevSub, StateLocations.elevLowFront),
-                new MoveToAngle(pivSub, StateLocations.pivLowFront)
+                new MoveToAngle(pivSub, StateLocations.pivShallowFront),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevShallowFront)
             );
 
             case SHOOTHIGHREAR:
             return new ParallelCommandGroup(
-                new MoveElevatorToSetpoint(elevSub, StateLocations.elevLowFront),
-                new MoveToAngle(pivSub, StateLocations.pivLowFront)
+                new MoveToAngle(pivSub, StateLocations.pivShallowFront),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevShallowFront)
             );
 
-            case SHOOTHIGHFRONT:
+            case SHOOTSTEEPFRONT:
+            return new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevShallowFront),
+                new MoveToAngle(pivSub, StateLocations.pivShallowFront)
+            );
+
+            case TRAVEL:
             return new ParallelCommandGroup(
-                new MoveElevatorToSetpoint(elevSub, StateLocations.elevLowFront),
-                new MoveToAngle(pivSub, StateLocations.pivLowFront)
+                new MoveToAngle(pivSub, StateLocations.pivShallowFront),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevShallowFront)
+            );
+
+            default:
+            return null;
+        }
+    }
+    private Command goToSteepFront() {
+        switch(currentState) {
+            case STARTUP:
+            return new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevTurnHight),
+                new MoveToAngle(pivSub, StateLocations.pivSteepFront),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevSteepFront)
+            );
+
+            case PICKUPFLOOR:
+            return new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevTurnHight),
+                new MoveToAngle(pivSub, StateLocations.pivSteepFront),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevSteepFront)
+            );
+
+            case PICKUPSOURCE:
+            return new SequentialCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivSteepFront),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevSteepFront)
+            );
+
+            case SHOOTAMPTRAP:
+            return new SequentialCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivSteepFront),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevSteepFront)
+            );
+
+            case SHOOTHIGHREAR:
+            return new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevSteepFront),
+                new MoveToAngle(pivSub, StateLocations.pivSteepFront)
+            );
+
+            case SHOOOTSHALLOWFRONT:
+            return new ParallelCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevSteepFront),
+                new MoveToAngle(pivSub, StateLocations.pivSteepFront)
+            );
+
+            case TRAVEL:
+            return new ParallelCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevSteepFront),
+                new MoveToAngle(pivSub, StateLocations.pivSteepFront)
+            );
+
+            default:
+            return null;
+        }
+    }
+    private Command goToTravel() {
+        switch(currentState) {
+            case STARTUP:
+            return new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevTravel),
+                new MoveToAngle(pivSub, StateLocations.pivTravel)
+            );
+
+            case PICKUPFLOOR:
+            return new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevTravel),
+                new MoveToAngle(pivSub, StateLocations.pivTravel)
+            );
+
+            case PICKUPSOURCE:
+            return new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivTravel),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevTravel)
+            );
+
+            case SHOOTAMPTRAP:
+            return new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivTravel),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevTravel)
+            );
+
+            case SHOOTHIGHREAR:
+            return new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivTravel),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevTravel)
+            );
+
+            case SHOOOTSHALLOWFRONT:
+            return new ParallelCommandGroup(
+                new MoveToAngle(pivSub, StateLocations.pivTravel),
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevTravel)
+            );
+
+            case SHOOTSTEEPFRONT:
+            return new SequentialCommandGroup(
+                new MoveElevatorToSetpoint(elevSub, StateLocations.elevTravel),
+                new MoveToAngle(pivSub, StateLocations.pivTravel)
             );
 
             default:

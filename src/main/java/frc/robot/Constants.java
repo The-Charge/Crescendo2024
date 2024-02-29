@@ -103,19 +103,25 @@ public final class Constants {
   }
 
   public static abstract class StateLocations {
-    public static final double elevStartup = -1;
-    public static final double pivStartup = -1;
-    public static final double elevPickupFloor = -1;
-    public static final double pivPickupFloor = -1;
-    public static final double elevPickupSource = -1;
-    public static final double pivPickupSource = -1;
-    public static final double elevShootAmp = -1;
-    public static final double pivShootAmp = -1;
-    public static final double elevHighRear = -1;
-    public static final double pivHighRear = -1;
-    public static final double elevHighFront = -1;
-    public static final double pivHighFront = -1;
-    public static final double elevLowFront = -1;
-    public static final double pivLowFront = -1;
+    //elevator travel distance is 27 in
+
+    public static final double elevStartup = 0;
+    public static final double pivStartup = 155;
+    public static final double elevPickupFloor = 0;
+    public static final double pivPickupFloor = 20;
+    public static final double elevPickupSource = 27 * 0.5;
+    public static final double pivPickupSource = -45;
+    public static final double elevShootAmp = 27 * 0.5;
+    public static final double pivShootAmp = 45;
+    public static final double elevHighRear = 27;
+    public static final double pivHighRear = 80;
+    public static final double elevShallowFront = 27 * 0.5;
+    public static final double pivShallowFront = -45;
+    public static final double elevSteepFront = 27 * 0.33;
+    public static final double pivSteepFront = -20;
+    public static final double elevTravel = 27 * 0.5;
+    public static final double pivTravel = 0;
+
+    public static final double elevTurnHight = 27 * 0.5; //the elevator high required to turn the pivot freely and not hit anything
   }
 }
