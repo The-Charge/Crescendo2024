@@ -42,9 +42,7 @@ public final class Constants {
   }
 
   public static final class Elevator {
-    public static final int leftDriverId = -1;
-    public static final int rightDriverId = -1;
-    public static final int brakeId = -1;
+    public static final int driverId = -1;
     
     public static final int currentLimit = 20;
 
@@ -55,7 +53,6 @@ public final class Constants {
     public static final double rangeSize = 0.2; //0.2 rotations
     public static final int rangeTime = 20; //20 frames, ~0.4s
 
-    public static final double homePos = 0;
     public static final double minPos = 0;
     public static final double maxPos = 0;
   }

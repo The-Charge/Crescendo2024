@@ -31,7 +31,6 @@ public class MoveElevatorToSetpoint extends Command {
 
     if(isDone) {
       elevatorSub.stopElevator();
-      elevatorSub.enableBrake();
     }
 
     return isDone;
