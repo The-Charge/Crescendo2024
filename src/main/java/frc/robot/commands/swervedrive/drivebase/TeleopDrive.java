@@ -72,39 +72,31 @@ public class TeleopDrive extends Command {
     double headingY = 0;
 
     switch ((int) (POV.getAsDouble())) {
-      case 0:
-        //Face Forward
+      case Constants.FORWARD:
         headingY = 1;
         break;
-      case 45:
-        //Face Forward-Right
+      case Constants.FORWARD_RIGHT:
         headingX = -1;
         headingY = 1;
         break;
-      case 90:
-        //Face Right
+      case Constants.RIGHT:
         headingX = -1;
         break;
-      case 135:
-        //Face Back-Right
+      case Constants.BACKWARD_RIGHT:
         headingX = -1;
         headingY = -1;
         break;
-      case 180:
-        //Face Back
+      case Constants.BACKWARD:
         headingY = -1;
         break;
-      case 225:
-        //Face Back-Left
+      case Constants.BACKWARD_LEFT:
         headingX = 1;
         headingY = -1;
         break;
-      case 270:
-        //Face Left
+      case Constants.LEFT:
         headingX = 1;
         break;
-      case 315:
-        //Face Forward-Left
+      case Constants.FORWARD_LEFT:
         headingX = 1;
         headingY = 1;
         break;
