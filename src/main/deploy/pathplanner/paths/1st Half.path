@@ -3,39 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8503155467849413,
-        "y": 2.1805943611887235
+        "x": 0.761513061487663,
+        "y": 6.58
       },
       "prevControl": null,
       "nextControl": {
-<<<<<<<< Updated upstream:src/main/deploy/pathplanner/paths/Straight.path
-        "x": 2.5,
-        "y": 7.0
-========
-        "x": 1.850315546784942,
-        "y": 2.1805943611887235
->>>>>>>> Stashed changes:src/main/deploy/pathplanner/paths/Mobility.path
+        "x": 0.8215130614876629,
+        "y": 6.58
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-<<<<<<<< Updated upstream:src/main/deploy/pathplanner/paths/Straight.path
-        "x": 4.0,
-        "y": 7.0
+        "x": 1.9159453703522806,
+        "y": 7.005529395674177
       },
       "prevControl": {
-        "x": 3.5,
-        "y": 7.0
-========
-        "x": 2.9717082511088115,
-        "y": 2.1805943611887235
-      },
-      "prevControl": {
-        "x": 1.9717082511088115,
-        "y": 2.1805943611887235
->>>>>>>> Stashed changes:src/main/deploy/pathplanner/paths/Mobility.path
+        "x": 1.8559453703522806,
+        "y": 7.005529395674177
       },
       "nextControl": null,
       "isLocked": false,
@@ -53,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 63.43494882292201,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 59.56576424655656,
     "velocity": 0
   },
   "useDefaultConstraints": true

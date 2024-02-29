@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7220452902444284,
-      "y": 6.591117797620211
+      "x": 0.6825775190011933,
+      "y": 4.489458978917958
     },
-    "rotation": 59.74356283647072
+    "rotation": -61.89373017919815
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1st Half"
+            "pathName": "bottom sub to shoot"
           }
         },
         {
@@ -32,31 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Sub To Top"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot Back"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Run Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Top To Top"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Top To Sub"
+            "pathName": "Small"
           }
         },
         {

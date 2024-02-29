@@ -3,46 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8503155467849413,
-        "y": 2.1805943611887235
+        "x": 1.8962114847306633,
+        "y": 4.114515152107228
       },
       "prevControl": null,
       "nextControl": {
-<<<<<<<< Updated upstream:src/main/deploy/pathplanner/paths/Straight.path
-        "x": 2.5,
-        "y": 7.0
-========
-        "x": 1.850315546784942,
-        "y": 2.1805943611887235
->>>>>>>> Stashed changes:src/main/deploy/pathplanner/paths/Mobility.path
+        "x": 1.3962114847306633,
+        "y": 4.114515152107228
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-<<<<<<<< Updated upstream:src/main/deploy/pathplanner/paths/Straight.path
-        "x": 4.0,
-        "y": 7.0
+        "x": 2.813837166135872,
+        "y": 4.114515152107228
       },
       "prevControl": {
-        "x": 3.5,
-        "y": 7.0
-========
-        "x": 2.9717082511088115,
-        "y": 2.1805943611887235
-      },
-      "prevControl": {
-        "x": 1.9717082511088115,
-        "y": 2.1805943611887235
->>>>>>>> Stashed changes:src/main/deploy/pathplanner/paths/Mobility.path
+        "x": 2.753837166135872,
+        "y": 4.114515152107228
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.05,
+      "rotationDegrees": 0.0,
+      "rotateFast": true
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
