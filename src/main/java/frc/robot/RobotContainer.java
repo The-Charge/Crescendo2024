@@ -80,7 +80,7 @@ public class RobotContainer {
       () -> -driverXbox.getRawAxis(rotationXboxAxis),
       () -> MathUtil.applyDeadband(driverXbox.getLeftTriggerAxis(), OperatorConstants.TRIGGER_DEADBAND) > 0,
       () -> MathUtil.applyDeadband(driverXbox.getRightTriggerAxis(), OperatorConstants.TRIGGER_DEADBAND) > 0,
-      () -> driverXbox.getRawButtonPressed(7)
+      () -> driverXbox.getRawButtonPressed(XboxController.Button.kBack.value)
     );
 
     drivebase.setDefaultCommand(teleopDrive);
