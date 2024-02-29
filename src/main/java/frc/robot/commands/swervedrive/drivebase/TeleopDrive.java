@@ -139,7 +139,7 @@ public class TeleopDrive extends Command {
 
     // Make the robot move
     if (usePOV) {
-      swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true);
+      swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, isFieldCentric);
     } else {
       swerve.drive(translation, rotationSpeed, isFieldCentric);
     }
