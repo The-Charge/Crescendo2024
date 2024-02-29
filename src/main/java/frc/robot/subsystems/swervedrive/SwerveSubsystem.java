@@ -85,10 +85,10 @@ public class SwerveSubsystem extends SubsystemBase
 
     swerveDrive.updateCacheValidityPeriods(20, 10, 20);
 
-    swerveDrive.setCosineCompensator(SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
+    swerveDrive.setCosineCompensator(!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
     setupPathPlanner();
   }
-
+  
   /**
    * Construct the swerve drive.
    *

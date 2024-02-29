@@ -23,9 +23,10 @@ import swervelib.math.SwerveMath;
 public class TeleopDrive extends Command {
 
   private final SwerveSubsystem swerve;
-  private final DoubleSupplier vX, vY, heading;
+  private final DoubleSupplier vX, vY, heading, POV;
   private final BooleanSupplier shiftHalf, shiftQuarter, centricToggle;
   private double rotationSpeed;
+  private boolean usePOV;
   private boolean isFieldCentric = true;
 
 
@@ -51,16 +52,17 @@ public class TeleopDrive extends Command {
    * @param heading DoubleSupplier that supplies the robot's heading angle.
    */
   public TeleopDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY,
-      DoubleSupplier heading, BooleanSupplier shiftHalf, BooleanSupplier shiftQuarter, BooleanSupplier centricToggle) {
+      DoubleSupplier heading, DoubleSupplier POV, BooleanSupplier shiftHalf, BooleanSupplier shiftQuarter, BooleanSupplier centricToggle) {
     this.swerve = swerve;
     this.vX = vX;
     this.vY = vY;
     this.heading = heading;
+    this.POV = POV;
     this.shiftHalf = shiftHalf;
     this.shiftQuarter = shiftQuarter;
     this.centricToggle = centricToggle;
 
-    
+
     rotationSpeed = 0;
 
     addRequirements(swerve);
@@ -68,21 +70,59 @@ public class TeleopDrive extends Command {
 
   @Override
   public void initialize() {
-    
+    usePOV = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Math.abs(heading.getAsDouble()) > swerve.getSwerveController().config.angleJoyStickRadiusDeadband) {
-      rotationSpeed = heading.getAsDouble()*swerve.getSwerveController().config.maxAngularVelocity;
+    double headingX = 0;
+    double headingY = 0;
+
+    switch ((int) (POV.getAsDouble())) {
+      case Constants.FORWARD:
+        headingY = 1;
+        break;
+      case Constants.FORWARD_RIGHT:
+        headingX = -1;
+        headingY = 1;
+        break;
+      case Constants.RIGHT:
+        headingX = -1;
+        break;
+      case Constants.BACKWARD_RIGHT:
+        headingX = -1;
+        headingY = -1;
+        break;
+      case Constants.BACKWARD:
+        headingY = -1;
+        break;
+      case Constants.BACKWARD_LEFT:
+        headingX = 1;
+        headingY = -1;
+        break;
+      case Constants.LEFT:
+        headingX = 1;
+        break;
+      case Constants.FORWARD_LEFT:
+        headingX = 1;
+        headingY = 1;
+        break;
     }
-    else {
+
+    if (POV.getAsDouble() != -1) {
+      usePOV = true;
+    }
+
+    if (Math.abs(heading.getAsDouble()) > swerve.getSwerveController().config.angleJoyStickRadiusDeadband) {
+      rotationSpeed = heading.getAsDouble() * swerve.getSwerveController().config.maxAngularVelocity;
+      usePOV = false;
+    } else {
       rotationSpeed = 0;
     }
 
-    ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble(), vY.getAsDouble(), new Rotation2d(rotationSpeed));
-    
+    ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble(), vY.getAsDouble(), headingX, headingY);
+
     double multiplier = shiftQuarter.getAsBoolean() ? 0.25 : (shiftHalf.getAsBoolean() ? 0.5 : 1);
     desiredSpeeds = desiredSpeeds.times(multiplier);
 
@@ -98,7 +138,11 @@ public class TeleopDrive extends Command {
     SmartDashboard.putString("Translation", translation.toString());
 
     // Make the robot move
-    swerve.drive(translation, rotationSpeed, isFieldCentric);
+    if (usePOV) {
+      swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true);
+    } else {
+      swerve.drive(translation, rotationSpeed, isFieldCentric);
+    }
   }
 
   // Called once the command ends or is interrupted.
