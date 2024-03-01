@@ -17,6 +17,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -29,6 +30,7 @@ public class PivotSubsystem extends SubsystemBase {
     private TalonFX pivotMotor;
     private boolean atSetpoint;
     private MotionMagicVoltage request;
+    private DutyCycleEncoder absoluteEncoderPivot;
 
     public PivotSubsystem() {
 
@@ -36,7 +38,13 @@ public class PivotSubsystem extends SubsystemBase {
         pivotMotor = new TalonFX(Constants.Pivot.PivotId);
         pivotMotor.setInverted(true); //constant
 
+        absoluteEncoderPivot = new DutyCycleEncoder(Constants.Pivot.ABSENCODERID);
 
+        absoluteEncoderPivot.setDistancePerRotation(Constants.Pivot.DISTANCEPERROTATION);
+
+        absoluteEncoderPivot.reset();
+        //absoluteEncoderPivot.getPositionOffset();
+        absoluteEncoderPivot.setPositionOffset(0.5);
         //set status frame period 
         var talonFXConfigs = new TalonFXConfiguration();
 
@@ -60,6 +68,9 @@ public class PivotSubsystem extends SubsystemBase {
         request = new MotionMagicVoltage(0).withSlot(0);
     }
 
+    public double getEncoderDistance() {
+        return absoluteEncoderPivot.getDistance();
+    }
 
     // This method will be called once per scheduler run
     @Override

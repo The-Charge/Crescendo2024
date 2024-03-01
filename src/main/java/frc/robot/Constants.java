@@ -82,6 +82,8 @@ public final class Constants {
     public static final double pivotkV = 0.12;
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 30;
+    public static final int ABSENCODERID =0;
+    public static final double DISTANCEPERROTATION = 0.0;
 
 
 
