@@ -102,8 +102,8 @@ public class RobotContainer {
    * Flight joysticks}.
    */
   private void configureBindings() {
-    driverController.button(1).onTrue(new MoveOnceAngle(m_elevator, 0));
-    driverController.button(2).onTrue(new MoveOnceAngle(m_elevator, 500));
+    driverController.button(1).onTrue(new MoveToSetpoint(m_elevator, 0));
+    driverController.button(2).onTrue(new MoveToSetpoint(m_elevator, 500));
 
     // new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new
     // InstantCommand(drivebase::zeroGyro)));

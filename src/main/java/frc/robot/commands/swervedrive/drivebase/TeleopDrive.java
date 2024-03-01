@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.*;
 import frc.robot.commands.StateMachine;
-import frc.robot.commands.Elevator.MoveOnceAngle;
+import frc.robot.commands.Elevator.MoveToSetpoint;
 import frc.robot.commands.Pivot.MoveToAngle;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
