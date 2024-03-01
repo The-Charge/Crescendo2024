@@ -15,10 +15,10 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 public class UpdateRobotPose extends Command {
     private final SwerveSubsystem swerve;
-    private final String limelightname;
-    public UpdateRobotPose(SwerveSubsystem swerve, String limelightname){
+    private final VisionSubsystem limelight;
+    public UpdateRobotPose(SwerveSubsystem swerve, VisionSubsystem limelight){
         this.swerve = swerve;
-        this.limelightname = limelightname;
+        this.limelight = limelight;
         addRequirements(swerve);
     }
 
@@ -31,7 +31,7 @@ public class UpdateRobotPose extends Command {
 
   @Override
   public void execute() {
-    swerve.addVisionReading(limelightname);
+    swerve.addVisionReading(limelight.getName());
   }
 
   // Called once the command ends or is interrupted.
@@ -43,7 +43,7 @@ public class UpdateRobotPose extends Command {
   @Override
   public boolean isFinished() {
     //Ensures robot pose estimator is within pose given by limelight
-    return swerve.updatedPoseWithinThreshold(limelightname);
+    return swerve.updatedPoseWithinThreshold(limelight.getName());
   }
 
 }

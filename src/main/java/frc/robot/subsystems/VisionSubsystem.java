@@ -23,7 +23,6 @@ public class VisionSubsystem extends SubsystemBase{
     public double distance;         //distance to target
     public Pose2d robotpose;        //Robot in Fieldspace (blue side)
     public double[] campose = new double[6];          //3D tranform of thecamerai n the coordinate system of the robot
-    
 
     public VisionSubsystem(String limelightname){
         this.limelightname = limelightname;
@@ -46,7 +45,6 @@ public class VisionSubsystem extends SubsystemBase{
         tl = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("tl").getDouble(0);
         cl = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("cl").getDouble(0);
         getpipe = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("getpipe").getDouble(0);
-        
 
         //Read pose-specific values
         campose = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("camerapose_robotspace").getDoubleArray(new double[6]);
@@ -93,8 +91,6 @@ public class VisionSubsystem extends SubsystemBase{
         NetworkTableInstance.getDefault().getTable(limelightname).getEntry("camerapose_robotspace_set").setDoubleArray(campose);    //change later
     }
 
-
-
     public void setPriorityID(double id){
          NetworkTableInstance.getDefault().getTable(limelightname).getEntry("priorityid").setNumber(id);   
     }
@@ -131,7 +127,8 @@ public class VisionSubsystem extends SubsystemBase{
     }
     public double[] getCampose(){
         return campose;
-    }
+    }    
+
 }
 
 

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 
@@ -18,10 +19,10 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 public class DriveToTag extends InstantCommand {
     private final SwerveSubsystem swerve;
     private Command drivetoPose;
-    private final String limelightname;
-    public DriveToTag(SwerveSubsystem swerve, String limelightname){
+    private final VisionSubsystem limelight;
+    public DriveToTag(SwerveSubsystem swerve, VisionSubsystem limelight){
         this.swerve = swerve;
-        this.limelightname = limelightname;
+        this.limelight = limelight;
         addRequirements(swerve);
     }
 
@@ -30,8 +31,8 @@ public class DriveToTag extends InstantCommand {
 
 @Override
   public void initialize() {
-    if (RobotContainer.getlimelight(limelightname).gettv() > 0.0){
-      drivetoPose = swerve.driveToPose(Constants.ApriltagConstants.OFFSET_APRILTAG_POSE[(int)RobotContainer.getlimelight(limelightname).gettid()]);
+    if (RobotContainer.getlimelight(limelight.getName()).gettv() > 0.0){
+      drivetoPose = swerve.driveToPose(Constants.ApriltagConstants.OFFSET_APRILTAG_POSE[(int)RobotContainer.getlimelight(limelight.getName()).gettid()]);
       drivetoPose.schedule();
     }
     

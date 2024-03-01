@@ -17,12 +17,12 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
  */
 
 public class DriveToTagCommandGroup extends SequentialCommandGroup{
-    public DriveToTagCommandGroup(VisionSubsystem limelight, SwerveSubsystem swerve, String limelightname){
+    public DriveToTagCommandGroup(VisionSubsystem limelight, SwerveSubsystem swerve){
 
             addCommands(
                 new SetPipeline(limelight, VisionConstants.APRILTAG_PIPELINE),
-                new UpdateRobotPose(swerve, limelightname),
-                new DriveToTag(swerve, limelightname),
+                new UpdateRobotPose(swerve, limelight),
+                new DriveToTag(swerve, limelight),
                 new InstantCommand(swerve::zeroGyro)
             );  
             

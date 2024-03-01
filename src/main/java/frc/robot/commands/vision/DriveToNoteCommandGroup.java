@@ -16,11 +16,11 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
  */
 
 public class DriveToNoteCommandGroup extends SequentialCommandGroup{
-    public DriveToNoteCommandGroup(VisionSubsystem limelight, SwerveSubsystem swerve, String limelightname){
+    public DriveToNoteCommandGroup(VisionSubsystem limelight, SwerveSubsystem swerve){
 
             addCommands(
                 new SetPipeline(limelight, VisionConstants.NEURAL_NETWORK_PIPELINE),
-                new DriveToNote(swerve, limelightname)
+                new DriveToNote(swerve, limelight)
             );  
             
            

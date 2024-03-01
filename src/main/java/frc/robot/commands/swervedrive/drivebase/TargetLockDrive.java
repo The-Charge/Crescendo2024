@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.List;
 import java.util.function.DoubleSupplier;
@@ -29,7 +30,7 @@ public class TargetLockDrive extends Command {
   private double rotationSpeed;
   private final PIDController heading_controller;
   private final boolean fieldRelative;
-  private final String limelightname;
+  private final VisionSubsystem limelight;
   /**
    * Used to drive a swerve robot in full field-centric mode. vX and vY supply
    * translation inputs, where x is
@@ -51,13 +52,13 @@ public class TargetLockDrive extends Command {
    *                station glass.
    * @param heading DoubleSupplier that supplies the robot's heading angle. Will be corrected with rotation in this.
    */
-  public TargetLockDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading, boolean fieldRelative, String limelightname) {
+  public TargetLockDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading, boolean fieldRelative, VisionSubsystem limelight) {
     this.swerve = swerve;
     this.vX = vX;
     this.vY = vY;
     this.heading = heading;
     this.fieldRelative = fieldRelative;
-    this.limelightname = limelightname;
+    this.limelight = limelight;
     rotationSpeed = 0;
     heading_controller = new PIDController(0.02, 0.0002, 0.0001);
     heading_controller.setTolerance(0.1);
@@ -73,9 +74,9 @@ public class TargetLockDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double tx = RobotContainer.getlimelight(limelightname).gettx();
+    double tx = RobotContainer.getlimelight(limelight.getName()).gettx();
     double RotationVal = MathUtil.clamp(heading_controller.calculate(tx, 0.0), -1, 1);
-    if (RobotContainer.getlimelight(limelightname).gettv() > 0.0)
+    if (RobotContainer.getlimelight(limelight.getName()).gettv() > 0.0)
     rotationSpeed = RotationVal * swerve.getSwerveController().config.maxAngularVelocity;
     else if (Math.abs(heading.getAsDouble()) > swerve.getSwerveController().config.angleJoyStickRadiusDeadband) {
       rotationSpeed = heading.getAsDouble()*swerve.getSwerveController().config.maxAngularVelocity;
