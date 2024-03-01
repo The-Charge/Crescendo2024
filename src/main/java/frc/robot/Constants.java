@@ -59,19 +59,24 @@ public final class Constants {
   }
 
   public static final class Intake {
-    public static final int topIntakeId = 0;
-    public static final int bottomIntakeId = 1;
+    public static final int TOPINTAKEID = 0;
+    public static final int BOTTOMINTAKEID = 1;
+    public static final PIDConstants INTAKEPID= new PIDConstants(4.0, 0.0, 1.0);
   }
 
   public static final class Shooter {
-    public static final int leftShooterId = 0;
-    public static final int rightShooterId = 1;
+    public static final int LEFTSHOOTERID = 0;
+    public static final int RIGHTSHOOTERID = 1;
+    public static final PIDConstants SHOOTERPID = new PIDConstants(4.0, 0.0, 1.0);
   }
 
   public static final class Indexer {
-    public static final int leftIndexerId = 0;
-    public static final int rightIndexerId = 1;
-    public static final double limitSwitchIndexer = 2;
+    public static final int LEFTINDEXERID = 0;
+    public static final int RIGHTINDEXERID = 1;
+    public static final double limitSwitchIndexer = 2; //not sure what this is for
+    public static final double PHOTOSENSORID1 = 0;
+    public static final double PHOTOSENSORID2 = 0;
+    public static final PIDConstants INDEXERPID = new PIDConstants(4.0, 0.0, 1.0);
   }
 
   public static final class Pivot {
