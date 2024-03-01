@@ -48,7 +48,7 @@ public final class Constants {
   public static final class DrivebaseConstants {
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds
-    public static final double maxSpeedFeetPerSecond = 14.5;
+    public static final double MAX_SPEED_FEET_PER_SECOND = 14.5;
   }
   public static final class Elevator {
     public static final double setpoint = 2;

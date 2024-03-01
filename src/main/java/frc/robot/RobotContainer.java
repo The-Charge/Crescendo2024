@@ -97,12 +97,6 @@ public class RobotContainer {
    * Flight joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    //driverController.button(1).onTrue(new MoveToAngle(m_pivot, 50));
-    //driverController.button(2).onTrue(new MoveToAngle(m_pivot, 0));
-    //driverController.button(4).onTrue(new SpinShooter(m_shooter));
-    //driverController.button(3).onTrue(new SenseNote(m_indexer)); //never ends
-    
     new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }

@@ -23,8 +23,13 @@ import swervelib.math.SwerveMath;
 public class TeleopDrive extends Command {
 
   private final SwerveSubsystem swerve;
-  private final DoubleSupplier vX, vY, heading, POV;
-  private final BooleanSupplier shiftHalf, shiftQuarter, centricToggle;
+  private final DoubleSupplier vX;
+  private final DoubleSupplier vY;
+  private final DoubleSupplier heading;
+  private final DoubleSupplier POV;
+  private final BooleanSupplier shiftHalf;
+  private final BooleanSupplier shiftQuarter;
+  private final BooleanSupplier centricToggle;
   private double rotationSpeed;
   private boolean usePOV;
   private boolean isFieldCentric = true;
