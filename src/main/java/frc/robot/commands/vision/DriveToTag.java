@@ -32,7 +32,7 @@ public class DriveToTag extends InstantCommand {
 @Override
   public void initialize() {
     if (RobotContainer.getlimelight(limelight.getName()).gettv() > 0.0){
-      drivetoPose = swerve.driveToPose(Constants.ApriltagConstants.OFFSET_APRILTAG_POSE[(int)RobotContainer.getlimelight(limelight.getName()).gettid()]);
+      drivetoPose = swerve.driveToPose(Constants.ApriltagConstants.OFFSET_APRILTAG_POSE[(int) limelight.gettid()]);
       drivetoPose.schedule();
     }
     

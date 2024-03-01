@@ -48,8 +48,8 @@ public class DriveToNote extends InstantCommand {
 
   @Override
   public void execute() {
-    double tx = RobotContainer.getlimelight(limelight.getName()).gettx();
-    double distance = RobotContainer.getlimelight(limelight.getName()).getdistance();
+    double tx = limelight.gettx();
+    double distance = limelight.getdistance();
     heading_controller.reset();
     drive_controller.reset();
     double RotationVal = MathUtil.clamp(heading_controller.calculate(tx, 0.0), -1, 1);
