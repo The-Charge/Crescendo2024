@@ -4,12 +4,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ElevatorSubsystem;
 
-public class MoveElevatorToSetpoint extends Command {
+public class MoveToSetpoint extends Command {
 
   private final ElevatorSubsystem elevatorSub;
   private final double target;
 
-  public MoveElevatorToSetpoint(ElevatorSubsystem nElevSub, double targetPos) {
+  public MoveToSetpoint(ElevatorSubsystem nElevSub, double targetPos) {
     elevatorSub = nElevSub;
     addRequirements(nElevSub);
 
