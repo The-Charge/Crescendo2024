@@ -16,7 +16,7 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 
 import frc.robot.subsystems.*;
-
+import frc.robot.commands.pivotElevator;
 import frc.robot.commands.Climber.*;
 import frc.robot.commands.Elevator.*;
 import frc.robot.commands.Indexer.*;
@@ -40,7 +40,7 @@ public class RobotContainer {
 
   // CommandJoystick rotationController = new CommandJoystick(1);
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  CommandJoystick driverController = new CommandJoystick(1);
+  Joystick buttonBox = new Joystick(1);
 
   // CommandJoystick driverController = new
   // CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
@@ -70,19 +70,27 @@ public class RobotContainer {
       rotationXboxAxis = 2;
     }
 
+    pivotElevator pivotElevator = new pivotElevator(
+      m_elevator, m_pivot,
+      () -> {
+        if(buttonBox.getRawButtonPressed(1)) return 0;
+        else if(buttonBox.getRawButtonPressed(2)) return 1;
+        else if(buttonBox.getRawButtonPressed(3)) return 2;
+        else if(buttonBox.getRawButtonPressed(4)) return 3;
+        else if(buttonBox.getRawButtonPressed(5)) return 4;
+        else if(buttonBox.getRawButtonPressed(6)) return 5;
+        else if(buttonBox.getRawButtonPressed(7)) return 6;
+        else if(buttonBox.getRawButtonPressed(8)) return 7;
+
+        return -1;
+      }
+    );
+
     TeleopDrive teleopDrive = new TeleopDrive(
-      drivebase, m_elevator, m_pivot, 
-      () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-      () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-      () -> -driverXbox.getRawAxis(rotationXboxAxis),
-      () -> false,
-      () -> false,
-      () -> false,
-      () -> false,
-      () -> false,
-      () -> false,
-      () -> false,
-      () -> false
+      drivebase,
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> -driverXbox.getRawAxis(rotationXboxAxis)
     );
 
     drivebase.setDefaultCommand(teleopDrive);
@@ -102,8 +110,8 @@ public class RobotContainer {
    * Flight joysticks}.
    */
   private void configureBindings() {
-    driverController.button(1).onTrue(new MoveToSetpoint(m_elevator, 0));
-    driverController.button(2).onTrue(new MoveToSetpoint(m_elevator, 500));
+    new Trigger(() -> buttonBox.getRawButton(1)).onTrue(new MoveToSetpoint(m_elevator, 0));
+    new Trigger(() -> buttonBox.getRawButton(2)).onTrue(new MoveToSetpoint(m_elevator, 500));
 
     // new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new
     // InstantCommand(drivebase::zeroGyro)));

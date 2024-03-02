@@ -30,11 +30,8 @@ import swervelib.math.SwerveMath;
 public class TeleopDrive extends Command {
 
   private final SwerveSubsystem swerve;
-  private final ElevatorSubsystem elev;
-  private final PivotSubsystem pivot;
   private final DoubleSupplier vX, vY, heading;
   private double rotationSpeed;
-  private final BooleanSupplier startup, pickupFloor, pickupSource, shootAmpTrap, shootHighRear, shootShallowFront, shootSteepFront, travel;
 
   /**
    * Used to drive a swerve robot in full field-centric mode. vX and vY supply
@@ -57,10 +54,8 @@ public class TeleopDrive extends Command {
    *                station glass.
    * @param heading DoubleSupplier that supplies the robot's heading angle.
    */
-  public TeleopDrive(SwerveSubsystem swerve, ElevatorSubsystem elevSub, PivotSubsystem pivSub, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading, BooleanSupplier goToStartup, BooleanSupplier goToPickupFloor, BooleanSupplier goToPickupSource, BooleanSupplier goToShootAmpTrap, BooleanSupplier goToShootHighRear, BooleanSupplier goToShootShallowFront, BooleanSupplier goToShootSteepFront, BooleanSupplier goToTravel) {
+  public TeleopDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading) {
     this.swerve = swerve;
-    this.elev = elevSub;
-    this.pivot = pivSub;
     this.vX = vX;
     this.vY = vY;
     this.heading = heading;
@@ -68,15 +63,6 @@ public class TeleopDrive extends Command {
     rotationSpeed = 0;
 
     addRequirements(swerve);
-
-    this.startup = goToStartup;
-    this.pickupFloor = goToPickupFloor;
-    this.pickupSource = goToPickupSource;
-    this.shootAmpTrap = goToShootAmpTrap;
-    this.shootHighRear = goToShootHighRear;
-    this.shootShallowFront = goToShootShallowFront;
-    this.shootSteepFront = goToShootSteepFront;
-    this.travel = goToTravel;
   }
 
   @Override
@@ -108,14 +94,7 @@ public class TeleopDrive extends Command {
     // Make the robot move
     swerve.drive(translation, rotationSpeed, true);
 
-    if(startup.getAsBoolean()) new StateMachine(elev, pivot, StateMachine.State.STARTUP);
-    else if(pickupFloor.getAsBoolean()) new StateMachine(elev, pivot, StateMachine.State.PICKUPFLOOR);
-    else if(pickupSource.getAsBoolean()) new StateMachine(elev, pivot, StateMachine.State.PICKUPSOURCE);
-    else if(shootAmpTrap.getAsBoolean()) new StateMachine(elev, pivot, StateMachine.State.SHOOTAMPTRAP);
-    else if(shootHighRear.getAsBoolean()) new StateMachine(elev, pivot, StateMachine.State.SHOOTHIGHREAR);
-    else if(shootShallowFront.getAsBoolean()) new StateMachine(elev, pivot, StateMachine.State.SHOOOTSHALLOWFRONT);
-    else if(shootSteepFront.getAsBoolean()) new StateMachine(elev, pivot, StateMachine.State.SHOOTSTEEPFRONT);
-    else if(travel.getAsBoolean()) new StateMachine(elev, pivot, StateMachine.State.TRAVEL);
+    
   }
 
   // Called once the command ends or is interrupted.
