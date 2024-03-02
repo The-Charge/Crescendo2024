@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -58,6 +59,16 @@ public class Robot extends TimedRobot
     // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop
     // immediately when disabled, but then also let it be pushed more 
     disabledTimer = new Timer();
+
+    // Connect to 172.22.11.2:2011 to see fixed limelight
+    PortForwarder.add(2011, "limelight-fixed.local", 5800);
+    PortForwarder.add(2011, "limelight-fixed.local", 5801);
+    PortForwarder.add(2011, "limelight-fixed.local", 5805);
+
+    // Connect to 172.22.11.2:2012 to see shooter limelight
+    PortForwarder.add(2012, "limelight-shooter.local", 5800);
+    PortForwarder.add(2012, "limelight-shooter.local", 5801);
+    PortForwarder.add(2012, "limelight-shooter.local", 5805);
   }
 
   /**
