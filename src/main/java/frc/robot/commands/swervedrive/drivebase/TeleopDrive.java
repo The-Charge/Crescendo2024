@@ -34,7 +34,6 @@ public class TeleopDrive extends Command {
   private boolean usePOV;
   private boolean isFieldCentric = true;
 
-
   /**
    * Used to drive a swerve robot in full field-centric mode. vX and vY supply
    * translation inputs, where x is
@@ -57,7 +56,8 @@ public class TeleopDrive extends Command {
    * @param heading DoubleSupplier that supplies the robot's heading angle.
    */
   public TeleopDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY,
-      DoubleSupplier heading, DoubleSupplier POV, BooleanSupplier shiftHalf, BooleanSupplier shiftQuarter, BooleanSupplier centricToggle) {
+      DoubleSupplier heading, DoubleSupplier POV, BooleanSupplier shiftHalf, BooleanSupplier shiftQuarter,
+      BooleanSupplier centricToggle) {
     this.swerve = swerve;
     this.vX = vX;
     this.vY = vY;
@@ -66,7 +66,6 @@ public class TeleopDrive extends Command {
     this.shiftHalf = shiftHalf;
     this.shiftQuarter = shiftQuarter;
     this.centricToggle = centricToggle;
-
 
     rotationSpeed = 0;
 
@@ -128,10 +127,7 @@ public class TeleopDrive extends Command {
 
     ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble(), vY.getAsDouble(), headingX, headingY);
 
-    double multiplier = shiftQuarter.getAsBoolean() ? 0.25 : (shiftHalf.getAsBoolean() ? 0.5 : 1);
-    desiredSpeeds = desiredSpeeds.times(multiplier);
-
-    if(centricToggle.getAsBoolean()) {
+    if (centricToggle.getAsBoolean()) {
       isFieldCentric = !isFieldCentric;
     }
     // Limit velocity to prevent tippy
@@ -141,6 +137,10 @@ public class TeleopDrive extends Command {
         swerve.getSwerveDriveConfiguration());
     SmartDashboard.putNumber("LimitedTranslation", translation.getX());
     SmartDashboard.putString("Translation", translation.toString());
+
+    double multiplier = shiftQuarter.getAsBoolean() ? 0.25 : (shiftHalf.getAsBoolean() ? 0.5 : 1);
+    translation = translation.times(multiplier);
+    rotationSpeed = rotationSpeed * multiplier;
 
     // Make the robot move
     if (usePOV) {
