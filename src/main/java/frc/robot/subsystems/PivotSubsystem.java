@@ -13,10 +13,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -29,6 +30,7 @@ public class PivotSubsystem extends SubsystemBase {
     private TalonFX pivotMotor;
     private boolean atSetpoint;
     private MotionMagicVoltage request;
+    private DutyCycleEncoder encoder;
 
     public PivotSubsystem() {
 
@@ -36,9 +38,12 @@ public class PivotSubsystem extends SubsystemBase {
         pivotMotor = new TalonFX(Constants.Pivot.PivotId);
         pivotMotor.setInverted(true); //constant
 
-
         //set status frame period 
         var talonFXConfigs = new TalonFXConfiguration();
+        var CurrentLimits = talonFXConfigs.CurrentLimits;
+        CurrentLimits.StatorCurrentLimit = 40.0;
+        CurrentLimits.SupplyTimeThreshold = 0.3;
+        CurrentLimits.StatorCurrentLimitEnable = true;
 
         var slot0Configs = talonFXConfigs.Slot0;
         slot0Configs.kS = Constants.Pivot.pivotkS;
@@ -58,6 +63,9 @@ public class PivotSubsystem extends SubsystemBase {
 
         pivotMotor.getConfigurator().apply(talonFXConfigs);
         request = new MotionMagicVoltage(0).withSlot(0);
+
+        encoder = new DutyCycleEncoder(Constants.Pivot.encoderId);
+        
     }
 
 
@@ -88,5 +96,10 @@ public class PivotSubsystem extends SubsystemBase {
     // public boolean atSetpoint() {
     //     return atSetpoint;
     // }
+
+    public void pivotUp() {
+        double currentAngle = encoder.getAbsolutePosition();
+        pivotMotor.setPosition(currentAngle + 20.0);
+    }
 
 }

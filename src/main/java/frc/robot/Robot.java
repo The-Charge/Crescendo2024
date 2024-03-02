@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.CollectorHead.CollectorZero;
 import frc.robot.commands.led.*;
 
 import java.io.File;
@@ -49,6 +50,7 @@ public class Robot extends TimedRobot
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    
 
     // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop
     // immediately when disabled, but then also let it be pushed more 
@@ -101,6 +103,8 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit()
   {
+    // new CollectorZero(m_robotContainer.getCollectorHeadSubsystem()).schedule();
+
     m_robotContainer.setMotorBrake(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -122,6 +126,7 @@ public class Robot extends TimedRobot
   @Override
   public void teleopInit()
   {
+    // new CollectorZero(m_robotContainer.getCollectorHeadSubsystem()).schedule();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

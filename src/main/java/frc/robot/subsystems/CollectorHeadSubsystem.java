@@ -1,11 +1,13 @@
 package frc.robot.subsystems;
 
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.*;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,17 +26,19 @@ public class CollectorHeadSubsystem extends SubsystemBase {
     private DigitalInput noteSensor1;
 
     private int inRangeCounter = 0;
-    private Timer shootTimer;
 
     
    // public RelativeEncoder encoderLeft;
         public CollectorHeadSubsystem() {
-            noteSensor2 = new DigitalInput(0);
-            noteSensor1 = new DigitalInput(1);
+            noteSensor2 = new DigitalInput(9); // initial second one
+            noteSensor1 = new DigitalInput(8); //initial first one
             //shooterLeft
             shooterLeft = new CANSparkMax(Constants.Shooter.LEFTSHOOTERID, MotorType.kBrushless);
             shooterLeft.set(0);
             shooterLeft.restoreFactoryDefaults();
+           // shooterLeft.setMotorBrake(NeutralMode.Brake);
+           shooterLeft.setSmartCurrentLimit(10);
+           
             SparkPIDController pidControllerShooterLeft = shooterLeft.getPIDController();
             pidControllerShooterLeft.setOutputRange(-1, 1);
 
@@ -44,13 +48,16 @@ public class CollectorHeadSubsystem extends SubsystemBase {
 
             pidControllerShooterLeft.setIZone(0);
             pidControllerShooterLeft.setFF(0);
-        
+            shooterLeft.burnFlash();
             //set to coast mode 
 
             //shooterRight
             shooterRight = new CANSparkMax(Constants.Shooter.RIGHTSHOOTERID, MotorType.kBrushless);
             shooterRight.set(0);
             shooterRight.restoreFactoryDefaults();
+            shooterRight.setSmartCurrentLimit(10);
+            shooterRight.setInverted(true);
+            
             SparkPIDController pidControllerShooterRight = shooterRight.getPIDController();
             pidControllerShooterRight.setOutputRange(-1, 1);
             pidControllerShooterRight.setP(Constants.Shooter.SHOOTERPID.kP);
@@ -58,10 +65,12 @@ public class CollectorHeadSubsystem extends SubsystemBase {
             pidControllerShooterRight.setD(Constants.Shooter.SHOOTERPID.kD);
             pidControllerShooterRight.setIZone(0);
             pidControllerShooterRight.setFF(0);
+            shooterRight.burnFlash();
 
             //indexerLeft
             indexerLeft = new CANSparkMax(Constants.Indexer.LEFTINDEXERID, MotorType.kBrushless);
             indexerLeft.set(0);
+            indexerLeft.setSmartCurrentLimit(10);
             indexerLeft.restoreFactoryDefaults();
             SparkPIDController pidControllerIndexerLeft = indexerLeft.getPIDController();
             pidControllerIndexerLeft.setOutputRange(-1, 1);
@@ -70,13 +79,16 @@ public class CollectorHeadSubsystem extends SubsystemBase {
             pidControllerIndexerLeft.setD(Constants.Indexer.INDEXERPID.kD);
             pidControllerIndexerLeft.setIZone(0);
             pidControllerIndexerLeft.setFF(0);
+            indexerLeft.burnFlash();
 
             //indexerRight
             indexerRight = new CANSparkMax(Constants.Indexer.RIGHTINDEXERID, MotorType.kBrushless);
             indexerRight.set(0);
             indexerRight.restoreFactoryDefaults();
+            indexerRight.setInverted(true);
             SparkPIDController pidControllerIndexerRight = indexerLeft.getPIDController();
             pidControllerIndexerRight.setOutputRange(-1, 1);
+            indexerRight.setSmartCurrentLimit(10);
 
             pidControllerIndexerRight.setP(Constants.Indexer.INDEXERPID.kP);
             pidControllerIndexerRight.setI(Constants.Indexer.INDEXERPID.kI);
@@ -84,13 +96,16 @@ public class CollectorHeadSubsystem extends SubsystemBase {
 
             pidControllerIndexerRight.setIZone(0);
             pidControllerIndexerRight.setFF(0);
+            indexerRight.burnFlash();
 
             //intakeTop
             intakeTop = new CANSparkMax(Constants.Intake.TOPINTAKEID, MotorType.kBrushless);
             intakeTop.set(0);
             intakeTop.restoreFactoryDefaults();
+            intakeTop.setSmartCurrentLimit(10);
             SparkPIDController pidControllerIntakeTop = intakeTop.getPIDController();
             pidControllerIntakeTop.setOutputRange(-1, 1);
+
 
             pidControllerIntakeTop.setP(Constants.Intake.INTAKEPID.kP);
             pidControllerIntakeTop.setI(Constants.Intake.INTAKEPID.kI);
@@ -98,11 +113,14 @@ public class CollectorHeadSubsystem extends SubsystemBase {
 
             pidControllerIntakeTop.setIZone(0);
             pidControllerIntakeTop.setFF(0);
+            intakeTop.burnFlash();
 
             //intakeBottom
             intakeBottom = new CANSparkMax(Constants.Intake.BOTTOMINTAKEID, MotorType.kBrushless);
             intakeBottom.set(0);
             intakeBottom.restoreFactoryDefaults();
+            intakeBottom.setInverted(false);
+            intakeBottom.setSmartCurrentLimit(10);
             SparkPIDController pidControllerIntakeBottom = intakeBottom.getPIDController();
             pidControllerIntakeBottom.setOutputRange(-1, 1);
 
@@ -112,6 +130,7 @@ public class CollectorHeadSubsystem extends SubsystemBase {
             
             pidControllerIntakeBottom.setIZone(0);
             pidControllerIntakeBottom.setFF(0);
+            intakeBottom.burnFlash();
 
         }
 
@@ -135,146 +154,44 @@ public class CollectorHeadSubsystem extends SubsystemBase {
             collectorMotor.getPIDController().setReference(speed,CANSparkMax.ControlType.kVelocity);
         }
         
-        public void reverseIntake() {
-            setVelocity(-12000, intakeTop);
-            setVelocity(-12000, intakeBottom); 
-            setVelocity(-12000, indexerLeft);
-            setVelocity(-12000, indexerRight); 
+        public void reverseAll() {
+            intakeTop.set(-.5);
+            intakeBottom.set(-.5);
+            indexerLeft.set(-.5);
+            indexerRight.set(-.5);
+            shooterLeft.set(-.5);
+            shooterRight.set(-.5);
         }
 
-        public void intakeGround(){
-            new Command() {
-                @Override
-                public void initialize() {
-                    setVelocity(3600, intakeTop);
-                    setVelocity(3600, intakeBottom);
-                }
-                @Override
-                public void execute() {
 
-                }
-                @Override
-                public void end(boolean interrupted) {
-                    pivotUp();
-                    collectorStates(State.INTAKESOURCE);
-                }
-                @Override
-                public boolean isFinished() {
-                    return getNoteSensor1();
-                }
-            }.schedule();
+        public void resetTargetCounter() {
+            inRangeCounter = 0;
         }
-
-        public void intakeSource() {
-            new Command() {
-                @Override
-                public void initialize() {
-                    setVelocity(3600, intakeTop);
-                    setVelocity(3600, intakeBottom);
-                }
-                @Override
-                public void execute() {
-                    
-                }
-                @Override
-                public void end(boolean interrupted) {
-                    collectorStates(State.ZERO);
-                }
-                @Override
-                public boolean isFinished() {
-                    return getNoteSensor2();
-                }
-            }.schedule();
+        
+        public boolean shootIsATarget(double targetVel) {
+            return isAtTarget(targetVel, shooterLeft, shooterRight);
         }
-
-        public void shoot() {
-            new Command() {
-                Timer timeout, feedTimer;
-
-                @Override
-                public void initialize() {
-                    timeout = new Timer();
-                    feedTimer = null;
-
-                    inRangeCounter = 0;
-                    setVelocity(12000, shooterLeft);
-                    setVelocity(12000, shooterRight);
-                }
-
-                @Override
-                public void execute() {
-                    if(isAtTarget(12000, shooterLeft, shooterRight)) {
-                        indexerForShoot();
-                        feedTimer = new Timer();
-                    }
-                }
-
-                @Override
-                public void end(boolean interrupted) {
-                    collectorStates(State.ZERO); 
-                }
-
-                @Override
-                public boolean isFinished() {
-                    return timeout.hasElapsed(12) || (feedTimer == null ? false : feedTimer.hasElapsed(1.5));
-                }
-            }.schedule();
-        }
-
-        public boolean isAtTarget(double targetVelocity, CANSparkMax motor1, CANSparkMax motor2) {
-            final double deadband = 40;
-            final int requiredTime = 20;
+        private boolean isAtTarget(double targetVelocity, CANSparkMax motor1, CANSparkMax motor2) {
+            final double deadband = 1000;
+            final int requiredTime = 5;
 
             double error1 = targetVelocity - motor1.getEncoder().getVelocity();
             double error2 = targetVelocity - motor2.getEncoder().getVelocity();
+
             if(Math.abs(error1) <= deadband && Math.abs(error2) <= deadband) inRangeCounter++;
             else inRangeCounter = 0;
 
+        
+            SmartDashboard.putNumber("left encoder value", motor1.getEncoder().getVelocity());
+            SmartDashboard.putNumber("right encoder value", motor2.getEncoder().getVelocity());
+            SmartDashboard.putBoolean(" is at target", inRangeCounter>=requiredTime);
+            SmartDashboard.putNumber("in Range Counter", inRangeCounter);
+            SmartDashboard.putNumber("current shooter left", shooterLeft.getOutputCurrent());
+            SmartDashboard.putNumber("current shooter right", shooterRight.getOutputCurrent());
+            
             if(inRangeCounter >= requiredTime) return true;
             return false;
-        }
-
-
-        public void indexerForShoot() {
-            setVelocity(12000, indexerLeft);
-            setVelocity(12000, indexerRight);
-
-            setVelocity(12000, intakeTop);
-            setVelocity(12000, indexerRight);
-        }
-
-        public void pivotUp() {
             
-        }
-
-        public void collectorStates(State targetState) {
-            switch(targetState) {
-                case REVERSEINTAKE:
-                    reverseIntake();
-                    break;
-                case INTAKESOURCE:
-                    intakeSource();
-                    break;
-                case INTAKEGROUND:
-                    intakeGround();
-                case SHOOT:
-                    shoot();
-                    break;
-                case ZERO:
-                    zero();
-                    break;
-            }
-        }
-        //collector head tells robot when to pivot
-        //monitor current 
-        // 
-        public enum State {
-            REVERSEINTAKE,
-            INTAKESOURCE,
-            INTAKEGROUND,
-            PIVOTUP,
-            SHOOT,
-            ZERO
         }
 
 
@@ -289,11 +206,52 @@ public class CollectorHeadSubsystem extends SubsystemBase {
             shooterRight.disable();
         }
 
-        private boolean getNoteSensor2() {
+        public boolean getNoteSensor2() {
             return noteSensor2.get();
         }
 
-        private boolean getNoteSensor1() {
+        public boolean getNoteSensor1() {
             return noteSensor1.get();
         }
+
+
+        public void spinIndexer(Direction dir, double speed) {
+            if(dir == Direction.FORWARD) {
+                indexerLeft.set(speed);
+                indexerRight.set(speed);
+            }
+            else {
+                indexerLeft.set(speed);
+                indexerRight.set(speed);
+            }
+        }
+
+        public void spinShooter(Direction dir, double speed) {
+            if(dir == Direction.FORWARD) {
+                indexerLeft.set(speed);
+                indexerRight.set(speed);
+            }
+            else {
+                indexerLeft.set(speed);
+                indexerRight.set(speed);
+            }
+        }
+
+        public void spinIntake(Direction dir, double speed) {
+            if(dir == Direction.FORWARD) {
+                indexerLeft.set(speed);
+                indexerRight.set(speed);
+            }
+            else {
+                indexerLeft.set(speed);
+                indexerRight.set(speed);
+            }
+        }
+
+        public enum Direction {
+            FORWARD,
+            BACKWARD
+        }
+
+
 }

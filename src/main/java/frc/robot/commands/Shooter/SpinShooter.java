@@ -31,6 +31,7 @@ public class SpinShooter extends Command {
     // double target = 0.3;
 
     // flywheel.set(target);
+  
     m_shooter.setVelocity(120); //rpm!!
   }
 
