@@ -71,12 +71,14 @@ public class RobotContainer {
     configureBindings();
 
     TeleopDrive teleopDrive = new TeleopDrive(drivebase,
-        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
-            OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
-            OperatorConstants.LEFT_X_DEADBAND),
-        () -> -driverXbox.getRawAxis(rotationXboxAxis),
-        () -> driverXbox.getPOV());
+      () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+      () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+      () -> -driverXbox.getRawAxis(rotationXboxAxis),
+      () -> driverXbox.getPOV(),
+      () -> MathUtil.applyDeadband(driverXbox.getLeftTriggerAxis(), OperatorConstants.TRIGGER_DEADBAND) > 0,
+      () -> MathUtil.applyDeadband(driverXbox.getRightTriggerAxis(), OperatorConstants.TRIGGER_DEADBAND) > 0,
+      () -> driverXbox.getRawButtonPressed(XboxController.Button.kBack.value)
+    );
 
     drivebase.setDefaultCommand(teleopDrive);
   }
@@ -95,14 +97,8 @@ public class RobotContainer {
    * Flight joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    driverController.button(1).onTrue(new MoveToAngle(m_pivot, 50));
-    driverController.button(2).onTrue(new MoveToAngle(m_pivot, 0));
-    driverController.button(4).onTrue(new SpinShooter(m_shooter));
-    driverController.button(3).onTrue(new SenseNote(m_indexer)); //never ends
-    
-    //new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    //new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+    new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
   /**

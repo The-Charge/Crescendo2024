@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import swervelib.SwerveController;
 import swervelib.math.SwerveMath;
@@ -22,9 +23,16 @@ import swervelib.math.SwerveMath;
 public class TeleopDrive extends Command {
 
   private final SwerveSubsystem swerve;
-  private final DoubleSupplier vX, vY, heading, POV;
+  private final DoubleSupplier vX;
+  private final DoubleSupplier vY;
+  private final DoubleSupplier heading;
+  private final DoubleSupplier POV;
+  private final BooleanSupplier shiftHalf;
+  private final BooleanSupplier shiftQuarter;
+  private final BooleanSupplier centricToggle;
   private double rotationSpeed;
   private boolean usePOV;
+  private boolean isFieldCentric = true;
 
   /**
    * Used to drive a swerve robot in full field-centric mode. vX and vY supply
@@ -48,12 +56,16 @@ public class TeleopDrive extends Command {
    * @param heading DoubleSupplier that supplies the robot's heading angle.
    */
   public TeleopDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY,
-      DoubleSupplier heading, DoubleSupplier POV) {
+      DoubleSupplier heading, DoubleSupplier POV, BooleanSupplier shiftHalf, BooleanSupplier shiftQuarter,
+      BooleanSupplier centricToggle) {
     this.swerve = swerve;
     this.vX = vX;
     this.vY = vY;
     this.heading = heading;
     this.POV = POV;
+    this.shiftHalf = shiftHalf;
+    this.shiftQuarter = shiftQuarter;
+    this.centricToggle = centricToggle;
 
     rotationSpeed = 0;
 
@@ -115,6 +127,9 @@ public class TeleopDrive extends Command {
 
     ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble(), vY.getAsDouble(), headingX, headingY);
 
+    if (centricToggle.getAsBoolean()) {
+      isFieldCentric = !isFieldCentric;
+    }
     // Limit velocity to prevent tippy
     Translation2d translation = SwerveController.getTranslation2d(desiredSpeeds);
     translation = SwerveMath.limitVelocity(translation, swerve.getFieldVelocity(), swerve.getPose(),
@@ -123,11 +138,15 @@ public class TeleopDrive extends Command {
     SmartDashboard.putNumber("LimitedTranslation", translation.getX());
     SmartDashboard.putString("Translation", translation.toString());
 
+    double multiplier = shiftQuarter.getAsBoolean() ? 0.25 : (shiftHalf.getAsBoolean() ? 0.5 : 1);
+    translation = translation.times(multiplier);
+    rotationSpeed = rotationSpeed * multiplier;
+
     // Make the robot move
     if (usePOV) {
-      swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true);
+      swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, isFieldCentric);
     } else {
-      swerve.drive(translation, rotationSpeed, true);
+      swerve.drive(translation, rotationSpeed, isFieldCentric);
     }
   }
 
