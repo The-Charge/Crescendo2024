@@ -81,6 +81,8 @@ public class Robot extends TimedRobot
     m_robotContainer.setMotorBrake(true);
     disabledTimer.reset();
     disabledTimer.start();
+
+    new DisableLEDs(m_robotContainer.getLEDSubsystem()).schedule();
   }
 
   @Override
