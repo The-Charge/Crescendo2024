@@ -42,7 +42,7 @@ public final class Constants {
   }
 
   public static final class Elevator {
-    public static final int driverId = -1;
+    public static final int driverId = 12;
     
     public static final int currentLimit = 20;
 
@@ -74,14 +74,14 @@ public final class Constants {
   }
 
   public static final class Pivot {
-    public static final int PivotId = 7;
+    public static final int PivotId = 3;
     public static final double kFeedForward = 0;
     public static final PIDFConfig pivotPID = new PIDFConfig(0.7, 0, 0, kFeedForward);
     public static final double pivotkS = 0.25;
     public static final double pivotkV = 0.12;
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 30;
-
+    public static final int encoderId = 7;
   }
 
   public static final class Climber {
@@ -119,6 +119,6 @@ public final class Constants {
     public static final double elevTravel = 27 * 0.5;
     public static final double pivTravel = 0;
 
-    public static final double elevTurnHight = 27 * 0.5; //the elevator high required to turn the pivot freely and not hit anything
+    public static final double elevTurnHight = 27 * 0.5; //the elevator hight required to turn the pivot freely and not hit anything
   }
 }

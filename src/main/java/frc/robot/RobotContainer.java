@@ -16,7 +16,7 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 
 import frc.robot.subsystems.*;
-import frc.robot.commands.pivotElevator;
+import frc.robot.commands.PivotElevator;
 import frc.robot.commands.Climber.*;
 import frc.robot.commands.Elevator.*;
 import frc.robot.commands.Indexer.*;
@@ -55,10 +55,6 @@ public class RobotContainer {
   private final PivotSubsystem m_pivot = new PivotSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
 
-  
-
-
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -70,7 +66,7 @@ public class RobotContainer {
       rotationXboxAxis = 2;
     }
 
-    pivotElevator pivotElevator = new pivotElevator(
+    PivotElevator pivotElevator = new PivotElevator(
       m_elevator, m_pivot,
       () -> {
         if(buttonBox.getRawButtonPressed(1)) return 0;
