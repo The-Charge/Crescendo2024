@@ -54,9 +54,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     @Override
     public void simulationPeriodic() {}
 
+    //NOTE: target is in inches from the bottom of the elevators range
     public void goToPosition(double target) {
         //clamp target within a safe range
-        lastTarget = Math.min(Math.max(target, Constants.Elevator.minPos), Constants.Elevator.maxPos);
+        lastTarget = Math.min(Math.max(target * Constants.Elevator.ticksPerInch, Constants.Elevator.minPos), Constants.Elevator.maxPos);
         inRangeCounter = 0;
 
         magicRequest.withPosition(lastTarget);

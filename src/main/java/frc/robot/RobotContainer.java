@@ -110,6 +110,8 @@ public class RobotContainer {
 
     CollectorZero collectorZero = new CollectorZero(m_collector);
     m_collector.setDefaultCommand(collectorZero);
+
+    m_elevator.setDefaultCommand(new MoveElevWithJoystick(m_elevator, () -> buttonBox.getY()));
   }
 
   /**
@@ -126,19 +128,9 @@ public class RobotContainer {
    * Flight joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    // driverController.button(1).onTrue(new MoveToAngle(m_pivot, 50));
-    // driverController.button(2).onTrue(new MoveToAngle(m_pivot, 0));
-    // driverController.button(4).onTrue(new SpinShooter(m_shooter));
-    // driverController.button(3).onTrue(new SenseNote(m_indexer)); //never ends
     new Trigger(() -> buttonBox.getRawButton(3)).onTrue(new CollectorIntakeSource(m_collector));
     new Trigger(() -> buttonBox.getRawButton(4)).onTrue(new CollectorReverseAll(m_collector));
     new Trigger(() -> buttonBox.getRawButton(2)).onTrue(new CollectorShoot(m_collector));
-    // driverController.button(2).onTrue(new GoToHeadState(m_collector, CollectorHeadSubsystem.State.ZERO));
-    // driverController.button(3).onTrue(new GoToHeadState(m_collector, CollectorHeadSubsystem.State.SHOOT));
-    // driverController.button(4).onTrue(new GoToHeadState(m_collector, CollectorHeadSubsystem.State.INTAKEGROUND));
-    // driverController.button(5).onTrue(new GoToHeadState(m_collector, CollectorHeadSubsystem.State.REVERSEINTAKE));
-
     
     //new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     //new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));

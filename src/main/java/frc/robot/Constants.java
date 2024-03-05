@@ -61,9 +61,10 @@ public final class Constants {
     public static final int magicJerk = 1600;
     public static final double rangeSize = 0.2; //0.2 rotations
     public static final int rangeTime = 20; //20 frames, ~0.4s
+    public static final double ticksPerInch = 0;
 
     public static final double minPos = 0;
-    public static final double maxPos = 0;
+    public static final double maxPos = 27 * ticksPerInch;
   }
 
   public static final class Intake {
@@ -95,10 +96,10 @@ public final class Constants {
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 30;
     public static final int encoderId = 7;
-    public static final double ticksPerDeg = (2048 / 80.0) / 360.0;
+    public static final double gearRat = 1 / 80.0;
+    public static final double ticksPerDeg = 2048 / gearRat / 360.0;
     public static final double absEncoderAngleOffset = 0;
     public static final double absTicksPerDeg = 2048;
-    public static final double gearRat = 1 / 80.0;
   }
 
   public static final class Climber {
