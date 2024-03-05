@@ -49,12 +49,22 @@ public final class Constants {
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds
   }
-  public static final class Elevator {
-    public static final double setpoint = 2;
-    public static final int leftId = 0;
-    public static final PIDFConfig elevatorPID   = new PIDFConfig(0.4, 0, 0.01);
 
+  public static final class Elevator {
+    public static final int driverId = 12;
     
+    public static final int currentLimit = 20;
+
+    public static final PIDFConfig pid = new PIDFConfig(0.4, 0, 0.01, 0);
+    public static final int magicCruisVelocity = 80;
+    public static final int magicAcceleration = 160;
+    public static final int magicJerk = 1600;
+    public static final double rangeSize = 0.2; //0.2 rotations
+    public static final int rangeTime = 20; //20 frames, ~0.4s
+    public static final double ticksPerInch = 0;
+
+    public static final double minPos = 0;
+    public static final double maxPos = 27 * ticksPerInch;
   }
 
   public static final class Intake {
@@ -78,7 +88,7 @@ public final class Constants {
   }
 
   public static final class Pivot {
-    public static final int PivotId = 3; 
+    public static final int PivotId = 3;
     public static final double kFeedForward = 0;
     public static final PIDFConfig pivotPID = new PIDFConfig(0.7, 0, 0, kFeedForward);
     public static final double pivotkS = 0.25;
@@ -86,11 +96,14 @@ public final class Constants {
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 30;
     public static final int encoderId = 7;
+    public static final double gearRat = 1 / 80.0;
+    public static final double ticksPerDeg = 2048 / gearRat / 360.0;
+    public static final double absEncoderAngleOffset = 0;
+    public static final double absTicksPerDeg = 2048;
   }
 
   public static final class Climber {
     public static final int climberId = 0;
-
 
   }
 
@@ -101,11 +114,34 @@ public final class Constants {
 
   public static class OperatorConstants {
     // Joystick Deadband
-    public static final double LEFT_X_DEADBAND  = 0.1;
-    public static final double LEFT_Y_DEADBAND  = 0.1;
+    public static final double LEFT_X_DEADBAND = 0.1;
+    public static final double LEFT_Y_DEADBAND = 0.1;
     public static final double RIGHT_X_DEADBAND = 0.1;
-    public static final double TURN_CONSTANT    = 6;
+    public static final double TURN_CONSTANT = 6;
+    
+    public static final double joystickDeadband = 0.1;
   }
 
-  
+  public static abstract class StateLocations {
+    //elevator travel distance is 27 in
+
+    public static final double elevStartup = 0;
+    public static final double pivStartup = 155;
+    public static final double elevPickupFloor = 0;
+    public static final double pivPickupFloor = 20;
+    public static final double elevPickupSource = 27 * 0.5;
+    public static final double pivPickupSource = -45;
+    public static final double elevShootAmp = 27 * 0.5;
+    public static final double pivShootAmp = 45;
+    public static final double elevHighRear = 27;
+    public static final double pivHighRear = 80;
+    public static final double elevShallowFront = 27 * 0.5;
+    public static final double pivShallowFront = -45;
+    public static final double elevSteepFront = 27 * 0.33;
+    public static final double pivSteepFront = -20;
+    public static final double elevTravel = 27 * 0.5;
+    public static final double pivTravel = 0;
+
+    public static final double elevTurnHight = 27 * 0.5; //the elevator hight required to turn the pivot freely and not hit anything
+  }
 }

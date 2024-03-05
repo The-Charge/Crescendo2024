@@ -7,7 +7,6 @@ import frc.robot.subsystems.CollectorHeadSubsystem;
 public class CollectorReverseAll extends Command {
 
     private CollectorHeadSubsystem head;
-    Timer timeout, feedTimer;
 
     public CollectorReverseAll(CollectorHeadSubsystem head) {
         this.head = head;
@@ -15,7 +14,9 @@ public class CollectorReverseAll extends Command {
 
     @Override
     public void initialize() {
-        head.reverseIntake();
+        head.spinShooter(CollectorHeadSubsystem.Direction.BACKWARD, 1);
+        head.spinIndexer(CollectorHeadSubsystem.Direction.BACKWARD, 1);
+        head.spinIntake(CollectorHeadSubsystem.Direction.BACKWARD, 1);
     }
 
     @Override

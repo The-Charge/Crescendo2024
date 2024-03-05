@@ -1,13 +1,8 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
-import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
+import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.compound.Diff_MotionMagicTorqueCurrentFOC_Position;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.GravityTypeValue;
-import com.ctre.phoenix6.signals.MotionMagicIsRunningValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -18,14 +13,13 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import com.ctre.phoenix6.jni.CtreJniWrapper;
-import com.ctre.phoenix6.hardware.ParentDevice;
-import com.ctre.phoenix6.hardware.core.CoreTalonFX;
 
 public class PivotSubsystem extends SubsystemBase {
+
     private PIDController PivotPIDController; 
     private TalonFX pivotMotor;
     private boolean atSetpoint;
@@ -67,7 +61,7 @@ public class PivotSubsystem extends SubsystemBase {
         request = new MotionMagicVoltage(0).withSlot(0);
 
         encoder = new DutyCycleEncoder(Constants.Pivot.encoderId);
-        
+        pivotMotor.setPosition((encoder.getAbsolutePosition() / Constants.Pivot.absTicksPerDeg + Constants.Pivot.absEncoderAngleOffset) * Constants.Pivot.ticksPerDeg);
     }
 
 
@@ -75,8 +69,9 @@ public class PivotSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        SmartDashboard.putNumber("encoder pivot value", pivotMotor.getPosition().getValueAsDouble());
-        
+        SmartDashboard.putNumber("REL Position (degrees)", pivotMotor.getPosition().getValueAsDouble() * 360);
+        SmartDashboard.putNumber("ABS Position + offset (degrees)", encoder.getAbsolutePosition() * Constants.Pivot.absTicksPerDeg + Constants.Pivot.absEncoderAngleOffset);
+        SmartDashboard.putNumber("REQ Position (degrees)", request.Position * 360);
     }
 
     // This method will be called once per scheduler run when in simulation
@@ -90,7 +85,7 @@ public class PivotSubsystem extends SubsystemBase {
     //         pivotMotor.set(0.0);
     //         atSetpoint = true;
     //    } 
-        pivotMotor.setControl(request.withPosition(angle));
+        pivotMotor.setControl(request.withPosition(angle * Constants.Pivot.ticksPerDeg));
         //atSetpoint = false;
         //pivotMotor.set(angle);
     }
@@ -100,8 +95,11 @@ public class PivotSubsystem extends SubsystemBase {
     // }
 
     public void pivotUp() {
-        double currentAngle = encoder.getAbsolutePosition();
-        pivotMotor.setPosition(currentAngle + 20.0);
+        pivotToAngle(getCurrentAngle() + 20);
+    }
+    
+    private double getCurrentAngle() {
+        return pivotMotor.getPosition().getValueAsDouble() * 360 / Constants.Pivot.gearRat; //getPosition() is in rotations
     }
 
 }

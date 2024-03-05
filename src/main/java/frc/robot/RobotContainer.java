@@ -1,3 +1,4 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -8,9 +9,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -37,6 +36,15 @@ import frc.robot.subsystems.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 
+import frc.robot.subsystems.*;
+import frc.robot.commands.PivotElevator;
+import frc.robot.commands.Climber.*;
+import frc.robot.commands.Elevator.*;
+import frc.robot.commands.Indexer.*;
+import frc.robot.commands.Intake.*;
+import frc.robot.commands.Pivot.*;
+import frc.robot.commands.Shooter.*;
+
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a "declarative" paradigm, very
@@ -58,14 +66,15 @@ public class RobotContainer {
   private final CollectorHeadSubsystem m_collector = new CollectorHeadSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  CommandJoystick driverController = new CommandJoystick(1);
+  Joystick buttonBox = new Joystick(1);
 
   // CommandJoystick driverController = new
   // CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   XboxController driverXbox = new XboxController(0);
 
   private int rotationXboxAxis = 4;
-
+  private final ClimbSubsystem m_climber = new ClimbSubsystem();
+  private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -74,20 +83,35 @@ public class RobotContainer {
     configureBindings();
     //m_collector.zero();
 
-    // TeleopDrive teleopDrive = new TeleopDrive(drivebase,
-    //     () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
-    //         OperatorConstants.LEFT_Y_DEADBAND),
-    //     () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
-    //         OperatorConstants.LEFT_X_DEADBAND),
-    //     () -> -driverXbox.getRawAxis(rotationXboxAxis),
-    //     () -> driverXbox.getPOV());
+    // pivotElevator pivotElevator = new pivotElevator(
+    //   m_elevator, m_pivot,
+    //   () -> {
+    //     if(buttonBox.getRawButtonPressed(1)) return 0;
+    //     else if(buttonBox.getRawButtonPressed(2)) return 1;
+    //     else if(buttonBox.getRawButtonPressed(3)) return 2;
+    //     else if(buttonBox.getRawButtonPressed(4)) return 3;
+    //     else if(buttonBox.getRawButtonPressed(5)) return 4;
+    //     else if(buttonBox.getRawButtonPressed(6)) return 5;
+    //     else if(buttonBox.getRawButtonPressed(7)) return 6;
+    //     else if(buttonBox.getRawButtonPressed(8)) return 7;
 
-    //drivebase.setDefaultCommand(teleopDrive);
+    //     return -1;
+    //   }
+    // );
+
+    // TeleopDrive teleopDrive = new TeleopDrive(
+    //   drivebase,
+    //     () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+    //     () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+    //     () -> -driverXbox.getRawAxis(rotationXboxAxis)
+    // );
+
+    // drivebase.setDefaultCommand(teleopDrive);
 
     CollectorZero collectorZero = new CollectorZero(m_collector);
     m_collector.setDefaultCommand(collectorZero);
 
-
+    m_elevator.setDefaultCommand(new MoveElevWithJoystick(m_elevator, () -> buttonBox.getY()));
   }
 
   /**
@@ -104,19 +128,9 @@ public class RobotContainer {
    * Flight joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    // driverController.button(1).onTrue(new MoveToAngle(m_pivot, 50));
-    // driverController.button(2).onTrue(new MoveToAngle(m_pivot, 0));
-    // driverController.button(4).onTrue(new SpinShooter(m_shooter));
-    // driverController.button(3).onTrue(new SenseNote(m_indexer)); //never ends
-    driverController.button(3).onTrue(new CollectorIntakeSource(m_collector));
-    driverController.button(4).onTrue(new CollectorReverseAll(m_collector));
-    driverController.button(2).onTrue(new CollectorShoot(m_collector));
-    // driverController.button(2).onTrue(new GoToHeadState(m_collector, CollectorHeadSubsystem.State.ZERO));
-    // driverController.button(3).onTrue(new GoToHeadState(m_collector, CollectorHeadSubsystem.State.SHOOT));
-    // driverController.button(4).onTrue(new GoToHeadState(m_collector, CollectorHeadSubsystem.State.INTAKEGROUND));
-    // driverController.button(5).onTrue(new GoToHeadState(m_collector, CollectorHeadSubsystem.State.REVERSEINTAKE));
-
+    new Trigger(() -> buttonBox.getRawButton(3)).onTrue(new CollectorIntakeSource(m_collector));
+    new Trigger(() -> buttonBox.getRawButton(4)).onTrue(new CollectorReverseAll(m_collector));
+    new Trigger(() -> buttonBox.getRawButton(2)).onTrue(new CollectorShoot(m_collector));
     
     //new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     //new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
@@ -137,9 +151,8 @@ public class RobotContainer {
     // drivebase.setDefaultCommand();
   }
 
-  public void setMotorBrake(boolean brake)
-  {
-    //drivebase.setMotorBrake(brake);
+  public void setMotorBrake(boolean brake) {
+    // drivebase.setMotorBrake(brake);
   }
 
   public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}
