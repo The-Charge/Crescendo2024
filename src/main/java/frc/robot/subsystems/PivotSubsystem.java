@@ -41,9 +41,11 @@ public class PivotSubsystem extends SubsystemBase {
         //set status frame period 
         var talonFXConfigs = new TalonFXConfiguration();
         var CurrentLimits = talonFXConfigs.CurrentLimits;
-        CurrentLimits.StatorCurrentLimit = 40.0;
+        CurrentLimits.StatorCurrentLimit = 20.0;
         CurrentLimits.SupplyTimeThreshold = 0.3;
         CurrentLimits.StatorCurrentLimitEnable = true;
+
+        
 
         var slot0Configs = talonFXConfigs.Slot0;
         slot0Configs.kS = Constants.Pivot.pivotkS;
