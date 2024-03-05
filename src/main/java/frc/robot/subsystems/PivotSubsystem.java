@@ -65,7 +65,7 @@ public class PivotSubsystem extends SubsystemBase {
         request = new MotionMagicVoltage(0).withSlot(0);
 
         encoder = new DutyCycleEncoder(Constants.Pivot.encoderId);
-        
+        pivotMotor.setPosition((encoder.getAbsolutePosition() / Constants.Pivot.absTicksPerDeg + Constants.Pivot.absEncoderAngleOffset) * Constants.Pivot.ticksPerDeg);
     }
 
 
@@ -73,8 +73,9 @@ public class PivotSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        SmartDashboard.putNumber("encoder pivot value", pivotMotor.getPosition().getValueAsDouble());
-        
+        SmartDashboard.putNumber("REL Position (degrees)", pivotMotor.getPosition().getValueAsDouble() * 360);
+        SmartDashboard.putNumber("ABS Position + offset (degrees)", encoder.getAbsolutePosition() * Constants.Pivot.absTicksPerDeg + Constants.Pivot.absEncoderAngleOffset);
+        SmartDashboard.putNumber("REQ Position (degrees)", request.Position * 360);
     }
 
     // This method will be called once per scheduler run when in simulation
@@ -88,7 +89,7 @@ public class PivotSubsystem extends SubsystemBase {
     //         pivotMotor.set(0.0);
     //         atSetpoint = true;
     //    } 
-        pivotMotor.setControl(request.withPosition(angle));
+        pivotMotor.setControl(request.withPosition(angle * Constants.Pivot.ticksPerDeg));
         //atSetpoint = false;
         //pivotMotor.set(angle);
     }
@@ -98,8 +99,11 @@ public class PivotSubsystem extends SubsystemBase {
     // }
 
     public void pivotUp() {
-        double currentAngle = encoder.getAbsolutePosition();
-        pivotMotor.setPosition(currentAngle + 20.0);
+        pivotToAngle(getCurrentAngle() + 20);
+    }
+    
+    private double getCurrentAngle() {
+        return pivotMotor.getPosition().getValueAsDouble() * 360 / Constants.Pivot.gearRat; //getPosition() is in rotations
     }
 
 }

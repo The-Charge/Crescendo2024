@@ -86,6 +86,10 @@ public final class Constants {
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 30;
     public static final int encoderId = 7;
+    public static final double ticksPerDeg = (2048 / 80.0) / 360.0;
+    public static final double absEncoderAngleOffset = 0;
+    public static final double absTicksPerDeg = 2048;
+    public static final double gearRat = 1 / 80.0;
   }
 
   public static final class Climber {
