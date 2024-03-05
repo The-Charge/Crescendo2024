@@ -7,12 +7,12 @@ import frc.robot.subsystems.CollectorHeadSubsystem;
 
 public class CollectorShoot extends Command {
 
-    private CollectorHeadSubsystem head;
+    private CollectorHeadSubsystem m_collector;
     Timer timeout, feedTimer;
     boolean hasStartedIndexers, hasSetTime;
 
     public CollectorShoot(CollectorHeadSubsystem head) {
-        this.head = head;
+        this.m_collector = head;
     
     }
 
@@ -22,8 +22,8 @@ public class CollectorShoot extends Command {
         feedTimer = null;
         timeout.start();
 
-        head.resetTargetCounter();
-        head.spinShooter(CollectorHeadSubsystem.Direction.FORWARD, 1);
+        m_collector.resetTargetCounter();
+        m_collector.spinShooter(CollectorHeadSubsystem.Direction.FORWARD, 1);
         hasStartedIndexers = false;
         hasSetTime = false;
     }
@@ -31,13 +31,13 @@ public class CollectorShoot extends Command {
     @Override
     public void execute() {
       
-        if(head.shootIsATarget(10000) && !hasStartedIndexers) {
-            head.spinIndexer(CollectorHeadSubsystem.Direction.FORWARD, 1);
-            head.spinIndexer(CollectorHeadSubsystem.Direction.FORWARD, 1);
+        if(m_collector.shootIsATarget(10000) && !hasStartedIndexers) {
+            m_collector.spinIndexer(CollectorHeadSubsystem.Direction.FORWARD, 1);
+            m_collector.spinIndexer(CollectorHeadSubsystem.Direction.FORWARD, 1);
             hasStartedIndexers = true;
         }
 
-        if(!head.getNoteSensor1() && !head.getNoteSensor2() && !hasSetTime) {
+        if(!m_collector.getNoteSensor1() && !m_collector.getNoteSensor2() && !hasSetTime) {
             feedTimer = new Timer();
             feedTimer.start();
             hasSetTime = true;
@@ -46,7 +46,7 @@ public class CollectorShoot extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        head.zero();
+        m_collector.zero();
     }
 
     @Override

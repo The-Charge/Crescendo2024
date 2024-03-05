@@ -6,17 +6,28 @@ import frc.robot.subsystems.CollectorHeadSubsystem;
 
 public class CollectorReverseAll extends Command {
 
+<<<<<<< Updated upstream
     private CollectorHeadSubsystem head;
+=======
+    private CollectorHeadSubsystem m_collector;
+    Timer timeout, feedTimer;
+>>>>>>> Stashed changes
 
     public CollectorReverseAll(CollectorHeadSubsystem head) {
-        this.head = head;
+        this.m_collector = head;
     }
 
     @Override
     public void initialize() {
+<<<<<<< Updated upstream
         head.spinShooter(CollectorHeadSubsystem.Direction.BACKWARD, 1);
         head.spinIndexer(CollectorHeadSubsystem.Direction.BACKWARD, 1);
         head.spinIntake(CollectorHeadSubsystem.Direction.BACKWARD, 1);
+=======
+        m_collector.spinIndexer(CollectorHeadSubsystem.Direction.BACKWARD, 1);
+        m_collector.spinIndexer(CollectorHeadSubsystem.Direction.BACKWARD, 1);
+        m_collector.spinIndexer(CollectorHeadSubsystem.Direction.BACKWARD, 1);
+>>>>>>> Stashed changes
     }
 
     @Override

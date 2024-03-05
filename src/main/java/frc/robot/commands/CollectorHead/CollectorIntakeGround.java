@@ -17,11 +17,13 @@ public class CollectorIntakeGround extends Command {
     @Override
     public void initialize() {
         m_collector.spinIntake(CollectorHeadSubsystem.Direction.FORWARD, 0.3);
+        m_collector.spinIndexer(CollectorHeadSubsystem.Direction.FORWARD, 0.3);
     }
     @Override
     public void execute() {
         if(m_collector.getNoteSensor1()) {
             m_pivot.pivotUp();
+            
         }
     }
     @Override

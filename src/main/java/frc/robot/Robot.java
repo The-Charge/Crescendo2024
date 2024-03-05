@@ -85,6 +85,7 @@ public class Robot extends TimedRobot
     disabledTimer.start();
 
     new DisableLEDs(m_robotContainer.getLEDSubsystem()).schedule();
+    new CollectorZero(m_robotContainer.getCollectorHeadSubsystem()).schedule();
   }
 
   @Override

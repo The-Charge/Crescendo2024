@@ -13,6 +13,7 @@ public class CollectorIntakeSource extends Command {
     addRequirements(subsystem);
   }
 
+<<<<<<< Updated upstream
   @Override
   public void initialize() {
     m_collector.spinIntake(CollectorHeadSubsystem.Direction.FORWARD, 1);
@@ -26,4 +27,23 @@ public class CollectorIntakeSource extends Command {
   public boolean isFinished() {
       return m_collector.getNoteSensor2();
   }
+=======
+    @Override
+    public void initialize() {
+        m_collector.spinIntake(CollectorHeadSubsystem.Direction.FORWARD, 0.3);
+        m_collector.spinIndexer(CollectorHeadSubsystem.Direction.FORWARD, 0.3);
+    }
+    @Override
+    public void execute() {
+  
+    }
+    @Override
+    public void end(boolean interrupted) {
+        m_collector.zero();
+    }
+    @Override
+    public boolean isFinished() {
+        return m_collector.getNoteSensor2();
+    }
+>>>>>>> Stashed changes
 }
