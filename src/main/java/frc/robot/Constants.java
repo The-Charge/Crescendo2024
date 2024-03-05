@@ -53,39 +53,40 @@ public final class Constants {
   public static final class Elevator {
     public static final double setpoint = 2;
     public static final int leftId = 0;
-    public static final int rightId = 1;
     public static final PIDFConfig elevatorPID   = new PIDFConfig(0.4, 0, 0.01);
 
     
   }
 
   public static final class Intake {
-    public static final int topIntakeId = 0;
-    public static final int bottomIntakeId = 1;
+    public static final int TOPINTAKEID = 5;
+    public static final int BOTTOMINTAKEID = 6;
+    public static final PIDConstants INTAKEPID= new PIDConstants(0.0002, 0.0000001, 0);
   }
 
   public static final class Shooter {
-    public static final int leftShooterId = 0;
-    public static final int rightShooterId = 1;
+    public static final int LEFTSHOOTERID = 2;
+    public static final int RIGHTSHOOTERID = 1;
+    public static final PIDConstants SHOOTERPID = new PIDConstants(4.0, 0.0, 1.0);
   }
 
   public static final class Indexer {
-    public static final int leftIndexerId = 0;
-    public static final int rightIndexerId = 1;
-    public static final double limitSwitchIndexer = 2;
+    public static final int PHOTOSENSORID1 = 8;
+    public static final int PHOTOSENSORID2 = 9;
+    public static final int LEFTINDEXERID = 7;
+    public static final int RIGHTINDEXERID = 4;
+    public static final PIDConstants INDEXERPID = new PIDConstants(4.0, 0.0, 1.0);
   }
 
   public static final class Pivot {
-    public static final int PivotId = 7; 
+    public static final int PivotId = 3; 
     public static final double kFeedForward = 0;
     public static final PIDFConfig pivotPID = new PIDFConfig(0.7, 0, 0, kFeedForward);
     public static final double pivotkS = 0.25;
     public static final double pivotkV = 0.12;
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 30;
-
-
-
+    public static final int encoderId = 7;
   }
 
   public static final class Climber {

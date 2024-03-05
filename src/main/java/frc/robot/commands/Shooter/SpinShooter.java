@@ -33,8 +33,8 @@ public class SpinShooter extends Command {
     // double target = 0.3;
 
     // flywheel.set(target);
-    m_shooter.setVelocity(speed); //rpm!!
-   SmartDashboard.putNumber("motor speed", speed);
+  
+    m_shooter.setVelocity(120); //rpm!!
   }
 
   // Called once the command ends or is interrupted.

@@ -29,6 +29,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants;
 import frc.robot.commands.led.*;
+import frc.robot.commands.CollectorHead.CollectorIntakeSource;
+import frc.robot.commands.CollectorHead.CollectorReverseAll;
+import frc.robot.commands.CollectorHead.CollectorShoot;
+import frc.robot.commands.CollectorHead.CollectorZero;
 import frc.robot.commands.Indexer.*;
 import frc.robot.commands.Pivot.*;
 import frc.robot.commands.Shooter.*;
@@ -53,16 +57,14 @@ import com.pathplanner.lib.auto.NamedCommands;
 public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-      "swerve"));
+  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
   private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem();
   // CommandJoystick rotationController = new CommandJoystick(1);
 
   private final PivotSubsystem m_pivot = new PivotSubsystem();
 
-  private final ShooterSubsystem m_shooter = new ShooterSubsystem();
 
-  private final IndexerSubsystem m_indexer = new IndexerSubsystem();
+  private final CollectorHeadSubsystem m_collector = new CollectorHeadSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   CommandJoystick driverController = new CommandJoystick(1);
@@ -87,6 +89,7 @@ public class RobotContainer {
 
     // Configure the trigger bindings
     configureBindings();
+    //m_collector.zero();
 
     TeleopDrive teleopDrive = new TeleopDrive(drivebase,
       () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
@@ -98,7 +101,12 @@ public class RobotContainer {
       () -> driverXbox.getRawButtonPressed(XboxController.Button.kBack.value)
     );
 
-    drivebase.setDefaultCommand(teleopDrive);
+    //drivebase.setDefaultCommand(teleopDrive);
+
+    CollectorZero collectorZero = new CollectorZero(m_collector);
+    m_collector.setDefaultCommand(collectorZero);
+
+
   }
 
   /**
@@ -125,7 +133,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    //return autoChooser.getSelected();
+    return null;
   }
 
   public void setDriveMode() {
@@ -137,4 +146,5 @@ public class RobotContainer {
   }
 
   public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}
+  // public CollectorHeadSubsystem getCollectorHeadSubsystem() {return m_collector;}
 }

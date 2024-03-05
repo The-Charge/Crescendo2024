@@ -9,7 +9,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.led.SetLEDBrightness;
+import frc.robot.commands.CollectorHead.CollectorZero;
+import frc.robot.commands.led.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -101,6 +102,8 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit()
   {
+    // new CollectorZero(m_robotContainer.getCollectorHeadSubsystem()).schedule();
+
     m_robotContainer.setMotorBrake(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -122,6 +125,7 @@ public class Robot extends TimedRobot
   @Override
   public void teleopInit()
   {
+    // new CollectorZero(m_robotContainer.getCollectorHeadSubsystem()).schedule();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
