@@ -81,9 +81,16 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    // need shoot back
     Command turn = new TurnXDegrees(drivebase, 90);
+    Command intake = new CollectorIntakeSource(m_collector);
+    // Command shoot_back = new GoToHeadState(m_collector, CollectorHeadSubsystem.State.SHOOTBACK);
+    Command shoot = new CollectorShoot(m_collector);
     NamedCommands.registerCommand("print hello", Commands.print("hello"));
     NamedCommands.registerCommand("turn 90", turn);
+    NamedCommands.registerCommand("Shoot", shoot);
+    // NamedCommands.registerCommand("Shoot Back", shoot_back);
+    NamedCommands.registerCommand("Run Intake", intake);
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -101,7 +108,7 @@ public class RobotContainer {
       () -> driverXbox.getRawButtonPressed(XboxController.Button.kBack.value)
     );
 
-    //drivebase.setDefaultCommand(teleopDrive);
+    drivebase.setDefaultCommand(teleopDrive);
 
     CollectorZero collectorZero = new CollectorZero(m_collector);
     m_collector.setDefaultCommand(collectorZero);
