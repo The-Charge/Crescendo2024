@@ -60,7 +60,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         inRangeCounter = 0;
 
         magicRequest.withPosition(lastTarget);
-
         driver.setControl(magicRequest);
     }
     public void stopElevator() {

@@ -37,7 +37,7 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 
 import frc.robot.subsystems.*;
-import frc.robot.commands.pivotElevator;
+import frc.robot.commands.PivotElevator;
 import frc.robot.commands.Climber.*;
 import frc.robot.commands.Elevator.*;
 import frc.robot.commands.Indexer.*;

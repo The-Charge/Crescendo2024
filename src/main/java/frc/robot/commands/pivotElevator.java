@@ -7,7 +7,7 @@ import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
-public class pivotElevator extends Command {
+public class PivotElevator extends Command {
 
     private final ElevatorSubsystem elev;
     private final PivotSubsystem pivot;
@@ -15,7 +15,7 @@ public class pivotElevator extends Command {
     private final IntSupplier machineState;
     
 
-    public pivotElevator( ElevatorSubsystem elev, PivotSubsystem piv, IntSupplier machineState) {
+    public PivotElevator( ElevatorSubsystem elev, PivotSubsystem piv, IntSupplier machineState) {
         this.elev = elev;
         this.pivot = piv;
         this.machineState = machineState;
