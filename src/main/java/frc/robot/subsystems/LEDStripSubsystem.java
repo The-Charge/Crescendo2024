@@ -74,10 +74,10 @@ public class LEDStripSubsystem extends SubsystemBase {
     hasChanged = true;
   }
 
-  public void setVisionPixelRGB(){
-    double tv = RobotContainer.getlimelight("limelight-fixed").gettv();
+  public void setVisionPixelRGB(VisionSubsystem limelight){
+    double tv = limelight.gettv();
     
-    switch ((int) RobotContainer.getlimelight("limelight-fixed").getcurrentpipeline()){
+    switch ((int) limelight.getcurrentpipeline()){
       case 0: //General Apriltag
        if (tv > 0){
           setRange(0, getStripLength(), Color.kGreen);

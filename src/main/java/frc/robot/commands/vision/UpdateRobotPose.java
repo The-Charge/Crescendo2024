@@ -31,7 +31,7 @@ public class UpdateRobotPose extends Command {
 
   @Override
   public void execute() {
-    swerve.addVisionReading(limelight.getName());
+    swerve.addVisionReading(limelight);
   }
 
   // Called once the command ends or is interrupted.
@@ -43,7 +43,7 @@ public class UpdateRobotPose extends Command {
   @Override
   public boolean isFinished() {
     //Ensures robot pose estimator is within pose given by limelight
-    return swerve.updatedPoseWithinThreshold(limelight.getName());
+    return swerve.updatedPoseWithinThreshold(limelight);
   }
 
 }

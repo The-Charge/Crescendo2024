@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.LEDStripSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 /**
  * An example command that uses an example subsystem.
@@ -17,10 +18,12 @@ import frc.robot.subsystems.LEDStripSubsystem;
 public class LEDVision extends Command {
 
   private final LEDStripSubsystem strip;
+  private final VisionSubsystem limelight;
   private int stripSize;
 
-  public LEDVision(LEDStripSubsystem sub1) {
+  public LEDVision(LEDStripSubsystem sub1, VisionSubsystem limelight) {
     strip = sub1;
+    this.limelight = limelight;
     addRequirements(sub1);
   }
 
@@ -34,7 +37,7 @@ public class LEDVision extends Command {
 
   @Override
   public void execute() {
-    strip.setVisionPixelRGB();
+    strip.setVisionPixelRGB(limelight);
   }
 
   // Called once the command ends or is interrupted.

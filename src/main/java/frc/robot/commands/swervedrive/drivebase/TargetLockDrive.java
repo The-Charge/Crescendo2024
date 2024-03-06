@@ -17,6 +17,9 @@ import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.List;
 import java.util.function.DoubleSupplier;
+
+import javax.naming.LimitExceededException;
+
 import swervelib.SwerveController;
 import swervelib.math.SwerveMath;
 
@@ -74,9 +77,9 @@ public class TargetLockDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double tx = RobotContainer.getlimelight(limelight.getName()).gettx();
+    double tx = limelight.gettx();
     double RotationVal = MathUtil.clamp(heading_controller.calculate(tx, 0.0), -1, 1);
-    if (RobotContainer.getlimelight(limelight.getName()).gettv() > 0.0)
+    if (limelight.gettv() > 0.0)
     rotationSpeed = RotationVal * swerve.getSwerveController().config.maxAngularVelocity;
     else if (Math.abs(heading.getAsDouble()) > swerve.getSwerveController().config.angleJoyStickRadiusDeadband) {
       rotationSpeed = heading.getAsDouble()*swerve.getSwerveController().config.maxAngularVelocity;

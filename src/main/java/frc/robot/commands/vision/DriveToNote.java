@@ -55,7 +55,7 @@ public class DriveToNote extends InstantCommand {
     double RotationVal = MathUtil.clamp(heading_controller.calculate(tx, 0.0), -1, 1);
     double TranslationVal = MathUtil.clamp(drive_controller.calculate(distance, 0.0), -0.1, 0.1);
 
-    if (RobotContainer.getlimelight(limelight.getName()).gettv() > 0.0){
+    if (limelight.gettv() > 0.0){
       swerve.drive(new Translation2d(-1 * TranslationVal * 14.5,0), RotationVal * swerve.getSwerveController().config.maxAngularVelocity, false);
     }
     else{
@@ -74,7 +74,7 @@ public class DriveToNote extends InstantCommand {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.getlimelight(limelight.getName()).gettv() < 1.0;
+    return limelight.gettv() < 1.0;
   }
 
 }

@@ -28,6 +28,7 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.ApriltagConstants;
 import frc.robot.Constants.AutonConstants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.subsystems.VisionSubsystem;
 
 import java.io.File;
 import java.util.function.DoubleSupplier;
@@ -498,19 +499,19 @@ public class SwerveSubsystem extends SubsystemBase
   }
 
 
-  public void addVisionReading(String limelightname){
+  public void addVisionReading(VisionSubsystem limelight){
     Pose2d setpose;
     //double latency;
-    if (RobotContainer.getlimelight(limelightname).gettv() > 0.0){
-      setpose = RobotContainer.getlimelight(limelightname).getRobotFieldPose();
+    if (limelight.gettv() > 0.0){
+      setpose = limelight.getRobotFieldPose();
       //latency = RobotContainer.getlimelightshooter().getlimelightshooterLatency();
     swerveDrive.addVisionMeasurement(setpose, Timer.getFPGATimestamp());
     }
   }
-  public boolean updatedPoseWithinThreshold(String limelightname){
+  public boolean updatedPoseWithinThreshold(VisionSubsystem limelight){
     boolean withinThreshold;
     Pose2d setpose;
-    setpose = RobotContainer.getlimelight(limelightname).getRobotFieldPose();
+    setpose = limelight.getRobotFieldPose();
     withinThreshold = Math.abs(swerveDrive.getPose().getX() - setpose.getX()) < ApriltagConstants.BOTPOSE_THRESHOLD_TRANSLATION;
     withinThreshold &= Math.abs(swerveDrive.getPose().getY() - setpose.getY()) < ApriltagConstants.BOTPOSE_THRESHOLD_TRANSLATION;
     withinThreshold &= Math.abs(swerveDrive.getPose().getRotation().getDegrees() - setpose.getRotation().getDegrees()) < ApriltagConstants.BOTPOSE_THRESHOLD_ROTATION;

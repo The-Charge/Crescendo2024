@@ -6,11 +6,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.LimelightHelpers;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.VisionConstants;
 
 public class VisionSubsystem extends SubsystemBase{
-    public String limelightname;
-    public boolean targetIdentified = false;
+    public String limelightname = "limelight-fixed";
+    public boolean targetIdentified = false;    
     public double tx;               //X-offset
     public double ty;               //Y-offset
     public double tv;               //Target Identification
@@ -24,8 +25,7 @@ public class VisionSubsystem extends SubsystemBase{
     public Pose2d robotpose;        //Robot in Fieldspace (blue side)
     public double[] campose = new double[6];          //3D tranform of thecamerai n the coordinate system of the robot
 
-    public VisionSubsystem(String limelightname){
-        this.limelightname = limelightname;
+    public VisionSubsystem(){
     }
 
     @Override
@@ -54,13 +54,6 @@ public class VisionSubsystem extends SubsystemBase{
         limelightlatency = tl + cl;                 //ms
         distance = Math.pow((ta * 1.82), -0.468);   //formula: 1.82x^-0.468, in meters
 
-
-        //SmartDashboard updates
-        SmartDashboard.putNumber("Distance To Target", distance);
-        SmartDashboard.putNumber("Robot Orientation", robotpose.getRotation().getDegrees());
-        SmartDashboard.putNumber("Robotx", robotpose.getX());
-        SmartDashboard.putNumber("Roboty", robotpose.getY());
-
     }
 
     @Override
@@ -78,10 +71,22 @@ public class VisionSubsystem extends SubsystemBase{
         
     }
 
+    public void swapCurrentLimelightName(){
+        LimelightHelpers.setLEDMode_ForceOff(limelightname);
+        if (limelightname == "limelight-fixed"){
+            limelightname = "limelight-shooter";
+        }
+        else{
+            limelightname = "limelight-fixed";
+        }
+        LimelightHelpers.setLEDMode_ForceOn(limelightname);
+    }
+
     //Setters
     public void setPipeline(double index){
         NetworkTableInstance.getDefault().getTable(limelightname).getEntry("pipeline").setNumber(index);
     }
+    
     
     public void setCameraPose(){ //elevator and pivot will change camera location, must adjust to that
         double x, z, pitch; //other 3 values will not change hopefully
