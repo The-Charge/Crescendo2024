@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.List;
@@ -64,9 +65,10 @@ public class TargetLockDrive extends Command {
     this.limelight = limelight;
     rotationSpeed = 0;
     heading_controller = new PIDController(0.02, 0.0002, 0.0001);
-    heading_controller.setTolerance(0.1);
+    heading_controller.setTolerance(VisionConstants.TX_TOLERANCE_THRESHOLD);
     heading_controller.setSetpoint(0.0);
     addRequirements(swerve);
+    addRequirements(limelight);
   }
 
   @Override

@@ -19,6 +19,7 @@ public class DriveToNoteCommandGroup extends SequentialCommandGroup{
     public DriveToNoteCommandGroup(VisionSubsystem limelight, SwerveSubsystem swerve){
 
             addCommands(
+                new SetCurrentCamera(limelight, "limelight-shooter"),
                 new SetPipeline(limelight, VisionConstants.NEURAL_NETWORK_PIPELINE),
                 new DriveToNote(swerve, limelight)
             );  

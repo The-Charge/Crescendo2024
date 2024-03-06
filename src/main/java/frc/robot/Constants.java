@@ -108,7 +108,7 @@ public final class Constants {
     public static final double SPEAKER_LOCK_PIPELINE = 2.0; 
 
     //note tolerances
-    public static final double TX_THRESHOLD = 5;  //degrees
+    public static final double TX_TOLERANCE_THRESHOLD = 5;  //degrees
   }
   public static class FieldConstants{
     //Fixed Apriltag poses as given by field drawings
@@ -205,16 +205,16 @@ public final class Constants {
     public static final double APRILTAG_PIPELINE = 0;
     public static final double NEURAL_NETWORK_PIPELINE = 1;
 
-    //default position of limelight in robotspace when in rest position
-    public static final double DEFAULT_X_POSITION = 0;
-    public static final double DEFAULT_Y_POSITION = 0;
-    public static final double DEFAULT_Z_POSITION = 0;
-    public static final double DEFAULT_ROLL_POSITION = 0;
-    public static final double DEFAULT_PITCH_POSITION = 0;
-    public static final double DEFAULT_YAW_POSITON = 0;
+    //default position of limelight in robotspace when in rest position (meters, degrees)
+    public static final double DEFAULT_X_POSITION = -0.3556;
+    public static final double DEFAULT_Y_POSITION = -0.1524;
+    public static final double DEFAULT_Z_POSITION = 0; //TBD
+    public static final double DEFAULT_ROLL_POSITION = 5; //TBD
+    public static final double DEFAULT_PITCH_POSITION = 35;
+    public static final double DEFAULT_YAW_POSITON = 180;
 
   }
-  public static class NoteLLConstants{
+  public static class ShooterLLConstants{
     //pipelines
     public static final double APRILTAG_PIPELINE = 0;
     public static final double NEURAL_NETWORK_PIPELINE = 1;
@@ -226,8 +226,6 @@ public final class Constants {
     public static final double DEFAULT_ROLL_POSITION = 0;
     public static final double DEFAULT_PITCH_POSITION = 0;
     public static final double DEFAULT_YAW_POSITON = 0;
-
-    
   }
   public static class ApriltagConstants{
     //Updating robot pose accuracy threshold

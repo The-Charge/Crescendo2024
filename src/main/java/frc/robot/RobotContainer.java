@@ -72,13 +72,10 @@ public class RobotContainer
         () -> -driverXbox.getRawAxis(rotationXboxAxis));
 
     LEDVision LEDLimelight = new LEDVision(m_ledSubsystem, m_limelight);
-    //UpdateCameraPose DefaultUpdateCameraPose_SHOOTER = new UpdateCameraPose(m_limelightfixed);
-    //UpdateCameraPose DefaultUpdateCameraPose_NOTE = new UpdateCameraPose(m_limelightshooter);
     
     drivebase.setDefaultCommand(teleopDrive);
     m_ledSubsystem.setDefaultCommand(LEDLimelight);
-    //m_limelightfixed.setDefaultCommand(DefaultUpdateCameraPose_SHOOTER);
-    //m_limelightshooter.setDefaultCommand(DefaultUpdateCameraPose_NOTE);
+ 
   }
 
   /**

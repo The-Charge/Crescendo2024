@@ -28,8 +28,9 @@ public class DriveToNote extends InstantCommand {
         this.swerve = swerve;
         this.limelight = limelight;
         addRequirements(swerve);
+        addRequirements(limelight);
         heading_controller = new PIDController(0.01, 0.0, 0.0);
-        heading_controller.setTolerance(VisionConstants.TX_THRESHOLD);
+        heading_controller.setTolerance(VisionConstants.TX_TOLERANCE_THRESHOLD);
         heading_controller.setSetpoint(0.0);
 
         drive_controller = new PIDController(0.5, 0.0, 0.0);

@@ -4,26 +4,20 @@
 
 package frc.robot.commands.vision;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 
 /**
  * An example command that uses an example subsystem.
  */
 
-public class DriveToTag extends InstantCommand {
-    private final SwerveSubsystem swerve;
-    private Command drivetoPose;
+public class SetCurrentCamera extends InstantCommand {
     private final VisionSubsystem limelight;
-    public DriveToTag(SwerveSubsystem swerve, VisionSubsystem limelight){
-        this.swerve = swerve;
+    private final String limelightname;
+    public SetCurrentCamera(VisionSubsystem limelight, String limelightname){
         this.limelight = limelight;
-        addRequirements(swerve);
+        this.limelightname = limelightname;
         addRequirements(limelight);
     }
 
@@ -32,17 +26,11 @@ public class DriveToTag extends InstantCommand {
 
 @Override
   public void initialize() {
-    if (limelight.gettv() > 0.0){
-      drivetoPose = swerve.driveToPose(Constants.ApriltagConstants.OFFSET_APRILTAG_POSE[(int) limelight.gettid()]);
-      drivetoPose.schedule();
-    }
-    
-}
+  }
 
   @Override
   public void execute() {
-
-    
+    limelight.setCurrentLimelightName(limelightname);
   }
 
   // Called once the command ends or is interrupted.
@@ -52,7 +40,7 @@ public class DriveToTag extends InstantCommand {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return drivetoPose != null && drivetoPose.isFinished();
+    return true;
   }
 
 }

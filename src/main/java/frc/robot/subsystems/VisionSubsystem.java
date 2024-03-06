@@ -26,6 +26,7 @@ public class VisionSubsystem extends SubsystemBase{
     public double[] campose = new double[6];          //3D tranform of thecamerai n the coordinate system of the robot
 
     public VisionSubsystem(){
+    
     }
 
     @Override
@@ -82,6 +83,11 @@ public class VisionSubsystem extends SubsystemBase{
         LimelightHelpers.setLEDMode_ForceOn(limelightname);
     }
 
+    public void setCurrentLimelightName(String newname){
+        LimelightHelpers.setLEDMode_ForceOff(limelightname);
+        limelightname = newname;
+        LimelightHelpers.setLEDMode_ForceOn(limelightname);
+    }
     //Setters
     public void setPipeline(double index){
         NetworkTableInstance.getDefault().getTable(limelightname).getEntry("pipeline").setNumber(index);
@@ -89,16 +95,22 @@ public class VisionSubsystem extends SubsystemBase{
     
     
     public void setCameraPose(){ //elevator and pivot will change camera location, must adjust to that
-        double x, z, pitch; //other 3 values will not change hopefully
-        campose[0] += 0;    //change x
-        campose[2] += 0;    //change z
-        campose[4] += 0;    //change pitch
+        if (limelightname == "limelight-shooter"){
+            double x = 0;
+            double z = 0;
+            double pitch = 0; //other 3 values will not change hopefully
+        campose[0] += x;    //change x
+        campose[2] += z;    //change z
+        campose[4] += pitch;    //change pitch
         NetworkTableInstance.getDefault().getTable(limelightname).getEntry("camerapose_robotspace_set").setDoubleArray(campose);    //change later
+        }
+        
     }
 
     public void setPriorityID(double id){
          NetworkTableInstance.getDefault().getTable(limelightname).getEntry("priorityid").setNumber(id);   
     }
+
     //Getters
     public String getlimelightshootername(){
         return limelightname;
@@ -135,5 +147,3 @@ public class VisionSubsystem extends SubsystemBase{
     }    
 
 }
-
-
