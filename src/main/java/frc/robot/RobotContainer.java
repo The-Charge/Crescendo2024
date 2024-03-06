@@ -64,10 +64,6 @@ public class RobotContainer
     // Configure the trigger bindings
     configureBindings();
 
-    if (RobotBase.isSimulation()) {
-      rotationXboxAxis = 2;
-    }
-
     TeleopDrive teleopDrive = new TeleopDrive(drivebase,
         () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
             OperatorConstants.LEFT_Y_DEADBAND),
