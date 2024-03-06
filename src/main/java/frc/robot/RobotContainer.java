@@ -28,9 +28,7 @@ import frc.robot.commands.CollectorHead.CollectorIntakeSource;
 import frc.robot.commands.CollectorHead.CollectorReverseAll;
 import frc.robot.commands.CollectorHead.CollectorShoot;
 import frc.robot.commands.CollectorHead.CollectorZero;
-import frc.robot.commands.Indexer.*;
 import frc.robot.commands.Pivot.*;
-import frc.robot.commands.Shooter.*;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -40,10 +38,7 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.PivotElevator;
 import frc.robot.commands.Climber.*;
 import frc.robot.commands.Elevator.*;
-import frc.robot.commands.Indexer.*;
-import frc.robot.commands.Intake.*;
 import frc.robot.commands.Pivot.*;
-import frc.robot.commands.Shooter.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -111,7 +106,7 @@ public class RobotContainer {
     CollectorZero collectorZero = new CollectorZero(m_collector);
     m_collector.setDefaultCommand(collectorZero);
 
-    m_elevator.setDefaultCommand(new MoveElevWithJoystick(m_elevator, () -> buttonBox.getY()));
+    m_elevator.setDefaultCommand(new MoveElevWithJoystick(m_elevator, () -> buttonBox.getZ()));
   }
 
   /**
@@ -128,24 +123,12 @@ public class RobotContainer {
    * Flight joysticks}.
    */
   private void configureBindings() {
-<<<<<<< Updated upstream
     new Trigger(() -> buttonBox.getRawButton(3)).onTrue(new CollectorIntakeSource(m_collector));
     new Trigger(() -> buttonBox.getRawButton(4)).onTrue(new CollectorReverseAll(m_collector));
     new Trigger(() -> buttonBox.getRawButton(2)).onTrue(new CollectorShoot(m_collector));
     
     //new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     //new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
-=======
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    // driverController.button(1).onTrue(new MoveToAngle(m_pivot, 50));
-    // driverController.button(2).onTrue(new MoveToAngle(m_pivot, 0));
-    // driverController.button(4).onTrue(new SpinShooter(m_shooter));
-    // driverController.button(3).onTrue(new SenseNote(m_indexer)); //never ends
-    driverController.button(3).onTrue(new CollectorIntakeSource(m_collector));
-    driverController.button(4).onTrue(new CollectorReverseAll(m_collector));
-    driverController.button(2).onTrue(new CollectorShoot(m_collector));
-
->>>>>>> Stashed changes
   }
 
   /**

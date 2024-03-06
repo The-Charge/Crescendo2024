@@ -55,16 +55,14 @@ public final class Constants {
     
     public static final int currentLimit = 20;
 
-    public static final PIDFConfig pid = new PIDFConfig(0.4, 0, 0.01, 0);
-    public static final int magicCruisVelocity = 80;
-    public static final int magicAcceleration = 160;
-    public static final int magicJerk = 1600;
-    public static final double rangeSize = 0.2; //0.2 rotations
-    public static final int rangeTime = 20; //20 frames, ~0.4s
-    public static final double ticksPerInch = 0;
-
-    public static final double minPos = 0;
-    public static final double maxPos = 27 * ticksPerInch;
+    public static final PIDFConfig pid = new PIDFConfig(0.8, 0.01, 0.05, 0);
+    public static final double kG = 0.04;
+    public static final double rangeSize = 0.2; //in inches
+    public static final int rangeTime = 20; //in frames (runs at roughly 50 FPS)
+    
+    public static final double minPos = 0; //in ticks
+    public static final double maxPos = 123; //in ticks
+    public static final double ticksPerInch = maxPos / 27.0;
   }
 
   public static final class Intake {
@@ -96,10 +94,13 @@ public final class Constants {
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 30;
     public static final int encoderId = 7;
+    
+    public static final double minPos = 0;
+    public static final double maxPos = 0;
     public static final double gearRat = 1 / 80.0;
     public static final double ticksPerDeg = 2048 / gearRat / 360.0;
     public static final double absEncoderAngleOffset = 0;
-    public static final double absTicksPerDeg = 2048;
+    public static final double absTicksPerDeg = 2048 / 360.0;
   }
 
   public static final class Climber {
@@ -123,7 +124,7 @@ public final class Constants {
   }
 
   public static abstract class StateLocations {
-    //elevator travel distance is 27 in
+    //elev is in inches, piv in degrees
 
     public static final double elevStartup = 0;
     public static final double pivStartup = 155;

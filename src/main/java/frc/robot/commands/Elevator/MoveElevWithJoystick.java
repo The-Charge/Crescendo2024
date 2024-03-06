@@ -8,18 +8,18 @@ import frc.robot.subsystems.ElevatorSubsystem;
 public class MoveElevWithJoystick extends Command {
 
     public final ElevatorSubsystem elev;
-    public final DoubleSupplier joyY;
+    public final DoubleSupplier joyZ;
 
-    public MoveElevWithJoystick(ElevatorSubsystem elev, DoubleSupplier joystickY) {
+    public MoveElevWithJoystick(ElevatorSubsystem elev, DoubleSupplier joystickZ) {
         this.elev = elev;
         addRequirements(elev);
 
-        this.joyY = joystickY;
+        this.joyZ = joystickZ;
     }
 
     @Override
     public void execute() {
-        elev.goToPosition((-joyY.getAsDouble() + 1) / 2.0 * 27);
+        elev.goToPosition(joyZ.getAsDouble() * 27);
     }
     @Override
     public boolean isFinished() {

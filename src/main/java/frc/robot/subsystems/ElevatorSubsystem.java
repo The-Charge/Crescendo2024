@@ -14,45 +14,41 @@ import frc.robot.Constants;
 public class ElevatorSubsystem extends SubsystemBase {
 
     private TalonFX driver;
-    private MotionMagicVoltage magicRequest;
     private double lastTarget = -1;
     private int inRangeCounter = 0;
 
     public ElevatorSubsystem() {
         driver = new TalonFX(Constants.Elevator.driverId);
+        driver.setNeutralMode(NeutralModeValue.Brake);
 
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
+        motorConfig.MotorOutput.PeakForwardDutyCycle = 0.6;
+        motorConfig.MotorOutput.PeakReverseDutyCycle = -0.6;
+
+        motorConfig.CurrentLimits.StatorCurrentLimit = 20;
+        motorConfig.CurrentLimits.SupplyTimeThreshold = 0.3;
+        motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+
         Slot0Configs slotConfigs = motorConfig.Slot0;
         slotConfigs.kS = slotConfigs.kV = 0;
         slotConfigs.kP = Constants.Elevator.pid.p;
         slotConfigs.kI = Constants.Elevator.pid.i;
         slotConfigs.kD = Constants.Elevator.pid.d;
-        slotConfigs.kG = Constants.Elevator.pid.f; // forward value to hold the elevator in place
+        slotConfigs.kG = Constants.Elevator.kG;
         slotConfigs.GravityType = GravityTypeValue.Elevator_Static;
-
-        MotionMagicConfigs magicConfig = motorConfig.MotionMagic;
-        magicConfig.MotionMagicCruiseVelocity = Constants.Elevator.magicCruisVelocity;
-        magicConfig.MotionMagicAcceleration = Constants.Elevator.magicAcceleration;
-        magicConfig.MotionMagicJerk = Constants.Elevator.magicJerk;
-
-        driver.setNeutralMode(NeutralModeValue.Brake);
+        driver.getConfigurator().apply(slotConfigs);
 
         SoftwareLimitSwitchConfigs softLimits = new SoftwareLimitSwitchConfigs();
         softLimits.ForwardSoftLimitEnable = softLimits.ReverseSoftLimitEnable = true;
         softLimits.ForwardSoftLimitThreshold = Constants.Elevator.maxPos;
         softLimits.ReverseSoftLimitThreshold = Constants.Elevator.minPos;
         driver.getConfigurator().apply(softLimits);
-
-        driver.getConfigurator().apply(slotConfigs);
-        magicRequest = new MotionMagicVoltage(0).withSlot(0);
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Elevator pos", driver.getPosition().getValueAsDouble());
     }
-    @Override
-    public void simulationPeriodic() {}
 
     //NOTE: target is in inches from the bottom of the elevators range
     public void goToPosition(double target) {
@@ -60,8 +56,9 @@ public class ElevatorSubsystem extends SubsystemBase {
         lastTarget = Math.min(Math.max(target * Constants.Elevator.ticksPerInch, Constants.Elevator.minPos), Constants.Elevator.maxPos);
         inRangeCounter = 0;
 
-        magicRequest.withPosition(lastTarget);
-        driver.setControl(magicRequest);
+        PositionDutyCycle request = new PositionDutyCycle(lastTarget);
+        request.Slot = 0;
+        driver.setControl(request);
     }
     public void stopElevator() {
         driver.setControl(new NeutralOut());
@@ -69,7 +66,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public boolean isAtTarget() {
         double error = lastTarget - driver.getPosition().getValueAsDouble();
 
-        if(Math.abs(error) <= Constants.Elevator.rangeSize) inRangeCounter++;
+        if(Math.abs(error) <= Constants.Elevator.rangeSize * Constants.Elevator.ticksPerInch) inRangeCounter++;
         else inRangeCounter = 0;
 
         if(inRangeCounter >= Constants.Elevator.rangeTime) return true;
