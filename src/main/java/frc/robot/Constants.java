@@ -97,7 +97,7 @@ public final class Constants {
     
     public static final double minPos = 0;
     public static final double maxPos = 0;
-    public static final double gearRat = 1 / 80.0;
+    public static final double gearRat = 1 / 100.0;
     public static final double ticksPerDeg = 2048 / gearRat / 360.0;
     public static final double absEncoderAngleOffset = 0;
     public static final double absTicksPerDeg = 2048 / 360.0;
