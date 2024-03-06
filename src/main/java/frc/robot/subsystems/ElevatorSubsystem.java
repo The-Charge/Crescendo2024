@@ -18,7 +18,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private int inRangeCounter = 0;
 
     public ElevatorSubsystem() {
-        driver = new TalonFX(Constants.Elevator.driverId);
+        driver = new TalonFX(Constants.Elevator.elevatorId);
         driver.setNeutralMode(NeutralModeValue.Brake);
 
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();

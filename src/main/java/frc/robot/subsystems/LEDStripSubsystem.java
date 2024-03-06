@@ -19,7 +19,7 @@ public class LEDStripSubsystem extends SubsystemBase {
   private int animationTimer = 0;
 
   public LEDStripSubsystem() {
-    leds = new AddressableLED(Constants.LEDConstants.portId);
+    leds = new AddressableLED(Constants.LEDConstants.ledId);
 
     buffer = new AddressableLEDBuffer(Constants.LEDConstants.totalLength);
     leds.setLength(buffer.getLength());

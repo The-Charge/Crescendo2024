@@ -51,7 +51,7 @@ public final class Constants {
   }
 
   public static final class Elevator {
-    public static final int driverId = 12;
+    public static final int elevatorId = 12;
     
     public static final int currentLimit = 20;
 
@@ -66,31 +66,31 @@ public final class Constants {
   }
 
   public static final class Intake {
-    public static final int TOPINTAKEID = 5;
-    public static final int BOTTOMINTAKEID = 6;
-    public static final PIDConstants INTAKEPID= new PIDConstants(0.0002, 0.0000001, 0);
+    public static final int topId = 5;
+    public static final int bottomId = 6;
+    public static final PIDConstants pid = new PIDConstants(0.0002, 0.0000001, 0);
   }
 
   public static final class Shooter {
-    public static final int LEFTSHOOTERID = 2;
-    public static final int RIGHTSHOOTERID = 1;
-    public static final PIDConstants SHOOTERPID = new PIDConstants(4.0, 0.0, 1.0);
+    public static final int leftId = 2;
+    public static final int rightId = 1;
+    public static final PIDConstants pid = new PIDConstants(4.0, 0.0, 1.0);
   }
 
   public static final class Indexer {
-    public static final int PHOTOSENSORID1 = 8;
-    public static final int PHOTOSENSORID2 = 9;
-    public static final int LEFTINDEXERID = 7;
-    public static final int RIGHTINDEXERID = 4;
-    public static final PIDConstants INDEXERPID = new PIDConstants(4.0, 0.0, 1.0);
+    public static final int photosensor1Id = 8;
+    public static final int photosensor2Id = 9;
+    public static final int leftId = 7;
+    public static final int rightId = 4;
+    public static final PIDConstants pid = new PIDConstants(4.0, 0.0, 1.0);
   }
 
   public static final class Pivot {
-    public static final int PivotId = 3;
-    public static final double kFeedForward = 0;
-    public static final PIDFConfig pivotPID = new PIDFConfig(0.7, 0, 0, kFeedForward);
-    public static final double pivotkS = 0.25;
-    public static final double pivotkV = 0.12;
+    public static final int pivotId = 3;
+    public static final double kF = 0;
+    public static final PIDFConfig pid = new PIDFConfig(0.7, 0, 0, kF);
+    public static final double kS = 0.25;
+    public static final double kV = 0.12;
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 30;
     public static final int encoderId = 7;
@@ -109,7 +109,7 @@ public final class Constants {
   }
 
   public static final class LEDConstants {
-    public static final int portId = 9;
+    public static final int ledId = 9;
     public static final int totalLength = 45; //in pixels
   }
 

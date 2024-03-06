@@ -23,7 +23,7 @@ public class PivotSubsystem extends SubsystemBase {
     private DutyCycleEncoder absEncoder;
 
     public PivotSubsystem() {
-        pivotMotor = new TalonFX(Constants.Pivot.PivotId);
+        pivotMotor = new TalonFX(Constants.Pivot.pivotId);
         pivotMotor.setInverted(true); //constant
 
         //set status frame period 
@@ -34,11 +34,11 @@ public class PivotSubsystem extends SubsystemBase {
         CurrentLimits.StatorCurrentLimitEnable = true;
 
         Slot0Configs slot0Configs = talonFXConfigs.Slot0;
-        slot0Configs.kS = Constants.Pivot.pivotkS;
-        slot0Configs.kV = Constants.Pivot.pivotkV;
-        slot0Configs.kP = Constants.Pivot.pivotPID.p;
-        slot0Configs.kI = Constants.Pivot.pivotPID.i;
-        slot0Configs.kD = Constants.Pivot.pivotPID.d;
+        slot0Configs.kS = Constants.Pivot.kS;
+        slot0Configs.kV = Constants.Pivot.kV;
+        slot0Configs.kP = Constants.Pivot.pid.p;
+        slot0Configs.kI = Constants.Pivot.pid.i;
+        slot0Configs.kD = Constants.Pivot.pid.d;
         //slot0Configs.GravityType = GravityTypeValue.Arm_Cosine; config the arm sensor stuff
         
         pivotMotor.setNeutralMode(NeutralModeValue.Brake);
