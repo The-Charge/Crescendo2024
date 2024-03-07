@@ -46,30 +46,26 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
  * trigger mappings) should be declared here.
  */
 public class RobotContainer {
-
   // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-      "swerve"));
-  private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem();
-  // CommandJoystick rotationController = new CommandJoystick(1);
 
-  private final PivotSubsystem m_pivot = new PivotSubsystem();
-
+  private final ClimbSubsystem m_climber = new ClimbSubsystem();
 
   private final CollectorHeadSubsystem m_collector = new CollectorHeadSubsystem();
-
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  Joystick buttonBox = new Joystick(1);
-
-  // CommandJoystick driverController = new
-  // CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
-  XboxController driverXbox = new XboxController(0);
-
-  private final SendableChooser<Command> autoChooser;
-
-  private int rotationXboxAxis = 4;
-  private final ClimbSubsystem m_climber = new ClimbSubsystem();
+  
   private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
+  
+  private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem();
+  
+  private final PivotSubsystem m_pivot = new PivotSubsystem();
+  
+  private final SendableChooser<Command> autoChooser;
+  
+  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
+  
+  Joystick buttonBox = new Joystick(1);
+    
+  XboxController driverXbox = new XboxController(0);
+  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -82,14 +78,13 @@ public class RobotContainer {
     configureBindings();
 
     TeleopDrive teleopDrive = new TeleopDrive(drivebase,
-      () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-      () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-      () -> -driverXbox.getRawAxis(rotationXboxAxis),
-      () -> driverXbox.getPOV(),
-      () -> MathUtil.applyDeadband(driverXbox.getLeftTriggerAxis(), OperatorConstants.joystickDeadband) > 0,
-      () -> MathUtil.applyDeadband(driverXbox.getRightTriggerAxis(), OperatorConstants.joystickDeadband) > 0,
-      () -> driverXbox.getRawButtonPressed(XboxController.Button.kBack.value)
-    );
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> -driverXbox.getRawAxis(OperatorConstants.rotationXboxAxis),
+        () -> driverXbox.getPOV(),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftTriggerAxis(), OperatorConstants.joystickDeadband) > 0,
+        () -> MathUtil.applyDeadband(driverXbox.getRightTriggerAxis(), OperatorConstants.joystickDeadband) > 0,
+        () -> driverXbox.getRawButtonPressed(XboxController.Button.kBack.value));
 
     drivebase.setDefaultCommand(teleopDrive);
 
@@ -116,9 +111,10 @@ public class RobotContainer {
     new Trigger(() -> buttonBox.getRawButton(3)).onTrue(new CollectorIntakeSource(m_collector));
     new Trigger(() -> buttonBox.getRawButton(4)).onTrue(new CollectorReverseAll(m_collector));
     new Trigger(() -> buttonBox.getRawButton(2)).onTrue(new CollectorShoot(m_collector));
-    
+
     new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+    new JoystickButton(driverXbox, XboxController.Button.kX.value)
+        .whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
   /**
@@ -138,6 +134,11 @@ public class RobotContainer {
     drivebase.setMotorBrake(brake);
   }
 
-  public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}
-  public CollectorHeadSubsystem getCollectorHeadSubsystem() {return m_collector;}
+  public LEDStripSubsystem getLEDSubsystem() {
+    return m_ledSubsystem;
+  }
+
+  public CollectorHeadSubsystem getCollectorHeadSubsystem() {
+    return m_collector;
+  }
 }
