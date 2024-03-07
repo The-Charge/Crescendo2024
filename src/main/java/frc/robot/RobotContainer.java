@@ -11,42 +11,31 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants;
-import frc.robot.commands.led.*;
 import frc.robot.commands.CollectorHead.CollectorIntakeSource;
 import frc.robot.commands.CollectorHead.CollectorReverseAll;
 import frc.robot.commands.CollectorHead.CollectorShoot;
 import frc.robot.commands.CollectorHead.CollectorZero;
-import frc.robot.commands.Pivot.*;
-import frc.robot.commands.Shooter.SpinShooter;
+import frc.robot.commands.Elevator.MoveElevWithJoystick;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.CollectorHeadSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LEDStripSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import java.io.File;
-
-import frc.robot.subsystems.*;
-import frc.robot.commands.PivotElevator;
-import frc.robot.commands.Climber.*;
-import frc.robot.commands.Elevator.*;
-import frc.robot.commands.Pivot.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -97,8 +86,8 @@ public class RobotContainer {
       () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
       () -> -driverXbox.getRawAxis(rotationXboxAxis),
       () -> driverXbox.getPOV(),
-      () -> MathUtil.applyDeadband(driverXbox.getLeftTriggerAxis(), OperatorConstants.TRIGGER_DEADBAND) > 0,
-      () -> MathUtil.applyDeadband(driverXbox.getRightTriggerAxis(), OperatorConstants.TRIGGER_DEADBAND) > 0,
+      () -> MathUtil.applyDeadband(driverXbox.getLeftTriggerAxis(), OperatorConstants.joystickDeadband) > 0,
+      () -> MathUtil.applyDeadband(driverXbox.getRightTriggerAxis(), OperatorConstants.joystickDeadband) > 0,
       () -> driverXbox.getRawButtonPressed(XboxController.Button.kBack.value)
     );
 
