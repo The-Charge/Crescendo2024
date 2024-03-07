@@ -20,6 +20,7 @@ public class DriveToTagCommandGroup extends SequentialCommandGroup{
     public DriveToTagCommandGroup(VisionSubsystem limelight, SwerveSubsystem swerve){
 
             addCommands(
+                new SetCurrentCamera(limelight, "limelight-fixed"),
                 new SetPipeline(limelight, VisionConstants.APRILTAG_PIPELINE),
                 new UpdateRobotPose(swerve, limelight),
                 new DriveToTag(swerve, limelight),

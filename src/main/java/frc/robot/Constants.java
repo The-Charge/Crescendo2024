@@ -203,12 +203,12 @@ public final class Constants {
   public static class FixedLLConstants{
     //pipelines
     public static final double APRILTAG_PIPELINE = 0;
-    public static final double NEURAL_NETWORK_PIPELINE = 1;
+    public static final double NEURAL_NETWORK_PIPELINE = 1; //FIXED LL I NOT ABLE TO USE THIS
 
     //default position of limelight in robotspace when in rest position (meters, degrees)
     public static final double DEFAULT_X_POSITION = -0.3556;
     public static final double DEFAULT_Y_POSITION = -0.1524;
-    public static final double DEFAULT_Z_POSITION = 0; //TBD
+    public static final double DEFAULT_Z_POSITION = 0.2667;
     public static final double DEFAULT_ROLL_POSITION = 5; //TBD
     public static final double DEFAULT_PITCH_POSITION = 35;
     public static final double DEFAULT_YAW_POSITON = 180;

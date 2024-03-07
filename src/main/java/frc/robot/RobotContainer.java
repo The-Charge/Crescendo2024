@@ -31,6 +31,8 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 import java.io.File;
 
+import com.pathplanner.lib.auto.NamedCommands;
+
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a "declarative" paradigm, very
@@ -61,8 +63,13 @@ public class RobotContainer
    */
   public RobotContainer()
   {
+    UpdateRobotPose updateRobotPose = new UpdateRobotPose(drivebase, m_limelight);
+    LEDVision LEDLimelight = new LEDVision(m_ledSubsystem, m_limelight);
+  
+    NamedCommands.registerCommand("Update Robot Pose", updateRobotPose);
     // Configure the trigger bindings
     configureBindings();
+
 
     TeleopDrive teleopDrive = new TeleopDrive(drivebase,
         () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
@@ -71,8 +78,7 @@ public class RobotContainer
             OperatorConstants.LEFT_X_DEADBAND),
         () -> -driverXbox.getRawAxis(rotationXboxAxis));
 
-    LEDVision LEDLimelight = new LEDVision(m_ledSubsystem, m_limelight);
-    
+   
     drivebase.setDefaultCommand(teleopDrive);
     m_ledSubsystem.setDefaultCommand(LEDLimelight);
  

@@ -83,12 +83,14 @@ public class VisionSubsystem extends SubsystemBase{
         LimelightHelpers.setLEDMode_ForceOn(limelightname);
     }
 
+    
+    //Setters
     public void setCurrentLimelightName(String newname){
         LimelightHelpers.setLEDMode_ForceOff(limelightname);
         limelightname = newname;
         LimelightHelpers.setLEDMode_ForceOn(limelightname);
     }
-    //Setters
+    
     public void setPipeline(double index){
         NetworkTableInstance.getDefault().getTable(limelightname).getEntry("pipeline").setNumber(index);
     }
