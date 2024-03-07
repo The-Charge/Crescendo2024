@@ -31,7 +31,7 @@ public class CollectorShoot extends Command {
     public void execute() {
         if(m_collector.shootIsATarget(10000) && !hasStartedIndexers) {
             m_collector.spinIndexer(CollectorHeadSubsystem.Direction.FORWARD, 1);
-            m_collector.spinIndexer(CollectorHeadSubsystem.Direction.FORWARD, 1);
+            m_collector.spinIntake(CollectorHeadSubsystem.Direction.FORWARD, 1);
             hasStartedIndexers = true;
         }
         if(!m_collector.getNoteSensor1() && !m_collector.getNoteSensor2() && !hasSetTime) {
@@ -46,9 +46,9 @@ public class CollectorShoot extends Command {
     }
     @Override
     public boolean isFinished() {
-        if(hasStartedIndexers) {
+        if(hasSetTime) {
             SmartDashboard.putNumber("feed timer", feedTimer.get());
         }
-        return timeout.hasElapsed(12) || (feedTimer == null ? false : feedTimer.hasElapsed(1.5));
+        return timeout.hasElapsed(12) || (feedTimer == null ? false : feedTimer.hasElapsed(2.5));
     }
 }

@@ -17,8 +17,8 @@ public class CollectorReverseAll extends Command {
     @Override
     public void initialize() {
         m_collector.spinIndexer(CollectorHeadSubsystem.Direction.BACKWARD, 1);
-        m_collector.spinIndexer(CollectorHeadSubsystem.Direction.BACKWARD, 1);
-        m_collector.spinIndexer(CollectorHeadSubsystem.Direction.BACKWARD, 1);
+        m_collector.spinShooter(CollectorHeadSubsystem.Direction.BACKWARD, 1);
+        m_collector.spinIntake(CollectorHeadSubsystem.Direction.BACKWARD, 1);
     }
     @Override
     public boolean isFinished() {

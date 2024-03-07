@@ -28,39 +28,39 @@ public class PivotSubsystem extends SubsystemBase {
 
         //set status frame period 
         TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
-        CurrentLimitsConfigs CurrentLimits = talonFXConfigs.CurrentLimits;
-        CurrentLimits.StatorCurrentLimit = 20.0;
-        CurrentLimits.SupplyTimeThreshold = 0.3;
-        CurrentLimits.StatorCurrentLimitEnable = true;
 
+        talonFXConfigs.CurrentLimits.StatorCurrentLimit = 20.0;
+        talonFXConfigs.CurrentLimits.SupplyTimeThreshold = 0.3;
+        talonFXConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
 
         talonFXConfigs.MotorOutput.PeakForwardDutyCycle = 0.5;
         talonFXConfigs.MotorOutput.PeakReverseDutyCycle = -0.5;
 
-
-        Slot0Configs slot0Configs = talonFXConfigs.Slot0;
-        slot0Configs.kS = Constants.Pivot.kS;
-        slot0Configs.kV = Constants.Pivot.kV;
-        slot0Configs.kP = Constants.Pivot.pid.p;
-        slot0Configs.kI = Constants.Pivot.pid.i;
-        slot0Configs.kD = Constants.Pivot.pid.d;
-        slot0Configs.kG = Constants.Pivot.kG;
+        talonFXConfigs.Slot0.kS = Constants.Pivot.kS;
+        talonFXConfigs.Slot0.kV = Constants.Pivot.kV;
+        talonFXConfigs.Slot0.kP = Constants.Pivot.pid.p;
+        talonFXConfigs.Slot0.kI = Constants.Pivot.pid.i;
+        talonFXConfigs.Slot0.kD = Constants.Pivot.pid.d;
+        talonFXConfigs.Slot0.kG = Constants.Pivot.kG;
         //slot0Configs.GravityType = GravityTypeValue.Arm_Cosine; config the arm sensor stuff
         
-        pivotMotor.setNeutralMode(NeutralModeValue.Brake);
+        talonFXConfigs.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
+
+        talonFXConfigs.Feedback.SensorToMechanismRatio = 100;
 
         pivotMotor.getConfigurator().apply(talonFXConfigs);
 
         absEncoder = new DutyCycleEncoder(Constants.Pivot.encoderId);
-        pivotMotor.setPosition((absEncoder.getAbsolutePosition() / Constants.Pivot.absTicksPerDeg + Constants.Pivot.absEncoderAngleOffset) * Constants.Pivot.ticksPerDeg);
+        //pivotMotor.setPosition((absEncoder.getAbsolutePosition() / Constants.Pivot.absTicksPerDeg + Constants.Pivot.absEncoderAngleOffset) * Constants.Pivot.ticksPerDeg);
         SoftwareLimitSwitchConfigs softLimits = new SoftwareLimitSwitchConfigs();
         pivotMotor.getConfigurator().apply(softLimits);
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("REL Position (degrees)", pivotMotor.getPosition().getValueAsDouble() * 360);
-        SmartDashboard.putNumber("ABS Position + offset (degrees)", absEncoder.getAbsolutePosition() * Constants.Pivot.absTicksPerDeg + Constants.Pivot.absEncoderAngleOffset);
+        SmartDashboard.putNumber("REL Position", pivotMotor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("ABS Position", absEncoder.getAbsolutePosition());
+        //SmartDashboard.putNumber("ABS Position + offset (degrees)", absEncoder.getAbsolutePosition() * Constants.Pivot.absTicksPerDeg + Constants.Pivot.absEncoderAngleOffset);
     }
 
     public void pivotToAngle(double angle) {

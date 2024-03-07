@@ -187,28 +187,28 @@ public class CollectorHeadSubsystem extends SubsystemBase {
             indexerRight.set(speed);
         }
         else {
-            indexerLeft.set(speed);
-            indexerRight.set(speed);
+            indexerLeft.set(-speed);
+            indexerRight.set(-speed);
         }
     }
     public void spinShooter(Direction dir, double speed) {
         if(dir == Direction.FORWARD) {
-            indexerLeft.set(speed);
-            indexerRight.set(speed);
+            shooterLeft.set(speed);
+            shooterRight.set(speed);
         }
         else {
-            indexerLeft.set(speed);
-            indexerRight.set(speed);
+            shooterLeft.set(-speed);
+            shooterRight.set(-speed);
         }
     }
     public void spinIntake(Direction dir, double speed) {
         if(dir == Direction.FORWARD) {
-            indexerLeft.set(speed);
-            indexerRight.set(speed);
+            intakeBottom.set(speed);
+            intakeTop.set(speed);
         }
         else {
-            indexerLeft.set(speed);
-            indexerRight.set(speed);
+            intakeBottom.set(-speed);
+            intakeTop.set(-speed);
         }
     }
 
