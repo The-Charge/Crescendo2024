@@ -33,8 +33,8 @@ public class CollectorHeadSubsystem extends SubsystemBase {
     private int inRangeCounter = 0;
     
     public CollectorHeadSubsystem() {
-        noteSensor2 = new DigitalInput(9); // initial second one
-        noteSensor1 = new DigitalInput(8); //initial first one
+        noteSensor2 = new DigitalInput(Constants.Indexer.photosensor2Id); // stop for second one
+        noteSensor1 = new DigitalInput(Constants.Indexer.photosensor1Id); //pivot first one
         //shooterLeft
         shooterLeft = new CANSparkMax(Constants.Shooter.leftId, MotorType.kBrushless);
         shooterLeft.set(0);

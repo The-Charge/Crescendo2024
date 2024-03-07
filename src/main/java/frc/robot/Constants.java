@@ -88,9 +88,11 @@ public final class Constants {
   public static final class Pivot {
     public static final int pivotId = 3;
     public static final double kF = 0;
-    public static final PIDFConfig pid = new PIDFConfig(0.7, 0, 0, kF);
-    public static final double kS = 0.25;
-    public static final double kV = 0.12;
+    public static final PIDFConfig pid = new PIDFConfig(0.12, 0, 0.03);
+    public static final double kS = 0;
+    public static final double kV = 0;
+    public static final double kG = 0.03;
+
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 30;
     public static final int encoderId = 7;
@@ -127,11 +129,11 @@ public final class Constants {
     //elev is in inches, piv in degrees
 
     public static final double elevStartup = 0;
-    public static final double pivStartup = 155;
-    public static final double elevPickupFloor = 0;
-    public static final double pivPickupFloor = 20;
-    public static final double elevPickupSource = 27 * 0.5;
-    public static final double pivPickupSource = -45;
+    public static final double pivStartup = 0;
+    public static final double elevPickupFloor = 10;
+    public static final double pivPickupFloor = 18;
+    public static final double elevPickupSource = 70;
+    public static final double pivPickupSource = -18;
     public static final double elevShootAmp = 27 * 0.5;
     public static final double pivShootAmp = 45;
     public static final double elevHighRear = 27;

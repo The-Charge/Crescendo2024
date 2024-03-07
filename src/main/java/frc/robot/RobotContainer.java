@@ -36,6 +36,7 @@ import java.io.File;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.PivotElevator;
+import frc.robot.commands.StateMachine;
 import frc.robot.commands.Climber.*;
 import frc.robot.commands.Elevator.*;
 import frc.robot.commands.Pivot.*;
@@ -70,6 +71,7 @@ public class RobotContainer {
   private int rotationXboxAxis = 4;
   private final ClimbSubsystem m_climber = new ClimbSubsystem();
   private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
+  private final PivotSubsystem m_pivot = new PivotSubsystem();
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -126,6 +128,8 @@ public class RobotContainer {
     new Trigger(() -> buttonBox.getRawButton(3)).onTrue(new CollectorIntakeSource(m_collector));
     new Trigger(() -> buttonBox.getRawButton(4)).onTrue(new CollectorReverseAll(m_collector));
     new Trigger(() -> buttonBox.getRawButton(2)).onTrue(new CollectorShoot(m_collector));
+    new Trigger(() -> buttonBox.getRawButton(6)).onTrue(new StateMachine(m_elevator, m_pivot, StateMachine.State.STARTUP));
+    new Trigger(() -> buttonBox.getRawButton(7)).onTrue(new StateMachine(m_elevator, m_pivot, StateMachine.State.PICKUPFLOOR));
     
     //new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     //new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));

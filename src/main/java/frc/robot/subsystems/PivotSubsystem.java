@@ -33,12 +33,18 @@ public class PivotSubsystem extends SubsystemBase {
         CurrentLimits.SupplyTimeThreshold = 0.3;
         CurrentLimits.StatorCurrentLimitEnable = true;
 
+
+        talonFXConfigs.MotorOutput.PeakForwardDutyCycle = 0.5;
+        talonFXConfigs.MotorOutput.PeakReverseDutyCycle = -0.5;
+
+
         Slot0Configs slot0Configs = talonFXConfigs.Slot0;
         slot0Configs.kS = Constants.Pivot.kS;
         slot0Configs.kV = Constants.Pivot.kV;
         slot0Configs.kP = Constants.Pivot.pid.p;
         slot0Configs.kI = Constants.Pivot.pid.i;
         slot0Configs.kD = Constants.Pivot.pid.d;
+        slot0Configs.kG = Constants.Pivot.kG;
         //slot0Configs.GravityType = GravityTypeValue.Arm_Cosine; config the arm sensor stuff
         
         pivotMotor.setNeutralMode(NeutralModeValue.Brake);
@@ -47,6 +53,8 @@ public class PivotSubsystem extends SubsystemBase {
 
         absEncoder = new DutyCycleEncoder(Constants.Pivot.encoderId);
         pivotMotor.setPosition((absEncoder.getAbsolutePosition() / Constants.Pivot.absTicksPerDeg + Constants.Pivot.absEncoderAngleOffset) * Constants.Pivot.ticksPerDeg);
+        SoftwareLimitSwitchConfigs softLimits = new SoftwareLimitSwitchConfigs();
+        pivotMotor.getConfigurator().apply(softLimits);
     }
 
     @Override
