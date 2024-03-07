@@ -50,63 +50,100 @@ public final class Constants {
     public static final double WHEEL_LOCK_TIME = 10; // seconds
     public static final double MAX_SPEED_FEET_PER_SECOND = 14.5;
   }
-  public static final class Elevator {
-    public static final double setpoint = 2;
-    public static final int leftId = 0;
-    public static final int rightId = 1;
-    public static final PIDFConfig elevatorPID   = new PIDFConfig(0.4, 0, 0.01);
 
+  public static final class Elevator {
+    public static final int elevatorId = 12;
     
+    public static final int currentLimit = 20;
+
+    public static final PIDFConfig pid = new PIDFConfig(0.8, 0.01, 0.05, 0);
+    public static final double kG = 0.04;
+    public static final double rangeSize = 0.2; //in inches
+    public static final int rangeTime = 20; //in frames (runs at roughly 50 FPS)
+    
+    public static final double minPos = 0; //in ticks
+    public static final double maxPos = 123; //in ticks
+    public static final double ticksPerInch = maxPos / 27.0;
   }
 
   public static final class Intake {
-    public static final int topIntakeId = 0;
-    public static final int bottomIntakeId = 1;
+    public static final int topId = 5;
+    public static final int bottomId = 6;
+    public static final PIDConstants pid = new PIDConstants(0.0002, 0.0000001, 0);
   }
 
   public static final class Shooter {
-    public static final int leftShooterId = 0;
-    public static final int rightShooterId = 1;
+    public static final int leftId = 2;
+    public static final int rightId = 1;
+    public static final PIDConstants pid = new PIDConstants(4.0, 0.0, 1.0);
   }
 
   public static final class Indexer {
-    public static final int leftIndexerId = 0;
-    public static final int rightIndexerId = 1;
-    public static final double limitSwitchIndexer = 2;
+    public static final int photosensor1Id = 8;
+    public static final int photosensor2Id = 9;
+    public static final int leftId = 7;
+    public static final int rightId = 4;
+    public static final PIDConstants pid = new PIDConstants(4.0, 0.0, 1.0);
   }
 
   public static final class Pivot {
-    public static final int PivotId = 7; 
-    public static final double kFeedForward = 0;
-    public static final PIDFConfig pivotPID = new PIDFConfig(0.7, 0, 0, kFeedForward);
-    public static final double pivotkS = 0.25;
-    public static final double pivotkV = 0.12;
+    public static final int pivotId = 3;
+    public static final double kF = 0;
+    public static final PIDFConfig pid = new PIDFConfig(0.7, 0, 0, kF);
+    public static final double kS = 0.25;
+    public static final double kV = 0.12;
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 30;
-
-
-
+    public static final int encoderId = 7;
+    
+    public static final double minPos = 0;
+    public static final double maxPos = 0;
+    public static final double gearRat = 1 / 100.0;
+    public static final double ticksPerDeg = 2048 / gearRat / 360.0;
+    public static final double absEncoderAngleOffset = 0;
+    public static final double absTicksPerDeg = 2048 / 360.0;
   }
 
   public static final class Climber {
     public static final int climberId = 0;
 
-
   }
 
   public static final class LEDConstants {
-    public static final int portId = 9;
+    public static final int ledId = 9;
     public static final int totalLength = 45; //in pixels
   }
 
   public static class OperatorConstants {
     // Joystick Deadband
-    public static final double LEFT_X_DEADBAND  = 0.1;
-    public static final double LEFT_Y_DEADBAND  = 0.1;
+    public static final double LEFT_X_DEADBAND = 0.1;
+    public static final double LEFT_Y_DEADBAND = 0.1;
     public static final double RIGHT_X_DEADBAND = 0.1;
-    public static final double TURN_CONSTANT    = 6;
-    public static final double TRIGGER_DEADBAND = 0.1;
+    public static final double TURN_CONSTANT = 6;
+    
+    public static final double joystickDeadband = 0.1;
   }
 
-  
+  public static abstract class StateLocations {
+    //elev is in inches, piv in degrees
+
+    public static final double elevStartup = 0;
+    public static final double pivStartup = 155;
+    public static final double elevPickupFloor = 0;
+    public static final double pivPickupFloor = 20;
+    public static final double elevPickupSource = 27 * 0.5;
+    public static final double pivPickupSource = -45;
+    public static final double elevShootAmp = 27 * 0.5;
+    public static final double pivShootAmp = 45;
+    public static final double elevHighRear = 27;
+    public static final double pivHighRear = 80;
+    public static final double elevShallowFront = 27 * 0.5;
+    public static final double pivShallowFront = -45;
+    public static final double elevSteepFront = 27 * 0.33;
+    public static final double pivSteepFront = -20;
+    public static final double elevTravel = 27 * 0.5;
+    public static final double pivTravel = 0;
+
+    public static final double elevTurnHight = 27 * 0.5; //the elevator hight required to turn the pivot freely and not hit anything
+  }
 }
