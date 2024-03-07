@@ -31,9 +31,7 @@ public class CollectorHeadSubsystem extends SubsystemBase {
     private DigitalInput noteSensor1;
 
     private int inRangeCounter = 0;
-
     
-   // public RelativeEncoder encoderLeft;
     public CollectorHeadSubsystem() {
         noteSensor2 = new DigitalInput(9); // initial second one
         noteSensor1 = new DigitalInput(8); //initial first one
@@ -136,18 +134,6 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         pidControllerIntakeBottom.setIZone(0);
         pidControllerIntakeBottom.setFF(0);
         intakeBottom.burnFlash();
-
-    }
-
-    // This method will be called once per scheduler run
-    @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
-    }
-
-    // This method will be called once per scheduler run when in simulation
-    @Override
-    public void simulationPeriodic() {
 
     }
 

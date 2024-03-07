@@ -7,32 +7,21 @@ import frc.robot.subsystems.CollectorHeadSubsystem;
 public class CollectorZero extends Command {
 
     private CollectorHeadSubsystem m_collector;
-    Timer timeout, feedTimer;
+    private Timer timeout, feedTimer;
 
-    public CollectorZero(CollectorHeadSubsystem head) {
-        this.m_collector = head;
+    public CollectorZero(CollectorHeadSubsystem collector) {
+        this.m_collector = collector;
+        addRequirements(collector);
     }
 
     @Override
     public void initialize() {
         m_collector.zero();
     }
-
-    @Override
-    public void execute() {
-
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-
-    }
-
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
-
     @Override
     public boolean runsWhenDisabled() {
         return true;

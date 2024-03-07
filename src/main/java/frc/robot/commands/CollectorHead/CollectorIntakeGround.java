@@ -5,13 +5,14 @@ import frc.robot.subsystems.CollectorHeadSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
 public class CollectorIntakeGround extends Command {
+
     private final CollectorHeadSubsystem m_collector;
     private final PivotSubsystem m_pivot;
 
-    public CollectorIntakeGround(CollectorHeadSubsystem subsystem, PivotSubsystem pivot) {
-    m_collector = subsystem;
-    m_pivot = pivot;
-    addRequirements(subsystem);
+    public CollectorIntakeGround(CollectorHeadSubsystem collector, PivotSubsystem pivot) {
+        m_collector = collector;
+        m_pivot = pivot;
+        addRequirements(collector, pivot);
     }
 
     @Override
@@ -23,15 +24,14 @@ public class CollectorIntakeGround extends Command {
     public void execute() {
         if(m_collector.getNoteSensor1()) {
             m_pivot.pivotUp();
-            
         }
     }
     @Override
     public void end(boolean interrupted) {
         m_collector.zero();
     }
-        @Override
-        public boolean isFinished() {
-            return m_collector.getNoteSensor2();
-        }
+    @Override
+    public boolean isFinished() {
+        return m_collector.getNoteSensor2();
+    }
 }

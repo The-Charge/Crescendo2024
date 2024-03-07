@@ -9,9 +9,9 @@ public class MoveToSetpoint extends Command {
   private final ElevatorSubsystem elevatorSub;
   private final double target;
 
-  public MoveToSetpoint(ElevatorSubsystem nElevSub, double targetPos) {
-    elevatorSub = nElevSub;
-    addRequirements(nElevSub);
+  public MoveToSetpoint(ElevatorSubsystem elev, double targetPos) {
+    elevatorSub = elev;
+    addRequirements(elev);
 
     target = targetPos;
   }
@@ -20,11 +20,6 @@ public class MoveToSetpoint extends Command {
   public void initialize() {
     elevatorSub.goToPosition(target);
   }
-  @Override
-  public void execute() {}
-  @Override
-  public void end(boolean interrupted) {}
-
   @Override
   public boolean isFinished() {
     boolean isDone = elevatorSub.isAtTarget();

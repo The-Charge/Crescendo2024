@@ -7,10 +7,11 @@ import frc.robot.subsystems.CollectorHeadSubsystem;
 public class CollectorReverseAll extends Command {
 
     private CollectorHeadSubsystem m_collector;
-    Timer timeout, feedTimer;
+    private Timer timeout, feedTimer;
 
-    public CollectorReverseAll(CollectorHeadSubsystem head) {
-        this.m_collector = head;
+    public CollectorReverseAll(CollectorHeadSubsystem collector) {
+        this.m_collector = collector;
+        addRequirements(collector);
     }
 
     @Override
@@ -21,6 +22,6 @@ public class CollectorReverseAll extends Command {
     }
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 }

@@ -25,5 +25,4 @@ public class MoveElevWithJoystick extends Command {
     public boolean isFinished() {
         return false;
     }
-    
 }

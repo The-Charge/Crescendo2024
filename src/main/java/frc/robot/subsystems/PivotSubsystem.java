@@ -49,10 +49,8 @@ public class PivotSubsystem extends SubsystemBase {
         pivotMotor.setPosition((absEncoder.getAbsolutePosition() / Constants.Pivot.absTicksPerDeg + Constants.Pivot.absEncoderAngleOffset) * Constants.Pivot.ticksPerDeg);
     }
 
-    // This method will be called once per scheduler run
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
         SmartDashboard.putNumber("REL Position (degrees)", pivotMotor.getPosition().getValueAsDouble() * 360);
         SmartDashboard.putNumber("ABS Position + offset (degrees)", absEncoder.getAbsolutePosition() * Constants.Pivot.absTicksPerDeg + Constants.Pivot.absEncoderAngleOffset);
     }
@@ -78,5 +76,4 @@ public class PivotSubsystem extends SubsystemBase {
     private double getCurrentAngle() {
         return pivotMotor.getPosition().getValueAsDouble() / Constants.Pivot.ticksPerDeg * Constants.Pivot.gearRat; //getPosition() is in rotations
     }
-
 }
