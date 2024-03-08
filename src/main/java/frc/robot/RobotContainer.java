@@ -72,13 +72,15 @@ public class RobotContainer
 
 
     TeleopDrive teleopDrive = new TeleopDrive(drivebase,
-        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
-            OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
-            OperatorConstants.LEFT_X_DEADBAND),
-        () -> -driverXbox.getRawAxis(rotationXboxAxis));
+      () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+      () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+      () -> -driverXbox.getRawAxis(rotationXboxAxis),
+      () -> driverXbox.getPOV(),
+      () -> MathUtil.applyDeadband(driverXbox.getLeftTriggerAxis(), OperatorConstants.TRIGGER_DEADBAND) > 0,
+      () -> MathUtil.applyDeadband(driverXbox.getRightTriggerAxis(), OperatorConstants.TRIGGER_DEADBAND) > 0,
+      () -> driverXbox.getRawButtonPressed(XboxController.Button.kBack.value)
+    );
 
-   
     drivebase.setDefaultCommand(teleopDrive);
     m_ledSubsystem.setDefaultCommand(LEDLimelight);
  

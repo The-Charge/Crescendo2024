@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import swervelib.SwerveController;
 import swervelib.math.SwerveMath;
@@ -22,8 +23,16 @@ import swervelib.math.SwerveMath;
 public class TeleopDrive extends Command {
 
   private final SwerveSubsystem swerve;
-  private final DoubleSupplier vX, vY, heading;
+  private final DoubleSupplier vX;
+  private final DoubleSupplier vY;
+  private final DoubleSupplier heading;
+  private final DoubleSupplier POV;
+  private final BooleanSupplier shiftHalf;
+  private final BooleanSupplier shiftQuarter;
+  private final BooleanSupplier centricToggle;
   private double rotationSpeed;
+  private boolean usePOV;
+  private boolean isFieldCentric = true;
 
   /**
    * Used to drive a swerve robot in full field-centric mode. vX and vY supply
@@ -47,12 +56,17 @@ public class TeleopDrive extends Command {
    * @param heading DoubleSupplier that supplies the robot's heading angle.
    */
   public TeleopDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY,
-      DoubleSupplier heading) {
+      DoubleSupplier heading, DoubleSupplier POV, BooleanSupplier shiftHalf, BooleanSupplier shiftQuarter,
+      BooleanSupplier centricToggle) {
     this.swerve = swerve;
     this.vX = vX;
     this.vY = vY;
     this.heading = heading;
-    
+    this.POV = POV;
+    this.shiftHalf = shiftHalf;
+    this.shiftQuarter = shiftQuarter;
+    this.centricToggle = centricToggle;
+
     rotationSpeed = 0;
 
     addRequirements(swerve);
@@ -60,22 +74,62 @@ public class TeleopDrive extends Command {
 
   @Override
   public void initialize() {
-    
+    usePOV = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double headingX = 0;
+    double headingY = 0;
+
+    switch ((int) (POV.getAsDouble())) {
+      case Constants.FORWARD:
+        headingY = 1;
+        break;
+      case Constants.FORWARD_RIGHT:
+        headingX = -1;
+        headingY = 1;
+        break;
+      case Constants.RIGHT:
+        headingX = -1;
+        break;
+      case Constants.BACKWARD_RIGHT:
+        headingX = -1;
+        headingY = -1;
+        break;
+      case Constants.BACKWARD:
+        headingY = -1;
+        break;
+      case Constants.BACKWARD_LEFT:
+        headingX = 1;
+        headingY = -1;
+        break;
+      case Constants.LEFT:
+        headingX = 1;
+        break;
+      case Constants.FORWARD_LEFT:
+        headingX = 1;
+        headingY = 1;
+        break;
+    }
+
+    if (POV.getAsDouble() != -1) {
+      usePOV = true;
+    }
 
     if (Math.abs(heading.getAsDouble()) > swerve.getSwerveController().config.angleJoyStickRadiusDeadband) {
-      rotationSpeed = heading.getAsDouble()*swerve.getSwerveController().config.maxAngularVelocity;
-    }
-    else {
+      rotationSpeed = heading.getAsDouble() * swerve.getSwerveController().config.maxAngularVelocity;
+      usePOV = false;
+    } else {
       rotationSpeed = 0;
     }
 
-    ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble(), vY.getAsDouble(), new Rotation2d(rotationSpeed));
-    
+    ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble(), vY.getAsDouble(), headingX, headingY);
+
+    if (centricToggle.getAsBoolean()) {
+      isFieldCentric = !isFieldCentric;
+    }
     // Limit velocity to prevent tippy
     Translation2d translation = SwerveController.getTranslation2d(desiredSpeeds);
     translation = SwerveMath.limitVelocity(translation, swerve.getFieldVelocity(), swerve.getPose(),
@@ -84,8 +138,16 @@ public class TeleopDrive extends Command {
     SmartDashboard.putNumber("LimitedTranslation", translation.getX());
     SmartDashboard.putString("Translation", translation.toString());
 
+    double multiplier = shiftQuarter.getAsBoolean() ? 0.25 : (shiftHalf.getAsBoolean() ? 0.5 : 1);
+    translation = translation.times(multiplier);
+    rotationSpeed = rotationSpeed * multiplier;
+
     // Make the robot move
-    swerve.drive(translation, rotationSpeed, true);
+    if (usePOV) {
+      swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, isFieldCentric);
+    } else {
+      swerve.drive(translation, rotationSpeed, isFieldCentric);
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
@@ -52,7 +53,7 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * Maximum speed of the robot in meters per second, used to limit acceleration.
    */
-  public        double      maximumSpeed = Units.feetToMeters(14.5);
+    public double maximumSpeed = Units.feetToMeters(Constants.DrivebaseConstants.MAX_SPEED_FEET_PER_SECOND);
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -93,7 +94,7 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive.setCosineCompensator(!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
     setupPathPlanner();
   }
-
+  
   /**
    * Construct the swerve drive.
    *
@@ -189,11 +190,16 @@ public class SwerveSubsystem extends SubsystemBase
       double xInput = Math.pow(translationX.getAsDouble(), 3); // Smooth controll out
       double yInput = Math.pow(translationY.getAsDouble(), 3); // Smooth controll out
       // Make the robot move
+
+                                                                  
       driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(xInput, yInput,
                                                                       headingX.getAsDouble(),
                                                                       headingY.getAsDouble(),
                                                                       swerveDrive.getOdometryHeading().getRadians(),
                                                                       swerveDrive.getMaximumVelocity()));
+
+      
+
     });
   }
 
@@ -210,6 +216,7 @@ public class SwerveSubsystem extends SubsystemBase
     // swerveDrive.setHeadingCorrection(true); // Normally you would want heading correction for this kind of control.
     return run(() -> {
       // Make the robot move
+
       driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(translationX.getAsDouble(),
                                                                       translationY.getAsDouble(),
                                                                       rotation.getAsDouble() * Math.PI,
