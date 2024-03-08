@@ -130,16 +130,16 @@ public final class Constants {
   public static abstract class StateLocations {
     //elev is in inches, piv in degrees
 
-    public static final double elevStartup = 0;
+    public static final double elevStartup = 0; //done
     public static final double pivStartup = 0;
-    public static final double elevPickupFloor = 10;
-    public static final double pivPickupFloor = -37.19; //0.56
-    public static final double elevPickupSource = 70;
-    public static final double pivPickupSource = -18;
-    public static final double elevShootAmp = 27 * 0.5;
-    public static final double pivShootAmp = 45;
-    public static final double elevHighRear = 27;
-    public static final double pivHighRear = 80;
+    public static final double elevPickupFloor = 0; //done
+    public static final double pivPickupFloor = -37.36;
+    public static final double elevPickupSource = 68.34*Elevator.ticksPerInch; //done
+    public static final double pivPickupSource = -7.99;
+    public static final double elevShootAmp = 27; //done
+    public static final double pivShootAmp = -30.58;
+    public static final double elevHighRear = 86.56*Elevator.ticksPerInch; //touching subwoofer done
+    public static final double pivHighRear = -28.52;
     public static final double elevShallowFront = 27 * 0.5;
     public static final double pivShallowFront = -45;
     public static final double elevSteepFront = 27 * 0.33;

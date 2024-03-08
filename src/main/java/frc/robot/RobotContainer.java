@@ -79,6 +79,7 @@ public class RobotContainer {
     configureBindings();
     //m_collector.zero();
 
+    
     TeleopDrive teleopDrive = new TeleopDrive(drivebase,
       () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
       () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
@@ -110,6 +111,13 @@ public class RobotContainer {
     new Trigger(() -> buttonBox.getRawButton(4)).onTrue(new CollectorReverseAll(m_collector));
     new Trigger(() -> buttonBox.getRawButton(2)).onTrue(new CollectorShoot(m_collector));
     new Trigger(() -> buttonBox.getRawButton(1)).onTrue(new CollectorZero(m_collector));
+    new Trigger(() -> buttonBox.getRawButton(5)).onTrue(new MoveToSetpoint(m_elevator, 5));
+    new Trigger(() -> buttonBox.getRawButton(6)).onTrue(new MoveToSetpoint(m_elevator, 19));
+    new Trigger(() -> buttonBox.getRawButton(7)).onTrue(new MoveToSetpoint(m_elevator, 27));
+    new Trigger(() -> buttonBox.getRawButton(8)).onTrue(new MoveToSetpoint(m_elevator, 0));
+
+    new Trigger(() -> buttonBox.getRawButton(9)).onTrue(new MoveToAngle(m_pivot, -28.52));
+
     new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
@@ -130,7 +138,7 @@ public class RobotContainer {
   }
 
   public void setMotorBrake(boolean brake) {
-    // drivebase.setMotorBrake(brake);
+    drivebase.setMotorBrake(brake);
   }
 
   public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}

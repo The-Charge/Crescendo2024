@@ -44,7 +44,8 @@ public class PivotSubsystem extends SubsystemBase {
         talonFXConfigs.Slot0.kG = Constants.Pivot.kG;
         //slot0Configs.GravityType = GravityTypeValue.Arm_Cosine; config the arm sensor stuff
         
-        talonFXConfigs.MotorOutput.withNeutralMode(NeutralModeValue.Coast); 
+         talonFXConfigs.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
+        //talonFXConfigs.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
         
 
         // talonFXConfigs.Feedback.SensorToMechanismRatio = 100;
