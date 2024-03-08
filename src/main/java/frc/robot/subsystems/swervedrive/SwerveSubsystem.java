@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.Constants;
 import frc.robot.Constants.AutonConstants;
 import java.io.File;
 import java.util.function.DoubleSupplier;
@@ -46,7 +47,7 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * Maximum speed of the robot in meters per second, used to limit acceleration.
    */
-  public        double      maximumSpeed = Units.feetToMeters(14.5);
+    public double maximumSpeed = Units.feetToMeters(Constants.DrivebaseConstants.MAX_SPEED_FEET_PER_SECOND);
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -55,19 +56,19 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public SwerveSubsystem(File directory)
   {
-    // // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
-    // //  In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
-    // //  The encoder resolution per motor revolution is 1 per motor revolution.
-    // double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation((150.0/7.0));
-    // // Motor conversion factor is (PI * WHEEL DIAMETER IN METERS) / (GEAR RATIO * ENCODER RESOLUTION).
-    // //  In this case the wheel diameter is 4 inches, which must be converted to meters to get meters/second.
-    // //  The gear ratio is 6.75 motor revolutions per wheel rotation.
-    // //  The encoder resolution per motor revolution is 1 per motor revolution.
-    // double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(4), 8.14);
-    // System.out.println("\"conversionFactor\": {");
-    // System.out.println("\t\"angle\": " + angleConversionFactor + ",");
-    // System.out.println("\t\"drive\": " + driveConversionFactor);
-    // System.out.println("}");
+    // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
+    //  In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
+    //  The encoder resolution per motor revolution is 1 per motor revolution.
+    double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation((150.0/7.0));
+    // Motor conversion factor is (PI * WHEEL DIAMETER IN METERS) / (GEAR RATIO * ENCODER RESOLUTION).
+    //  In this case the wheel diameter is 4 inches, which must be converted to meters to get meters/second.
+    //  The gear ratio is 6.75 motor revolutions per wheel rotation.
+    //  The encoder resolution per motor revolution is 1 per motor revolution.
+    double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(4), 6.75);
+    System.out.println("\"conversionFactor\": {");
+    System.out.println("\t\"angle\": " + angleConversionFactor + ",");
+    System.out.println("\t\"drive\": " + driveConversionFactor);
+    System.out.println("}");
 
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
@@ -183,11 +184,16 @@ public class SwerveSubsystem extends SubsystemBase
       double xInput = Math.pow(translationX.getAsDouble(), 3); // Smooth controll out
       double yInput = Math.pow(translationY.getAsDouble(), 3); // Smooth controll out
       // Make the robot move
+
+                                                                  
       driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(xInput, yInput,
                                                                       headingX.getAsDouble(),
                                                                       headingY.getAsDouble(),
                                                                       swerveDrive.getOdometryHeading().getRadians(),
                                                                       swerveDrive.getMaximumVelocity()));
+
+      
+
     });
   }
 
@@ -204,6 +210,7 @@ public class SwerveSubsystem extends SubsystemBase
     // swerveDrive.setHeadingCorrection(true); // Normally you would want heading correction for this kind of control.
     return run(() -> {
       // Make the robot move
+
       driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(translationX.getAsDouble(),
                                                                       translationY.getAsDouble(),
                                                                       rotation.getAsDouble() * Math.PI,

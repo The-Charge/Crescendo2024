@@ -52,8 +52,7 @@ import frc.robot.commands.Pivot.*;
 public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
-  // private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-  //     "swerve"));
+  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),"swerve"));
   private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem();
   // CommandJoystick rotationController = new CommandJoystick(1);
   // private final PivotSubsystem m_pivot = new PivotSubsystem();
@@ -80,35 +79,17 @@ public class RobotContainer {
     configureBindings();
     //m_collector.zero();
 
-    // pivotElevator pivotElevator = new pivotElevator(
-    //   m_elevator, m_pivot,
-    //   () -> {
-    //     if(buttonBox.getRawButtonPressed(1)) return 0;
-    //     else if(buttonBox.getRawButtonPressed(2)) return 1;
-    //     else if(buttonBox.getRawButtonPressed(3)) return 2;
-    //     else if(buttonBox.getRawButtonPressed(4)) return 3;
-    //     else if(buttonBox.getRawButtonPressed(5)) return 4;
-    //     else if(buttonBox.getRawButtonPressed(6)) return 5;
-    //     else if(buttonBox.getRawButtonPressed(7)) return 6;
-    //     else if(buttonBox.getRawButtonPressed(8)) return 7;
+    TeleopDrive teleopDrive = new TeleopDrive(drivebase,
+      () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+      () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+      () -> -driverXbox.getRawAxis(rotationXboxAxis),
+      () -> driverXbox.getPOV(),
+      () -> MathUtil.applyDeadband(driverXbox.getLeftTriggerAxis(), OperatorConstants.TRIGGER_DEADBAND) > 0,
+      () -> MathUtil.applyDeadband(driverXbox.getRightTriggerAxis(), OperatorConstants.TRIGGER_DEADBAND) > 0,
+      () -> driverXbox.getRawButtonPressed(XboxController.Button.kBack.value)
+    );
 
-    //     return -1;
-    //   }
-    // );
-
-    // TeleopDrive teleopDrive = new TeleopDrive(
-    //   drivebase,
-    //     () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-    //     () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-    //     () -> -driverXbox.getRawAxis(rotationXboxAxis)
-    // );
-
-    // drivebase.setDefaultCommand(teleopDrive);
-
-    CollectorZero collectorZero = new CollectorZero(m_collector);
-    m_collector.setDefaultCommand(collectorZero);
-
-    //m_elevator.setDefaultCommand(new MoveElevWithJoystick(m_elevator, () -> buttonBox.getZ()));
+    drivebase.setDefaultCommand(teleopDrive);
   }
 
   /**
@@ -129,14 +110,8 @@ public class RobotContainer {
     new Trigger(() -> buttonBox.getRawButton(4)).onTrue(new CollectorReverseAll(m_collector));
     new Trigger(() -> buttonBox.getRawButton(2)).onTrue(new CollectorShoot(m_collector));
     new Trigger(() -> buttonBox.getRawButton(1)).onTrue(new CollectorZero(m_collector));
-    //new Trigger(() -> buttonBox.getRawButton(6)).onTrue(new StateMachine(m_elevator, m_pivot, StateMachine.State.STARTUP));
-    //new Trigger(() -> buttonBox.getRawButton(7)).onTrue(new StateMachine(m_elevator, m_pivot, StateMachine.State.PICKUPFLOOR));
-    
-    //new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    //new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
-
-    new Trigger(() -> buttonBox.getRawButton(5)).onTrue(new MoveToSetpoint(m_elevator, 5));
-    new Trigger(() -> buttonBox.getRawButton(6)).onTrue(new MoveToSetpoint(m_elevator, 15));
+    new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
   /**
