@@ -22,7 +22,7 @@ public class TargetLockDriveCommandGroup extends SequentialCommandGroup{
     public TargetLockDriveCommandGroup(VisionSubsystem limelight, SwerveSubsystem swerve,  DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading){
             addCommands(
                 new SetPipeline(limelight, VisionConstants.APRILTAG_PIPELINE),
-                new SetCenterSpeakerPriorityID(limelight),
+                //new SetCenterSpeakerPriorityID(limelight),
                 new TargetLockDrive(swerve, vX, vY, heading, true, limelight)  
                 //Field relative moves "freely", robot relative creates a radius around speaker depending on where command is initiated
             );  

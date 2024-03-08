@@ -509,11 +509,11 @@ public class SwerveSubsystem extends SubsystemBase
 
   public void addVisionReading(VisionSubsystem limelight){
     Pose2d setpose;
-    //double latency;
+    double latency;
     if (limelight.gettv() > 0.0){
       setpose = limelight.getRobotFieldPose();
-      //latency = RobotContainer.getlimelightshooter().getlimelightshooterLatency();
-    swerveDrive.addVisionMeasurement(setpose, Timer.getFPGATimestamp());
+      latency = RobotContainer.getlimelight().getlimelightshooterLatency();
+    swerveDrive.addVisionMeasurement(setpose, Timer.getFPGATimestamp() - latency);
     }
   }
   public boolean updatedPoseWithinThreshold(VisionSubsystem limelight){

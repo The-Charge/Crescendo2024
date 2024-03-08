@@ -119,7 +119,7 @@ public class RobotContainer
             );
 
     new JoystickButton(driverXbox, XboxController.Button.kRightBumper.value).onTrue(new swapPipeline(m_limelight));
-        new JoystickButton(driverXbox, XboxController.Button.kLeftStick.value).onTrue(new SwapCurrentLimelight(m_limelight));
+    new JoystickButton(driverXbox, XboxController.Button.kLeftStick.value).onTrue(new SwapCurrentLimelight(m_limelight));
 
   }
 

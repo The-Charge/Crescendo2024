@@ -120,6 +120,7 @@ public final class Constants {
 
     //note tolerances
     public static final double TX_TOLERANCE_THRESHOLD = 5;  //degrees
+    public static final double TARGET_DISTANCE_TOLERANCE_THRESHOLD = 0.1;
   }
   public static class FieldConstants{
     //Fixed Apriltag poses as given by field drawings
@@ -213,8 +214,8 @@ public final class Constants {
 
   public static class FixedLLConstants{
     //pipelines
-    public static final double APRILTAG_PIPELINE = 0;
-    public static final double NEURAL_NETWORK_PIPELINE = 1; //FIXED LL I NOT ABLE TO USE THIS
+    public static final double FIXED_APRILTAG_PIPELINE = 0;
+    public static final double FIXED_DRIVER_PIPELINE = 1; //FIXED LL I NOT ABLE TO USE THIS
 
     //default position of limelight in robotspace when in rest position (meters, degrees)
     public static final double DEFAULT_X_POSITION = -0.3556;
@@ -227,30 +228,31 @@ public final class Constants {
   }
   public static class ShooterLLConstants{
     //pipelines
-    public static final double APRILTAG_PIPELINE = 0;
-    public static final double NEURAL_NETWORK_PIPELINE = 1;
+    public static final double SHOOTER_APRILTAG_PIPELINE = 0;
+    public static final double SHOOTER_NEURAL_NETWORK_PIPELINE = 1;
 
     //default position of limelight in robotspace when in rest position
-    public static final double DEFAULT_X_POSITION = 0;
-    public static final double DEFAULT_Y_POSITION = 0;
-    public static final double DEFAULT_Z_POSITION = 0;
+    public static final double DEFAULT_X_POSITION = 0.572;
+    public static final double DEFAULT_Y_POSITION = 0.0;
+    public static final double DEFAULT_Z_POSITION = 0.2667;
     public static final double DEFAULT_ROLL_POSITION = 0;
-    public static final double DEFAULT_PITCH_POSITION = 0;
+    public static final double DEFAULT_PITCH_POSITION = 350;  //TBD
     public static final double DEFAULT_YAW_POSITON = 0;
   }
+
   public static class ApriltagConstants{
     //Updating robot pose accuracy threshold
     public static final double BOTPOSE_THRESHOLD_TRANSLATION = Units.inchesToMeters(1); //meters
     public static final double BOTPOSE_THRESHOLD_ROTATION = 2;  //degrees
 
-    //Offset for drive to tag-related commands
+    //Offset for drive to tag-related commands 
     public static final double CAMERA_OFFSET = 30; //inches, needs tuning
     public static final double SUBWOOFER_OFFSET = 36.125; //inches, keep constant
 
     //Tag ids for each tags location
     public static final double BLUE_SOURCE_RIGHT_TAG = 1;
     public static final double BLUE_SOURCE_LEFT_TAG = 2;
-    public static final double RED_SPEAKER_SIDE_TAG = 3;
+    public static final double RED_SPEAKER_SIDE_TAG = 3 ;
     public static final double RED_SPEAKER_CENTER_TAG = 4;
     public static final double RED_AMP_TAG = 5;
     public static final double BLUE_AMP_TAG = 6;
@@ -313,7 +315,7 @@ public final class Constants {
       new Pose2d(new Translation2d(
         Units.inchesToMeters(-1.50 + SUBWOOFER_OFFSET + CAMERA_OFFSET), 
         Units.inchesToMeters(218.42)), 
-        Rotation2d.fromDegrees(0+180)),
+        Rotation2d.fromDegrees(0)),
 
       //Tag 8 - Blue Speaker SIDE
       new Pose2d(new Translation2d(

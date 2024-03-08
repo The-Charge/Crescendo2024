@@ -51,10 +51,18 @@ public class VisionSubsystem extends SubsystemBase{
         campose = NetworkTableInstance.getDefault().getTable(limelightname).getEntry("camerapose_robotspace").getDoubleArray(new double[6]);
         robotpose = LimelightHelpers.getBotPose2d_wpiBlue(limelightname);
 
+        SmartDashboard.putString("limelightname: ", limelightname);
         //Update rest of variables
-        limelightlatency = tl + cl;                 //ms
+        limelightlatency = (tl + cl) / 1000.0;                 //ms
         distance = Math.pow((ta * 1.82), -0.468);   //formula: 1.82x^-0.468, in meters
 
+        SmartDashboard.putNumber("ll latency", limelightlatency);
+        if (tv > 0){
+            LimelightHelpers.setLEDMode_ForceBlink(limelightname);
+        }
+        else{
+            LimelightHelpers.setLEDMode_ForceOn(limelightname);
+        }
     }
 
     @Override
@@ -83,7 +91,7 @@ public class VisionSubsystem extends SubsystemBase{
         LimelightHelpers.setLEDMode_ForceOn(limelightname);
     }
 
-    
+
     //Setters
     public void setCurrentLimelightName(String newname){
         LimelightHelpers.setLEDMode_ForceOff(limelightname);
