@@ -137,7 +137,7 @@ public class TeleopDrive extends Command {
     }
 
     boolean hasAlliance = DriverStation.getAlliance().isPresent();
-    if(hasAlliance && DriverStation.getAlliance().get() == Alliance.Red) allianceCorrection = -1;
+    if(hasAlliance && isFieldCentric && DriverStation.getAlliance().get() == Alliance.Red) allianceCorrection = -1;
     ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble() * allianceCorrection, vY.getAsDouble() * allianceCorrection, headingX, headingY);
 
     if (centricToggle.getAsBoolean()) {
