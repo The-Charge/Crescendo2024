@@ -24,15 +24,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Run Intake"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Small"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Run Intake"
           }
         },
         {
