@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -71,6 +72,8 @@ public class RobotContainer {
   private final ClimbSubsystem m_climber = new ClimbSubsystem();
   private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
   private final PivotSubsystem m_pivot = new PivotSubsystem();
+  public double elevTarget;
+  public double pivTarget;
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -79,7 +82,7 @@ public class RobotContainer {
     configureBindings();
     //m_collector.zero();
 
-    
+
     TeleopDrive teleopDrive = new TeleopDrive(drivebase,
       () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
       () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
@@ -116,10 +119,16 @@ public class RobotContainer {
     new Trigger(() -> buttonBox.getRawButton(7)).onTrue(new MoveToSetpoint(m_elevator, 27));
     new Trigger(() -> buttonBox.getRawButton(8)).onTrue(new MoveToSetpoint(m_elevator, 0));
 
+    
     new Trigger(() -> buttonBox.getRawButton(9)).onTrue(new MoveToAngle(m_pivot, -28.52));
 
     new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+
+    elevTarget = SmartDashboard.getNumber(" elev setpoint",  0.0);
+    SmartDashboard.putData("move elev", new MoveToSetpoint(m_elevator, elevTarget));
+    pivTarget = SmartDashboard.getNumber("piv setpoint", 0.0);
+    SmartDashboard.putData("move piv",new MoveToAngle(m_pivot, pivTarget));
   }
 
   /**
