@@ -103,6 +103,8 @@ public final class Constants {
     public static final double ticksPerDeg = 2048 / gearRat / 360.0;
     public static final double absEncoderAngleOffset = 0;
     public static final double absTicksPerDeg = 2048 / 360.0;
+    public static final double absStart = 0.93; //0.56
+    public static final double absRatio = -1* (0.93-0.56)/(37.19-0);
   }
 
   public static final class Climber {
@@ -131,7 +133,7 @@ public final class Constants {
     public static final double elevStartup = 0;
     public static final double pivStartup = 0;
     public static final double elevPickupFloor = 10;
-    public static final double pivPickupFloor = 18;
+    public static final double pivPickupFloor = -37.19; //0.56
     public static final double elevPickupSource = 70;
     public static final double pivPickupSource = -18;
     public static final double elevShootAmp = 27 * 0.5;

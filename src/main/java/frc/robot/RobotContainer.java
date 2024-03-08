@@ -128,11 +128,15 @@ public class RobotContainer {
     new Trigger(() -> buttonBox.getRawButton(3)).onTrue(new CollectorIntakeSource(m_collector));
     new Trigger(() -> buttonBox.getRawButton(4)).onTrue(new CollectorReverseAll(m_collector));
     new Trigger(() -> buttonBox.getRawButton(2)).onTrue(new CollectorShoot(m_collector));
+    new Trigger(() -> buttonBox.getRawButton(1)).onTrue(new CollectorZero(m_collector));
     //new Trigger(() -> buttonBox.getRawButton(6)).onTrue(new StateMachine(m_elevator, m_pivot, StateMachine.State.STARTUP));
     //new Trigger(() -> buttonBox.getRawButton(7)).onTrue(new StateMachine(m_elevator, m_pivot, StateMachine.State.PICKUPFLOOR));
     
     //new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     //new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+
+    new Trigger(() -> buttonBox.getRawButton(5)).onTrue(new MoveToSetpoint(m_elevator, 5));
+    new Trigger(() -> buttonBox.getRawButton(6)).onTrue(new MoveToSetpoint(m_elevator, 15));
   }
 
   /**

@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.*;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -37,10 +38,10 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         noteSensor1 = new DigitalInput(Constants.Indexer.photosensor1Id); //pivot first one
         //shooterLeft
         shooterLeft = new CANSparkMax(Constants.Shooter.leftId, MotorType.kBrushless);
-        shooterLeft.set(0);
         shooterLeft.restoreFactoryDefaults();
-        // shooterLeft.setMotorBrake(NeutralMode.Brake);
-        shooterLeft.setSmartCurrentLimit(10);
+        shooterLeft.set(0);
+        shooterLeft.setIdleMode(IdleMode.kCoast);
+        shooterLeft.setSmartCurrentLimit(25);
         
         SparkPIDController pidControllerShooterLeft = shooterLeft.getPIDController();
         pidControllerShooterLeft.setOutputRange(-1, 1);
@@ -56,9 +57,10 @@ public class CollectorHeadSubsystem extends SubsystemBase {
 
         //shooterRight
         shooterRight = new CANSparkMax(Constants.Shooter.rightId, MotorType.kBrushless);
-        shooterRight.set(0);
         shooterRight.restoreFactoryDefaults();
-        shooterRight.setSmartCurrentLimit(10);
+        shooterRight.set(0);
+        shooterRight.setIdleMode(IdleMode.kCoast);
+        shooterRight.setSmartCurrentLimit(25);
         shooterRight.setInverted(true);
         
         SparkPIDController pidControllerShooterRight = shooterRight.getPIDController();
@@ -72,9 +74,10 @@ public class CollectorHeadSubsystem extends SubsystemBase {
 
         //indexerLeft
         indexerLeft = new CANSparkMax(Constants.Indexer.leftId, MotorType.kBrushless);
-        indexerLeft.set(0);
-        indexerLeft.setSmartCurrentLimit(10);
         indexerLeft.restoreFactoryDefaults();
+        indexerLeft.set(0);
+        indexerLeft.setIdleMode(IdleMode.kCoast);
+        indexerLeft.setSmartCurrentLimit(25);
         SparkPIDController pidControllerIndexerLeft = indexerLeft.getPIDController();
         pidControllerIndexerLeft.setOutputRange(-1, 1);
         pidControllerIndexerLeft.setP(Constants.Indexer.pid.kP);
@@ -86,12 +89,13 @@ public class CollectorHeadSubsystem extends SubsystemBase {
 
         //indexerRight
         indexerRight = new CANSparkMax(Constants.Indexer.rightId, MotorType.kBrushless);
-        indexerRight.set(0);
         indexerRight.restoreFactoryDefaults();
+        indexerRight.set(0);
+        indexerRight.setIdleMode(IdleMode.kCoast);
         indexerRight.setInverted(true);
         SparkPIDController pidControllerIndexerRight = indexerLeft.getPIDController();
         pidControllerIndexerRight.setOutputRange(-1, 1);
-        indexerRight.setSmartCurrentLimit(10);
+        indexerRight.setSmartCurrentLimit(25);
 
         pidControllerIndexerRight.setP(Constants.Indexer.pid.kP);
         pidControllerIndexerRight.setI(Constants.Indexer.pid.kI);
@@ -103,9 +107,10 @@ public class CollectorHeadSubsystem extends SubsystemBase {
 
         //intakeTop
         intakeTop = new CANSparkMax(Constants.Intake.topId, MotorType.kBrushless);
-        intakeTop.set(0);
         intakeTop.restoreFactoryDefaults();
-        intakeTop.setSmartCurrentLimit(10);
+        intakeTop.setIdleMode(IdleMode.kCoast);
+        intakeTop.set(0);
+        intakeTop.setSmartCurrentLimit(25);
         SparkPIDController pidControllerIntakeTop = intakeTop.getPIDController();
         pidControllerIntakeTop.setOutputRange(-1, 1);
 
@@ -120,10 +125,11 @@ public class CollectorHeadSubsystem extends SubsystemBase {
 
         //intakeBottom
         intakeBottom = new CANSparkMax(Constants.Intake.bottomId, MotorType.kBrushless);
-        intakeBottom.set(0);
         intakeBottom.restoreFactoryDefaults();
+        intakeBottom.setIdleMode(IdleMode.kCoast);
+        intakeBottom.set(0);
         intakeBottom.setInverted(false);
-        intakeBottom.setSmartCurrentLimit(10);
+        intakeBottom.setSmartCurrentLimit(25);
         SparkPIDController pidControllerIntakeBottom = intakeBottom.getPIDController();
         pidControllerIntakeBottom.setOutputRange(-1, 1);
 
@@ -137,6 +143,23 @@ public class CollectorHeadSubsystem extends SubsystemBase {
 
     }
 
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("L Shooter Vel (RPM)", shooterLeft.getEncoder().getVelocity());
+        SmartDashboard.putNumber("R Shooter Vel (RPM)", shooterRight.getEncoder().getVelocity());
+        SmartDashboard.putNumber("L Indexer Vel (RPM)", indexerLeft.getEncoder().getVelocity());
+        SmartDashboard.putNumber("R Indexer Vel (RPM)", indexerRight.getEncoder().getVelocity());
+        SmartDashboard.putNumber("T Intake Vel (RPM)", intakeTop.getEncoder().getVelocity());
+        SmartDashboard.putNumber("B Intake Vel (RPM)", intakeBottom.getEncoder().getVelocity());
+
+        SmartDashboard.putNumber("L Shooter I (Amps)", shooterLeft.getOutputCurrent());
+        SmartDashboard.putNumber("R Shooter I (Amps)", shooterRight.getOutputCurrent());
+        SmartDashboard.putNumber("L Indexer I (Amps)", indexerLeft.getOutputCurrent());
+        SmartDashboard.putNumber("R Indexer I (Amps)", indexerRight.getOutputCurrent());
+        SmartDashboard.putNumber("T Intake I (Amps)", intakeTop.getOutputCurrent());
+        SmartDashboard.putNumber("B Intake I (Amps)", intakeBottom.getOutputCurrent());
+    }
+
     public void setVelocity(double speed, CANSparkMax collectorMotor) {
         collectorMotor.getPIDController().setReference(speed,CANSparkMax.ControlType.kVelocity);
     }
@@ -144,15 +167,15 @@ public class CollectorHeadSubsystem extends SubsystemBase {
     public void resetTargetCounter() {
         inRangeCounter = 0;
     }
-    public boolean shootIsATarget(double targetVel) {
-        return isAtTarget(targetVel, shooterLeft, shooterRight);
+    public boolean shootIsATarget(double leftTarget, double rightTarget) {
+        return isAtTarget(leftTarget, rightTarget, shooterLeft, shooterRight);
     }
-    private boolean isAtTarget(double targetVelocity, CANSparkMax motor1, CANSparkMax motor2) {
-        final double deadband = 1000;
-        final int requiredTime = 5;
+    private boolean isAtTarget(double target1, double target2, CANSparkMax motor1, CANSparkMax motor2) {
+        final double deadband = 500;
+        final int requiredTime = 15;
 
-        double error1 = targetVelocity - motor1.getEncoder().getVelocity();
-        double error2 = targetVelocity - motor2.getEncoder().getVelocity();
+        double error1 = target1 - motor1.getEncoder().getVelocity();
+        double error2 = target2 - motor2.getEncoder().getVelocity();
 
         if(Math.abs(error1) <= deadband && Math.abs(error2) <= deadband) inRangeCounter++;
         else inRangeCounter = 0;

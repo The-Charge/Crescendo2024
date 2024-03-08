@@ -44,33 +44,37 @@ public class PivotSubsystem extends SubsystemBase {
         talonFXConfigs.Slot0.kG = Constants.Pivot.kG;
         //slot0Configs.GravityType = GravityTypeValue.Arm_Cosine; config the arm sensor stuff
         
-        talonFXConfigs.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
+        talonFXConfigs.MotorOutput.withNeutralMode(NeutralModeValue.Coast); 
+        
 
-        talonFXConfigs.Feedback.SensorToMechanismRatio = 100;
+        // talonFXConfigs.Feedback.SensorToMechanismRatio = 100;
 
         pivotMotor.getConfigurator().apply(talonFXConfigs);
 
         absEncoder = new DutyCycleEncoder(Constants.Pivot.encoderId);
         //pivotMotor.setPosition((absEncoder.getAbsolutePosition() / Constants.Pivot.absTicksPerDeg + Constants.Pivot.absEncoderAngleOffset) * Constants.Pivot.ticksPerDeg);
-        SoftwareLimitSwitchConfigs softLimits = new SoftwareLimitSwitchConfigs();
-        pivotMotor.getConfigurator().apply(softLimits);
+        // SoftwareLimitSwitchConfigs softLimits = new SoftwareLimitSwitchConfigs();
+        // pivotMotor.getConfigurator().apply(softLimits);
+        // pivotMotor.setPosition(absEncoder.getAbsolutePosition() / Constants.Pivot.absRatio);
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("REL Position", pivotMotor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("ABS Position", absEncoder.getAbsolutePosition());
-        //SmartDashboard.putNumber("ABS Position + offset (degrees)", absEncoder.getAbsolutePosition() * Constants.Pivot.absTicksPerDeg + Constants.Pivot.absEncoderAngleOffset);
+        SmartDashboard.putNumber("Pivot I (Amps)", pivotMotor.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Pivot Position (Ticks)", pivotMotor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Pivot abs position (ticks)", absEncoder.getAbsolutePosition());
     }
 
-    public void pivotToAngle(double angle) {
+    public void pivotToAngle(double ticks) {
     //    if(Math.abs(pivotMotor.getPosition().getValueAsDouble() - angle) <0.2) {
     //         pivotMotor.set(0.0);
     //         atSetpoint = true;
     //    }
-        double nAngle = Math.min(Math.max(angle, Constants.Pivot.minPos), Constants.Pivot.maxPos);
+        // double nTicks = Math.min(Math.max(ticks, Constants.Pivot.minPos), Constants.Pivot.maxPos);
+        double nTicks = ticks;
+        SmartDashboard.putNumber("Pivot Target (Ticks)", nTicks);
         
-        pivotMotor.setControl(new PositionDutyCycle(nAngle * Constants.Pivot.ticksPerDeg / Constants.Pivot.gearRat).withSlot(0));
+        pivotMotor.setControl(new PositionDutyCycle(nTicks).withSlot(0));
         //atSetpoint = false;
         //pivotMotor.set(angle);
     }
@@ -78,7 +82,7 @@ public class PivotSubsystem extends SubsystemBase {
     //     return atSetpoint;
     // }
     public void pivotUp() {
-        pivotToAngle(getCurrentAngle() + 20);
+        pivotToAngle( pivotMotor.getPosition().getValueAsDouble() + 2);
     }
     
     private double getCurrentAngle() {

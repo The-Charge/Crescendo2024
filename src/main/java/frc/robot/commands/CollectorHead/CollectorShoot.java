@@ -29,7 +29,7 @@ public class CollectorShoot extends Command {
     }
     @Override
     public void execute() {
-        if(m_collector.shootIsATarget(10000) && !hasStartedIndexers) {
+        if(m_collector.shootIsATarget(10000, 10700) && !hasStartedIndexers) {
             m_collector.spinIndexer(CollectorHeadSubsystem.Direction.FORWARD, 1);
             m_collector.spinIntake(CollectorHeadSubsystem.Direction.FORWARD, 1);
             hasStartedIndexers = true;

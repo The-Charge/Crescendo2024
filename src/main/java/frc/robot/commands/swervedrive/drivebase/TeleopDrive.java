@@ -7,6 +7,8 @@ package frc.robot.commands.swervedrive.drivebase;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
@@ -33,6 +35,7 @@ public class TeleopDrive extends Command {
   private final DoubleSupplier vX, vY, heading, POV;
   private double rotationSpeed;
   private boolean usePOV;
+  private double allianceCorrection = 1;
 
   /**
    * Used to drive a swerve robot in full field-centric mode. vX and vY supply
@@ -121,7 +124,9 @@ public class TeleopDrive extends Command {
       rotationSpeed = 0;
     }
 
-    ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble(), vY.getAsDouble(), headingX, headingY);
+    boolean hasAlliance = DriverStation.getAlliance().isPresent();
+    if(hasAlliance && DriverStation.getAlliance().get() == Alliance.Red) allianceCorrection = -1;
+    ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble() * allianceCorrection, vY.getAsDouble() * allianceCorrection, headingX, headingY);
 
     // Limit velocity to prevent tippy
     Translation2d translation = SwerveController.getTranslation2d(desiredSpeeds);

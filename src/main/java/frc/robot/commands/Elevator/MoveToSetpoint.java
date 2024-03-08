@@ -24,9 +24,7 @@ public class MoveToSetpoint extends Command {
   public boolean isFinished() {
     boolean isDone = elevatorSub.isAtTarget();
 
-    if(isDone) {
-      elevatorSub.stopElevator();
-    }
+
 
     return isDone;
   }

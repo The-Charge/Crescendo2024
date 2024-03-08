@@ -19,11 +19,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public ElevatorSubsystem() {
         driver = new TalonFX(Constants.Elevator.elevatorId);
-        driver.setNeutralMode(NeutralModeValue.Brake);
 
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
         motorConfig.MotorOutput.PeakForwardDutyCycle = 0.6;
         motorConfig.MotorOutput.PeakReverseDutyCycle = -0.6;
+        motorConfig.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
 
         motorConfig.CurrentLimits.StatorCurrentLimit = 20;
         motorConfig.CurrentLimits.SupplyTimeThreshold = 0.3;
@@ -47,7 +47,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Elevator pos", driver.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator Position (Ticks)", driver.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator I (Amps)", driver.getStatorCurrent().getValueAsDouble());
     }
 
     //NOTE: target is in inches from the bottom of the elevators range
@@ -55,6 +56,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         //clamp target within a safe range
         lastTarget = Math.min(Math.max(target * Constants.Elevator.ticksPerInch, Constants.Elevator.minPos), Constants.Elevator.maxPos);
         inRangeCounter = 0;
+
+        SmartDashboard.putNumber("Elevator Target (Ticks)", lastTarget);
 
         PositionDutyCycle request = new PositionDutyCycle(lastTarget);
         request.Slot = 0;
