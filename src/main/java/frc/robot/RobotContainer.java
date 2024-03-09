@@ -143,6 +143,8 @@ public class RobotContainer {
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.src)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevPickupSource, StateLocations.pivPickupSource));
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.amp)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootAmp, StateLocations.pivShootAmp));
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.gnd)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevPickupFloor, StateLocations.pivPickupFloor));
+    // new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOVerride)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevClimb, StateLocations.pivClimb));
+    // new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOVerride)).onFalse(new MoveToSetpoint(m_elevator, 15));
 
     elevTarget = SmartDashboard.getNumber(" elev setpoint",  0.0);
     SmartDashboard.putData("move elev", new MoveToSetpoint(m_elevator, elevTarget));

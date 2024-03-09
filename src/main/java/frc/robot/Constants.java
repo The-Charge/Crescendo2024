@@ -146,6 +146,8 @@ public final class Constants {
     public static final double pivSteepFront = -20;
     public static final double elevTravel = 27 * 0.5;
     public static final double pivTravel = 0;
+    public static final double elevClimb = 27;
+    public static final double pivClimb = pivPickupFloor / 2.0;
 
     public static final double safeElevatorPoint = 27 * 0.5; //the elevator hight required to turn the pivot freely and not hit anything
   }
