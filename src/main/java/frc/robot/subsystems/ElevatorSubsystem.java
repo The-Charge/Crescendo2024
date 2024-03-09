@@ -21,8 +21,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         driver = new TalonFX(Constants.Elevator.elevatorId);
 
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
-        motorConfig.MotorOutput.PeakForwardDutyCycle = 0.6;
-        motorConfig.MotorOutput.PeakReverseDutyCycle = -0.6;
+        motorConfig.MotorOutput.PeakForwardDutyCycle = 0.9;
+        motorConfig.MotorOutput.PeakReverseDutyCycle = -0.9;
         motorConfig.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
 
         motorConfig.CurrentLimits.StatorCurrentLimit = 20;

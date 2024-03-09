@@ -131,7 +131,7 @@ public final class Constants {
     //elev is in inches, piv in degrees
 
     public static final double elevStartup = 0; //done
-    public static final double pivStartup = 0;
+    public static final double pivStartup = -3;
     public static final double elevPickupFloor = 0; //done
     public static final double pivPickupFloor = -35.2;
     public static final double elevPickupSource = 68.34/Elevator.ticksPerInch; //done

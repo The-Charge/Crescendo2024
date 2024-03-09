@@ -25,7 +25,8 @@ public class MoveToAngle extends Command {
   }
   @Override
   public boolean isFinished() {
-    return true;
+    // return true;
+    return m_pivot.isAtTarget();
   }
 
   @Override

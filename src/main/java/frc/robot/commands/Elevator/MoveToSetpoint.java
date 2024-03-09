@@ -22,7 +22,7 @@ public class MoveToSetpoint extends Command {
   }
   @Override
   public boolean isFinished() {
-    //return elevatorSub.isAtTarget();
-    return true;
+    return elevatorSub.isAtTarget();
+   // return true;
   }
 }
