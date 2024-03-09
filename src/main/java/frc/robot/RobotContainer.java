@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants;
 import frc.robot.commands.led.*;
+import frc.robot.commands.CollectorHead.CollectorIntakeGround;
 import frc.robot.commands.CollectorHead.CollectorIntakeSource;
 import frc.robot.commands.CollectorHead.CollectorReverseAll;
 import frc.robot.commands.CollectorHead.CollectorShoot;
@@ -35,7 +37,11 @@ import frc.robot.subsystems.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import frc.robot.subsystems.*;
+import frc.robot.commands.MovePivotElev;
 import frc.robot.commands.PivotElevator;
 import frc.robot.commands.StateMachine;
 import frc.robot.commands.Climber.*;
@@ -63,6 +69,7 @@ public class RobotContainer {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   Joystick buttonBox = new Joystick(1);
+  private SendableChooser<Command> autoChooser;
 
   // CommandJoystick driverController = new
   // CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
@@ -81,6 +88,17 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
     //m_collector.zero();
+        autoChooser = AutoBuilder.buildAutoChooser();
+        NamedCommands.registerCommand("intake pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevPickupFloor, Constants.StateLocations.pivPickupFloor));
+        NamedCommands.registerCommand("shoot pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevHighRear, Constants.StateLocations.pivHighRear));
+        NamedCommands.registerCommand("Shoot", new CollectorShoot(m_collector));
+        NamedCommands.registerCommand("Intake", new CollectorIntakeGround(m_collector, m_pivot));
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autoChooser);
+        /*   
+      } */
+    
+      // in robot in auton init: m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
 
     TeleopDrive teleopDrive = new TeleopDrive(drivebase,
@@ -136,11 +154,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    //return drivebase.getAutonomousCommand("New Auto");
-    return null;
-  }
+
 
   public void setDriveMode() {
     // drivebase.setDefaultCommand();
@@ -148,6 +162,9 @@ public class RobotContainer {
 
   public void setMotorBrake(boolean brake) {
     drivebase.setMotorBrake(brake);
+  }
+  public Command getAutonomousCommand() {
+      return autoChooser.getSelected();
   }
 
   public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}
