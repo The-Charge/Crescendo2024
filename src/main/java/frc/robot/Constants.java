@@ -147,7 +147,7 @@ public final class Constants {
     public static final double elevTravel = 27 * 0.5;
     public static final double pivTravel = 0;
     public static final double elevClimb = 27;
-    public static final double pivClimb = pivPickupFloor / 2.0;
+    public static final double pivClimb = pivPickupFloor + 5;
 
     public static final double safeElevatorPoint = 27 * 0.5; //the elevator hight required to turn the pivot freely and not hit anything
   }
@@ -166,7 +166,7 @@ public final class Constants {
     public static final int amp = 11; //shoot amp location
     public static final int gnd = 12; //pickup ground location
     public static final int unused4 = 13;
-    public static final int elevOVerride = 14; //manual elevator control
+    public static final int elevOverride = 14; //manual elevator control
     public static final int pivOverride = 15; //manual pivot control
   }
 }

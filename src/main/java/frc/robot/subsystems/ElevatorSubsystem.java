@@ -25,7 +25,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         motorConfig.MotorOutput.PeakReverseDutyCycle = -0.9;
         motorConfig.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
 
-        motorConfig.CurrentLimits.StatorCurrentLimit = 20;
+        motorConfig.CurrentLimits.StatorCurrentLimit = 40;
         motorConfig.CurrentLimits.SupplyTimeThreshold = 0.3;
         motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 

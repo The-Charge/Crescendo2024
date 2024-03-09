@@ -12,15 +12,22 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "shoot elev pos"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot pivot pos"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot elev pos"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot pivot pos"
+                }
+              }
+            ]
           }
         },
         {
@@ -30,45 +37,66 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "pick Note Straight"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake pivot pos"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake elev pos"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "intake pos"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "pick Note Straight"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "intake elev pos"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "go back to speaker front"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot elev pos"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot pivot pos"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot elev pos"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot pivot pos"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "go back to speaker front"
+                }
+              }
+            ]
           }
         },
         {

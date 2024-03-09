@@ -99,7 +99,7 @@ public class PivotSubsystem extends SubsystemBase {
     public boolean isAtTarget() {
         double error = lastTarget - pivotMotor.getPosition().getValueAsDouble();
         final int timeRequired = 8;
-        final double deadzone = 0.8;
+        final double deadzone = 0.6;
 
         if(Math.abs(error) <= deadzone) inRangeCounter++;
         else inRangeCounter = 0;

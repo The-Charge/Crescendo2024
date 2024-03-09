@@ -136,32 +136,33 @@ public class TeleopDrive extends Command {
       rotationSpeed = 0;
     }
 
-    boolean hasAlliance = DriverStation.getAlliance().isPresent();
-    if(hasAlliance && isFieldCentric && DriverStation.getAlliance().get() == Alliance.Red) allianceCorrection = -1;
-    ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble() * allianceCorrection, vY.getAsDouble() * allianceCorrection, headingX, headingY);
-
+    //boolean hasAlliance = DriverStation.getAlliance().isPresent();
+    //if(hasAlliance && isFieldCentric && DriverStation.getAlliance().get() == Alliance.Red) allianceCorrection = -1;
+    //ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble() * allianceCorrection, vY.getAsDouble() * allianceCorrection, headingX, headingY);
+    //ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble(), vY.getAsDouble(), new Rotation2d(swerve.getHeading().getRadians()));
     // if (centricToggle.getAsBoolean()) {
     //   isFieldCentric = !isFieldCentric;
     // }
     // Limit velocity to prevent tippy
-    Translation2d translation = SwerveController.getTranslation2d(desiredSpeeds);
-    translation = SwerveMath.limitVelocity(translation, swerve.getFieldVelocity(), swerve.getPose(),
-        Constants.LOOP_TIME, Constants.ROBOT_MASS, List.of(Constants.CHASSIS),
-        swerve.getSwerveDriveConfiguration());
-    SmartDashboard.putNumber("LimitedTranslation", translation.getX());
-    SmartDashboard.putString("Translation", translation.toString());
+    Translation2d translation = new Translation2d(vX.getAsDouble()*Constants.DrivebaseConstants.MAX_SPEED_FEET_PER_SECOND, vY.getAsDouble()*Constants.DrivebaseConstants.MAX_SPEED_FEET_PER_SECOND);
+    //translation = SwerveMath.limitVelocity(translation, swerve.getFieldVelocity(), swerve.getPose(),
+     //   Constants.LOOP_TIME, Constants.ROBOT_MASS, List.of(Constants.CHASSIS),
+      //  swerve.getSwerveDriveConfiguration());
+    //SmartDashboard.putNumber("LimitedTranslation", translation.getX());
+    //SmartDashboard.putString("Translation", translation.toString());
 
     // double multiplier = shiftQuarter.getAsBoolean() ? 0.25 : (shiftHalf.getAsBoolean() ? 0.5 : 1);
-    double multiplier = 1;
-    translation = translation.times(multiplier);
-    rotationSpeed = rotationSpeed * multiplier;
+    //double multiplier = 1;
+    //translation = translation.times(multiplier);
+    //rotationSpeed = rotationSpeed * multiplier;
 
     // Make the robot move
-    if (usePOV) {
-      swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, isFieldCentric);
-    } else {
-      swerve.drive(translation, rotationSpeed, isFieldCentric);
-    }
+   // if (usePOV) {
+     // swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, isFieldCentric);
+    ///} else {
+      //swerve.drive(translation, rotationSpeed, isFieldCentric);
+    //}
+    swerve.drive(translation, rotationSpeed, isFieldCentric);
   }
 
   // Called once the command ends or is interrupted.
