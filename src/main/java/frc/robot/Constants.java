@@ -53,6 +53,7 @@ public final class Constants {
 
   public static final class Elevator {
     public static final int elevatorId = 12;
+    public static final int limitId = -1;
     
     public static final int currentLimit = 20;
 
@@ -124,7 +125,7 @@ public final class Constants {
     public static final double LEFT_Y_DEADBAND = 0.1;
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
-    public static final double TRIGGER_DEADBAND = 0.1;
+    public static final double TRIGGER_DEADBAND = 0.3;
   }
 
   public static abstract class StateLocations {
@@ -156,7 +157,7 @@ public final class Constants {
     public static final int zero = 3; //collector zero
     public static final int shoot = 4; //collector shoot
     public static final int shB = 5; //shoot high rear location
-    public static final int unused1 = 6;
+    public static final int reset = 6; //move elevator down then reset
     public static final int inS = 7; //collector intake source
     public static final int inG = 8; //collector intake ground
     public static final int unused3 = 9;

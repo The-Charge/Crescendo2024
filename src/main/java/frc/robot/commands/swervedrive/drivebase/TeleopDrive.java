@@ -42,7 +42,7 @@ public class TeleopDrive extends Command {
   private final BooleanSupplier centricToggle;
   private double rotationSpeed;
   private boolean usePOV;
-  private boolean isFieldCentric = true;
+  private boolean isFieldCentric = false;
   private double allianceCorrection = 1;
 
   /**
@@ -125,9 +125,9 @@ public class TeleopDrive extends Command {
         break;
     }
 
-    if (POV.getAsDouble() != -1) {
-      usePOV = true;
-    }
+    // if (POV.getAsDouble() != -1) {
+    //   usePOV = true;
+    // }
 
     if (Math.abs(heading.getAsDouble()) > swerve.getSwerveController().config.angleJoyStickRadiusDeadband) {
       rotationSpeed = heading.getAsDouble() * swerve.getSwerveController().config.maxAngularVelocity;
@@ -140,9 +140,9 @@ public class TeleopDrive extends Command {
     if(hasAlliance && isFieldCentric && DriverStation.getAlliance().get() == Alliance.Red) allianceCorrection = -1;
     ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble() * allianceCorrection, vY.getAsDouble() * allianceCorrection, headingX, headingY);
 
-    if (centricToggle.getAsBoolean()) {
-      isFieldCentric = !isFieldCentric;
-    }
+    // if (centricToggle.getAsBoolean()) {
+    //   isFieldCentric = !isFieldCentric;
+    // }
     // Limit velocity to prevent tippy
     Translation2d translation = SwerveController.getTranslation2d(desiredSpeeds);
     translation = SwerveMath.limitVelocity(translation, swerve.getFieldVelocity(), swerve.getPose(),
@@ -151,7 +151,8 @@ public class TeleopDrive extends Command {
     SmartDashboard.putNumber("LimitedTranslation", translation.getX());
     SmartDashboard.putString("Translation", translation.toString());
 
-    double multiplier = shiftQuarter.getAsBoolean() ? 0.25 : (shiftHalf.getAsBoolean() ? 0.5 : 1);
+    // double multiplier = shiftQuarter.getAsBoolean() ? 0.25 : (shiftHalf.getAsBoolean() ? 0.5 : 1);
+    double multiplier = 1;
     translation = translation.times(multiplier);
     rotationSpeed = rotationSpeed * multiplier;
 
@@ -159,6 +160,7 @@ public class TeleopDrive extends Command {
     if (usePOV) {
       swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, isFieldCentric);
     } else {
+      // swerve.drive(translation, rotationSpeed, isFieldCentric);
       swerve.drive(translation, rotationSpeed, isFieldCentric);
     }
   }
