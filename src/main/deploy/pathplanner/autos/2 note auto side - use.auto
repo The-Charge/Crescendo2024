@@ -32,13 +32,14 @@
                 "data": {
                   "name": "Shoot"
                 }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "pick note left blue"
-                }
-              },
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
               {
                 "type": "named",
                 "data": {
@@ -60,9 +61,16 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "shoot note side"
+                  "pathName": "pick note left blue"
                 }
-              },
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
               {
                 "type": "named",
                 "data": {
@@ -76,12 +84,18 @@
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Shoot"
+                  "pathName": "shoot note side"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]
