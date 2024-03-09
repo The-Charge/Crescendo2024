@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.CollectorHead.CollectorZero;
@@ -55,6 +56,8 @@ public class Robot extends TimedRobot
     // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop
     // immediately when disabled, but then also let it be pushed more 
     disabledTimer = new Timer();
+    // new SetLEDRange(m_robotContainer.getLEDSubsystem(), 0, Constants.LEDConstants.totalLength, Color.kLime).schedule();
+    new LEDRainbow(m_robotContainer.getLEDSubsystem(), () -> false).schedule();
   }
 
   /**

@@ -83,7 +83,7 @@ public class PivotSubsystem extends SubsystemBase {
     //     return atSetpoint;
     // }
     public void pivotUp() {
-        pivotToAngle( pivotMotor.getPosition().getValueAsDouble() + 2);
+        pivotToAngle( pivotMotor.getPosition().getValueAsDouble() + 15);
     }
     
     private double getCurrentAngle() {

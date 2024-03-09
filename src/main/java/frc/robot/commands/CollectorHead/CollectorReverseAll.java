@@ -24,7 +24,12 @@ public class CollectorReverseAll extends Command {
         m_collector.spinIntake(CollectorHeadSubsystem.Direction.BACKWARD, 0.5);
     }
     @Override
+    public void end(boolean interrupted) {
+        // m_collector.zero();
+    }
+    @Override
     public boolean isFinished() {
-        return timer.hasElapsed(2.5);
+        // return timer.hasElapsed(2.5);
+        return false;
     }
 }

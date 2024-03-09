@@ -114,8 +114,8 @@ public final class Constants {
   }
 
   public static final class LEDConstants {
-    public static final int ledId = 9;
-    public static final int totalLength = 45; //in pixels
+    public static final int ledId = 6;
+    public static final int totalLength = 32; //in pixels
   }
 
   public static class OperatorConstants {
@@ -133,12 +133,12 @@ public final class Constants {
     public static final double elevStartup = 0; //done
     public static final double pivStartup = 0;
     public static final double elevPickupFloor = 0; //done
-    public static final double pivPickupFloor = -37.36;
-    public static final double elevPickupSource = 68.34*Elevator.ticksPerInch; //done
+    public static final double pivPickupFloor = -32.2;
+    public static final double elevPickupSource = 68.34/Elevator.ticksPerInch; //done
     public static final double pivPickupSource = -7.99;
     public static final double elevShootAmp = 27; //done
     public static final double pivShootAmp = -30.58;
-    public static final double elevHighRear = 86.56*Elevator.ticksPerInch; //touching subwoofer done
+    public static final double elevHighRear = 86.56/Elevator.ticksPerInch; //touching subwoofer done
     public static final double pivHighRear = -28.52;
     public static final double elevShallowFront = 27 * 0.5;
     public static final double pivShallowFront = -45;

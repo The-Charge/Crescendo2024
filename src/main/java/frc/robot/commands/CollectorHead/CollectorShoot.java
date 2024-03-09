@@ -49,6 +49,6 @@ public class CollectorShoot extends Command {
         if(hasSetTime) {
             SmartDashboard.putNumber("feed timer", feedTimer.get());
         }
-        return timeout.hasElapsed(12) || (feedTimer == null ? false : feedTimer.hasElapsed(2.5));
+        return timeout.hasElapsed(4) || (feedTimer == null ? false : feedTimer.hasElapsed(1.25));
     }
 }
