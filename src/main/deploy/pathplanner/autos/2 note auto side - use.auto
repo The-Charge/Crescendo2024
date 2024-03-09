@@ -51,7 +51,14 @@
                 "data": {
                   "name": "intake elev pos"
                 }
-              },
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
               {
                 "type": "named",
                 "data": {
