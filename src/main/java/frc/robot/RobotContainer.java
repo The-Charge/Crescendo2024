@@ -64,10 +64,7 @@ public class RobotContainer
 
  
   // CommandJoystick rotationController = new CommandJoystick(1);
-  // private final PivotSubsystem m_pivot = new PivotSubsystem();
 
-
-  private final CollectorHeadSubsystem m_collector = new CollectorHeadSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   Joystick buttonBox = new Joystick(1);
@@ -77,9 +74,10 @@ public class RobotContainer
   XboxController driverXbox = new XboxController(0);
 
   private int rotationXboxAxis = 4;
-  private final ClimbSubsystem m_climber = new ClimbSubsystem();
+  // private final ClimbSubsystem m_climber = new ClimbSubsystem();
   private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
   private final PivotSubsystem m_pivot = new PivotSubsystem();
+  private final CollectorHeadSubsystem m_collector = new CollectorHeadSubsystem();
   public double elevTarget;
   public double pivTarget;
   /**
