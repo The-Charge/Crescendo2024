@@ -78,8 +78,9 @@ public class MovePivotElev extends Command {
 
     @Override
     public boolean isFinished() {
-        if(!waitForTask) return true;
-
-        return action == null ? true : action.isFinished();
+        // if(!waitForTask) return true;
+        action.cancel();
+        // return action == null ? true : action.isFinished();
+        return true;
     }
 }

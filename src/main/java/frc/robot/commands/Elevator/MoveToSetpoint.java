@@ -22,10 +22,6 @@ public class MoveToSetpoint extends Command {
   }
   @Override
   public boolean isFinished() {
-    boolean isDone = elevatorSub.isAtTarget();
-
-
-
-    return isDone;
+    return elevatorSub.isAtTarget();
   }
 }

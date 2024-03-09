@@ -133,7 +133,7 @@ public final class Constants {
     public static final double elevStartup = 0; //done
     public static final double pivStartup = 0;
     public static final double elevPickupFloor = 0; //done
-    public static final double pivPickupFloor = -32.2;
+    public static final double pivPickupFloor = -35.2;
     public static final double elevPickupSource = 68.34/Elevator.ticksPerInch; //done
     public static final double pivPickupSource = -7.99;
     public static final double elevShootAmp = 27; //done
