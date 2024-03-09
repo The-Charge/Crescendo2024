@@ -160,8 +160,12 @@ public class TeleopDrive extends Command {
     if (usePOV) {
       swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, isFieldCentric);
     } else {
+<<<<<<< Updated upstream
       // swerve.drive(translation, rotationSpeed, isFieldCentric);
       swerve.drive(translation, rotationSpeed, isFieldCentric);
+=======
+      swerve.drive(translation, rotationSpeed, false);
+>>>>>>> Stashed changes
     }
   }
 

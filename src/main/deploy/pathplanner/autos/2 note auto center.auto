@@ -14,7 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "shoot pos"
+            "name": "shoot elev pos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot pivot pos"
           }
         },
         {
@@ -38,6 +44,12 @@
         {
           "type": "named",
           "data": {
+            "name": "intake elev pos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Intake"
           }
         },
@@ -45,6 +57,24 @@
           "type": "path",
           "data": {
             "pathName": "go back to speaker front"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot elev pos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot pivot pos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]

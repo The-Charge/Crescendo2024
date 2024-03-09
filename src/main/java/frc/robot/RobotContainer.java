@@ -85,8 +85,13 @@ public class RobotContainer {
     configureBindings();
     //m_collector.zero();
         autoChooser = AutoBuilder.buildAutoChooser();
-        NamedCommands.registerCommand("intake pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevPickupFloor, Constants.StateLocations.pivPickupFloor));
-        NamedCommands.registerCommand("shoot pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevHighRear, Constants.StateLocations.pivHighRear));
+        //NamedCommands.registerCommand("intake pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevPickupFloor, Constants.StateLocations.pivPickupFloor));
+        //NamedCommands.registerCommand("shoot pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevHighRear, Constants.StateLocations.pivHighRear));
+        NamedCommands.registerCommand("shoot pivot pos", new MoveToAngle(m_pivot,  Constants.StateLocations.pivHighRear));
+        NamedCommands.registerCommand("intake pivot pos", new MoveToAngle(m_pivot, Constants.StateLocations.pivPickupFloor));
+        NamedCommands.registerCommand("shoot elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.elevHighRear));
+        NamedCommands.registerCommand("intake elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.pivPickupFloor));
+        
         NamedCommands.registerCommand("Shoot", new CollectorShoot(m_collector));
         NamedCommands.registerCommand("Intake", new CollectorIntakeGround(m_collector, m_pivot));
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -143,6 +148,8 @@ public class RobotContainer {
     SmartDashboard.putData("move elev", new MoveToSetpoint(m_elevator, elevTarget));
     pivTarget = SmartDashboard.getNumber("piv setpoint", 0.0);
     SmartDashboard.putData("move piv",new MoveToAngle(m_pivot, pivTarget));
+
+    
   }
 
   /**

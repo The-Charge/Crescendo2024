@@ -64,6 +64,8 @@ public class PivotSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Pivot I (Amps)", pivotMotor.getStatorCurrent().getValueAsDouble());
         SmartDashboard.putNumber("Pivot Position (Ticks)", pivotMotor.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Pivot abs position (ticks)", absEncoder.getAbsolutePosition());
+
+        
     }
 
     public void pivotToAngle(double ticks) {

@@ -1,0 +1,79 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot elev pos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot pivot pos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "blue center note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake pivot pos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake elev pos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "center to woof blue"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot elev pos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot pivot pos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

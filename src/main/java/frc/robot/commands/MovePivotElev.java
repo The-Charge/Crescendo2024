@@ -20,6 +20,7 @@ public class MovePivotElev extends Command {
     private double pivSetpoint;
     private Command action;
     private boolean waitForTask;
+    private double x;
 
     public MovePivotElev(ElevatorSubsystem elev, PivotSubsystem piv, double elevTarget, double pivotSetpoint, boolean wait) {
         m_elevator = elev;
@@ -30,6 +31,7 @@ public class MovePivotElev extends Command {
         action = null;
         pivSetpoint = pivotSetpoint;
         waitForTask = wait;
+        x=0;
     }
 
     public MovePivotElev(ElevatorSubsystem elev, PivotSubsystem piv, double elevTarget, double pivotSetpoint) {
@@ -41,6 +43,7 @@ public class MovePivotElev extends Command {
         action = null;
         pivSetpoint = pivotSetpoint;
         waitForTask = false;
+        x=0;
     }
 
     @Override
@@ -73,14 +76,21 @@ public class MovePivotElev extends Command {
 
     @Override
     public void execute() {
-        
+        SmartDashboard.putBoolean("auto", action.isScheduled());
+        x+=1;
+        SmartDashboard.putNumber("auto 3", x);
     }
 
     @Override
     public boolean isFinished() {
         // if(!waitForTask) return true;
-        action.cancel();
+     
         // return action == null ? true : action.isFinished();
-        return true;
+        return false;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        SmartDashboard.putBoolean("auto 2", true);
     }
 }
