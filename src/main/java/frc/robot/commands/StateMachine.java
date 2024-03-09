@@ -136,7 +136,7 @@ public class StateMachine extends Command {
 
             case SHOOOTSHALLOWFRONT:
             return new SequentialCommandGroup(
-                new MoveToSetpoint(elevSub, StateLocations.elevTurnHight),
+                new MoveToSetpoint(elevSub, StateLocations.safeElevatorPoint),
                 new MoveToAngle(pivSub, StateLocations.pivStartup),
                 new MoveToSetpoint(elevSub, StateLocations.elevStartup)
             );
@@ -191,7 +191,7 @@ public class StateMachine extends Command {
 
             case SHOOTSTEEPFRONT:
             return new SequentialCommandGroup(
-                new MoveToSetpoint(elevSub, StateLocations.elevTurnHight),
+                new MoveToSetpoint(elevSub, StateLocations.safeElevatorPoint),
                 new MoveToAngle(pivSub, StateLocations.pivPickupFloor),
                 new MoveToSetpoint(elevSub, StateLocations.elevPickupFloor)
             );
@@ -402,14 +402,14 @@ public class StateMachine extends Command {
         switch(currentState) {
             case STARTUP:
             return new SequentialCommandGroup(
-                new MoveToSetpoint(elevSub, StateLocations.elevTurnHight),
+                new MoveToSetpoint(elevSub, StateLocations.safeElevatorPoint),
                 new MoveToAngle(pivSub, StateLocations.pivSteepFront),
                 new MoveToSetpoint(elevSub, StateLocations.elevSteepFront)
             );
 
             case PICKUPFLOOR:
             return new SequentialCommandGroup(
-                new MoveToSetpoint(elevSub, StateLocations.elevTurnHight),
+                new MoveToSetpoint(elevSub, StateLocations.safeElevatorPoint),
                 new MoveToAngle(pivSub, StateLocations.pivSteepFront),
                 new MoveToSetpoint(elevSub, StateLocations.elevSteepFront)
             );

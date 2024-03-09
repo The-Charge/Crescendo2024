@@ -114,8 +114,8 @@ public final class Constants {
   }
 
   public static final class LEDConstants {
-    public static final int ledId = 9;
-    public static final int totalLength = 45; //in pixels
+    public static final int ledId = 6;
+    public static final int totalLength = 32; //in pixels
   }
 
   public static class OperatorConstants {
@@ -133,12 +133,12 @@ public final class Constants {
     public static final double elevStartup = 0; //done
     public static final double pivStartup = 0;
     public static final double elevPickupFloor = 0; //done
-    public static final double pivPickupFloor = -37.36;
-    public static final double elevPickupSource = 68.34*Elevator.ticksPerInch; //done
+    public static final double pivPickupFloor = -32.2;
+    public static final double elevPickupSource = 68.34/Elevator.ticksPerInch; //done
     public static final double pivPickupSource = -7.99;
     public static final double elevShootAmp = 27; //done
     public static final double pivShootAmp = -30.58;
-    public static final double elevHighRear = 86.56*Elevator.ticksPerInch; //touching subwoofer done
+    public static final double elevHighRear = 86.56/Elevator.ticksPerInch; //touching subwoofer done
     public static final double pivHighRear = -28.52;
     public static final double elevShallowFront = 27 * 0.5;
     public static final double pivShallowFront = -45;
@@ -147,6 +147,24 @@ public final class Constants {
     public static final double elevTravel = 27 * 0.5;
     public static final double pivTravel = 0;
 
-    public static final double elevTurnHight = 27 * 0.5; //the elevator hight required to turn the pivot freely and not hit anything
+    public static final double safeElevatorPoint = 27 * 0.5; //the elevator hight required to turn the pivot freely and not hit anything
+  }
+
+  public static abstract class ButtonBox {
+    public static final int rest = 1; //startup location
+    public static final int clear = 2; //collector reverse all
+    public static final int zero = 3; //collector zero
+    public static final int shoot = 4; //collector shoot
+    public static final int shB = 5; //shoot high rear location
+    public static final int unused1 = 6;
+    public static final int inS = 7; //collector intake source
+    public static final int inG = 8; //collector intake ground
+    public static final int unused3 = 9;
+    public static final int src = 10; //pickup source location
+    public static final int amp = 11; //shoot amp location
+    public static final int gnd = 12; //pickup ground location
+    public static final int unused4 = 13;
+    public static final int elevOVerride = 14; //manual elevator control
+    public static final int pivOverride = 15; //manual pivot control
   }
 }

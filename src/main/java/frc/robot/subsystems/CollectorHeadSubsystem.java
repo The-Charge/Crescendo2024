@@ -171,8 +171,8 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         return isAtTarget(leftTarget, rightTarget, shooterLeft, shooterRight);
     }
     private boolean isAtTarget(double target1, double target2, CANSparkMax motor1, CANSparkMax motor2) {
-        final double deadband = 500;
-        final int requiredTime = 15;
+        final double deadband = 750;
+        final int requiredTime = 12;
 
         double error1 = target1 - motor1.getEncoder().getVelocity();
         double error2 = target2 - motor2.getEncoder().getVelocity();

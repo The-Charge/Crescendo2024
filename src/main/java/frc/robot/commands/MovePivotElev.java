@@ -46,7 +46,7 @@ public class MovePivotElev extends Command {
     @Override
     public void initialize() {
         if((elevSetpoint < Constants.StateLocations.safeElevatorPoint) && (pivSetpoint != Constants.StateLocations.pivStartup && pivSetpoint != Constants.StateLocations.pivPickupFloor)) {
-            DriverStation.reportError("Invalid location for elev/piv", null);
+            // DriverStation.reportError("Invalid location for elev/piv", null);
             return;
         } 
         else if(elevSetpoint < Constants.StateLocations.safeElevatorPoint && m_elevator.elevPos() > Constants.StateLocations.safeElevatorPoint) {
@@ -62,14 +62,13 @@ public class MovePivotElev extends Command {
             );
         }
         else {
-            action =new ParallelCommandGroup(
+            action = new ParallelCommandGroup(
                 new MoveToSetpoint(m_elevator, elevSetpoint),
                 new MoveToAngle(m_pivot, pivSetpoint)
             );
         }
 
         action.schedule();
-
     }
 
     @Override

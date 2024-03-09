@@ -26,11 +26,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants;
 import frc.robot.commands.led.*;
-import frc.robot.commands.CollectorHead.CollectorIntakeGround;
-import frc.robot.commands.CollectorHead.CollectorIntakeSource;
-import frc.robot.commands.CollectorHead.CollectorReverseAll;
-import frc.robot.commands.CollectorHead.CollectorShoot;
-import frc.robot.commands.CollectorHead.CollectorZero;
 import frc.robot.commands.Pivot.*;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.subsystems.*;
@@ -41,12 +36,13 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import frc.robot.subsystems.*;
-import frc.robot.commands.MovePivotElev;
-import frc.robot.commands.PivotElevator;
-import frc.robot.commands.StateMachine;
+import frc.robot.commands.*;
 import frc.robot.commands.Climber.*;
+import frc.robot.commands.CollectorHead.*;
 import frc.robot.commands.Elevator.*;
 import frc.robot.commands.Pivot.*;
+import frc.robot.Constants.StateLocations;
+import frc.robot.Constants.ButtonBox;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -128,20 +124,20 @@ public class RobotContainer {
    * Flight joysticks}.
    */
   private void configureBindings() {
-    new Trigger(() -> buttonBox.getRawButton(3)).onTrue(new CollectorIntakeSource(m_collector));
-    new Trigger(() -> buttonBox.getRawButton(4)).onTrue(new CollectorReverseAll(m_collector));
-    new Trigger(() -> buttonBox.getRawButton(2)).onTrue(new CollectorShoot(m_collector));
-    new Trigger(() -> buttonBox.getRawButton(1)).onTrue(new CollectorZero(m_collector));
-    new Trigger(() -> buttonBox.getRawButton(5)).onTrue(new MoveToSetpoint(m_elevator, 5));
-    new Trigger(() -> buttonBox.getRawButton(6)).onTrue(new MoveToSetpoint(m_elevator, 19));
-    new Trigger(() -> buttonBox.getRawButton(7)).onTrue(new MoveToSetpoint(m_elevator, 27));
-    new Trigger(() -> buttonBox.getRawButton(8)).onTrue(new MoveToSetpoint(m_elevator, 0));
-
-    
-    new Trigger(() -> buttonBox.getRawButton(9)).onTrue(new MoveToAngle(m_pivot, -28.52));
-
     new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+
+    new Trigger(() -> buttonBox.getRawButton(ButtonBox.rest)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevStartup, StateLocations.pivStartup));
+    // new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).onTrue(new CollectorReverseAll(m_collector));
+    new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).whileTrue(new CollectorReverseAll(m_collector));
+    new Trigger(() -> buttonBox.getRawButton(ButtonBox.zero)).onTrue(new CollectorZero(m_collector));
+    new Trigger(() -> buttonBox.getRawButton(ButtonBox.shoot)).onTrue(new CollectorShoot(m_collector));
+    new Trigger(() -> buttonBox.getRawButton(ButtonBox.shB)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevHighRear, StateLocations.pivHighRear));
+    new Trigger(() -> buttonBox.getRawButton(ButtonBox.inS)).onTrue(new CollectorIntakeSource(m_collector));
+    new Trigger(() -> buttonBox.getRawButton(ButtonBox.inG)).onTrue(new CollectorIntakeGround(m_collector, m_pivot));
+    new Trigger(() -> buttonBox.getRawButton(ButtonBox.src)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevPickupSource, StateLocations.pivPickupSource));
+    new Trigger(() -> buttonBox.getRawButton(ButtonBox.amp)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootAmp, StateLocations.pivShootAmp));
+    new Trigger(() -> buttonBox.getRawButton(ButtonBox.gnd)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevPickupFloor, StateLocations.pivPickupFloor));
 
     elevTarget = SmartDashboard.getNumber(" elev setpoint",  0.0);
     SmartDashboard.putData("move elev", new MoveToSetpoint(m_elevator, elevTarget));

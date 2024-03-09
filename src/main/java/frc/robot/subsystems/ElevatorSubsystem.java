@@ -76,4 +76,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         return false;
     }
+    public double elevPos() {
+        return driver.getPosition().getValueAsDouble();
+    }
 }
