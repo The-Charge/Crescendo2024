@@ -53,7 +53,7 @@ public final class Constants {
 
   public static final class Elevator {
     public static final int elevatorId = 12;
-    public static final int limitId = -1;
+    public static final int limitId = 5;
     
     public static final int currentLimit = 20;
 
