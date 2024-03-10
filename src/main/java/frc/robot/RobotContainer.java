@@ -95,6 +95,11 @@ public class RobotContainer
         autoChooser = AutoBuilder.buildAutoChooser();
         NamedCommands.registerCommand("intake pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevPickupFloor, Constants.StateLocations.pivPickupFloor));
         NamedCommands.registerCommand("shoot pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevHighRear, Constants.StateLocations.pivHighRear));
+        NamedCommands.registerCommand("shoot pivot pos", new MoveToAngle(m_pivot,  Constants.StateLocations.pivHighRear));
+        NamedCommands.registerCommand("intake pivot pos", new MoveToAngle(m_pivot, Constants.StateLocations.pivPickupFloor));
+        NamedCommands.registerCommand("shoot elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.elevHighRear));
+        NamedCommands.registerCommand("intake elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.pivPickupFloor));
+        
         NamedCommands.registerCommand("Shoot", new CollectorShoot(m_collector));
         NamedCommands.registerCommand("Intake", new CollectorIntakeGround(m_collector, m_pivot));
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -157,22 +162,25 @@ public class RobotContainer
 
 
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.rest)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevStartup, StateLocations.pivStartup));
-    // new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).onTrue(new CollectorReverseAll(m_collector));
-    new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).whileTrue(new CollectorReverseAll(m_collector));
+    new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).onTrue(new CollectorReverseAll(m_collector));
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.zero)).onTrue(new CollectorZero(m_collector));
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.shoot)).onTrue(new CollectorShoot(m_collector));
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.shB)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevHighRear, StateLocations.pivHighRear));
-    new Trigger(() -> buttonBox.getRawButton(ButtonBox.reset)).onTrue(new ResetElevator(m_elevator, m_pivot));
+    new Trigger(() -> buttonBox.getRawButton(ButtonBox.reset)).whileTrue(new ResetElevator(m_elevator, m_pivot));
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.inS)).onTrue(new CollectorIntakeSource(m_collector));
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.inG)).onTrue(new CollectorIntakeGround(m_collector, m_pivot));
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.src)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevPickupSource, StateLocations.pivPickupSource));
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.amp)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootAmp, StateLocations.pivShootAmp));
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.gnd)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevPickupFloor, StateLocations.pivPickupFloor));
-
+    new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOverride)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevClimb, StateLocations.pivClimb));
+    new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOverride)).onFalse(new MoveToSetpoint(m_elevator, 12));
+    new Trigger(() -> buttonBox.getRawButton(ButtonBox.pivOverride)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevClimb, StateLocations.pivPickupFloor));
     elevTarget = SmartDashboard.getNumber(" elev setpoint",  0.0);
     SmartDashboard.putData("move elev", new MoveToSetpoint(m_elevator, elevTarget));
     pivTarget = SmartDashboard.getNumber("piv setpoint", 0.0);
     SmartDashboard.putData("move piv",new MoveToAngle(m_pivot, pivTarget));
+
+    
   }
 
   /**

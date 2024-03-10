@@ -57,7 +57,6 @@ public final class Constants {
 
   public static final class Elevator {
     public static final int elevatorId = 12;
-    public static final int limitId = -1;
     
     public static final int currentLimit = 20;
 
@@ -136,7 +135,7 @@ public final class Constants {
     //elev is in inches, piv in degrees
 
     public static final double elevStartup = 0; //done
-    public static final double pivStartup = 0;
+    public static final double pivStartup = -3;
     public static final double elevPickupFloor = 0; //done
     public static final double pivPickupFloor = -35.2;
     public static final double elevPickupSource = 68.34/Elevator.ticksPerInch; //done
@@ -151,6 +150,8 @@ public final class Constants {
     public static final double pivSteepFront = -20;
     public static final double elevTravel = 27 * 0.5;
     public static final double pivTravel = 0;
+    public static final double elevClimb = 27;
+    public static final double pivClimb = pivPickupFloor + 5;
 
     public static final double safeElevatorPoint = 27 * 0.5; //the elevator hight required to turn the pivot freely and not hit anything
   }
@@ -169,7 +170,7 @@ public final class Constants {
     public static final int amp = 11; //shoot amp location
     public static final int gnd = 12; //pickup ground location
     public static final int unused4 = 13;
-    public static final int elevOVerride = 14; //manual elevator control
+    public static final int elevOverride = 14; //manual elevator control
     public static final int pivOverride = 15; //manual pivot control
   }
 

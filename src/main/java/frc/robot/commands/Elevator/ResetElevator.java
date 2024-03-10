@@ -9,14 +9,14 @@ public class ResetElevator extends Command {
 
     private ElevatorSubsystem elev;
     private MoveToAngle pivMove;
-    private boolean hasSetSpeed = false;
+    private boolean hasCoasted = false;
     private boolean canEnd = false;
 
     public ResetElevator(ElevatorSubsystem elev, PivotSubsystem piv) {
         this.elev = elev;
         addRequirements(elev);
 
-        pivMove = new MoveToAngle(piv, Constants.StateLocations.pivStartup);
+        pivMove = new MoveToAngle(piv, Constants.StateLocations.pivPickupSource);
     }
 
     @Override
@@ -25,18 +25,19 @@ public class ResetElevator extends Command {
     }
     @Override
     public void execute() {
-        if(pivMove.isFinished() && !hasSetSpeed) {
-            elev.moveAtSpeed(-0.3);
-            hasSetSpeed = true;
-        }
-        if(elev.getLimit()) {
-            elev.stopElevator();
-            elev.setAsZero();
-            canEnd = true;
+        if(pivMove.isFinished() && !hasCoasted) {
+            elev.coast();
+            elev.moveAtSpeed(0);
+            hasCoasted = true;
         }
     }
     @Override
+    public void end(boolean interrupted) {
+        elev.setAsZero();
+        elev.brake();
+    }
+    @Override
     public boolean isFinished() {
-        return canEnd;
+        return false;
     }
 }

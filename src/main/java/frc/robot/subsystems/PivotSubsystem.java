@@ -21,6 +21,8 @@ public class PivotSubsystem extends SubsystemBase {
 
     private TalonFX pivotMotor;
     private DutyCycleEncoder absEncoder;
+    private double lastTarget = -1;
+    private int inRangeCounter = 0;
 
     public PivotSubsystem() {
         pivotMotor = new TalonFX(Constants.Pivot.pivotId);
@@ -33,8 +35,8 @@ public class PivotSubsystem extends SubsystemBase {
         talonFXConfigs.CurrentLimits.SupplyTimeThreshold = 0.3;
         talonFXConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
 
-        talonFXConfigs.MotorOutput.PeakForwardDutyCycle = 0.5;
-        talonFXConfigs.MotorOutput.PeakReverseDutyCycle = -0.5;
+        talonFXConfigs.MotorOutput.PeakForwardDutyCycle = 0.8;
+        talonFXConfigs.MotorOutput.PeakReverseDutyCycle = -0.8;
 
         talonFXConfigs.Slot0.kS = Constants.Pivot.kS;
         talonFXConfigs.Slot0.kV = Constants.Pivot.kV;
@@ -64,6 +66,8 @@ public class PivotSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Pivot I (Amps)", pivotMotor.getStatorCurrent().getValueAsDouble());
         SmartDashboard.putNumber("Pivot Position (Ticks)", pivotMotor.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Pivot abs position (ticks)", absEncoder.getAbsolutePosition());
+
+        
     }
 
     public void pivotToAngle(double ticks) {
@@ -74,7 +78,9 @@ public class PivotSubsystem extends SubsystemBase {
         // double nTicks = Math.min(Math.max(ticks, Constants.Pivot.minPos), Constants.Pivot.maxPos);
         double nTicks = ticks;
         SmartDashboard.putNumber("Pivot Target (Ticks)", nTicks);
-        
+        lastTarget = nTicks;
+        inRangeCounter = 0;
+
         pivotMotor.setControl(new PositionDutyCycle(nTicks).withSlot(0));
         //atSetpoint = false;
         //pivotMotor.set(angle);
@@ -88,5 +94,18 @@ public class PivotSubsystem extends SubsystemBase {
     
     private double getCurrentAngle() {
         return pivotMotor.getPosition().getValueAsDouble() / Constants.Pivot.ticksPerDeg * Constants.Pivot.gearRat; //getPosition() is in rotations
+    }
+
+    public boolean isAtTarget() {
+        double error = lastTarget - pivotMotor.getPosition().getValueAsDouble();
+        final int timeRequired = 8;
+        final double deadzone = 0.6;
+
+        if(Math.abs(error) <= deadzone) inRangeCounter++;
+        else inRangeCounter = 0;
+
+        if(inRangeCounter >= timeRequired) return true;
+
+        return false;
     }
 }

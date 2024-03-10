@@ -14,7 +14,6 @@ import frc.robot.Constants;
 public class ElevatorSubsystem extends SubsystemBase {
 
     private TalonFX driver;
-    private DigitalInput limit;
     private double lastTarget = -1;
     private int inRangeCounter = 0;
 
@@ -22,11 +21,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         driver = new TalonFX(Constants.Elevator.elevatorId);
 
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
-        motorConfig.MotorOutput.PeakForwardDutyCycle = 0.6;
-        motorConfig.MotorOutput.PeakReverseDutyCycle = -0.6;
+        motorConfig.MotorOutput.PeakForwardDutyCycle = 0.9;
+        motorConfig.MotorOutput.PeakReverseDutyCycle = -0.9;
         motorConfig.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
 
-        motorConfig.CurrentLimits.StatorCurrentLimit = 20;
+        motorConfig.CurrentLimits.StatorCurrentLimit = 40;
         motorConfig.CurrentLimits.SupplyTimeThreshold = 0.3;
         motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
@@ -44,15 +43,13 @@ public class ElevatorSubsystem extends SubsystemBase {
         softLimits.ForwardSoftLimitThreshold = Constants.Elevator.maxPos;
         softLimits.ReverseSoftLimitThreshold = Constants.Elevator.minPos;
         driver.getConfigurator().apply(softLimits);
-
-        limit = new DigitalInput(Constants.Elevator.limitId);
+        driver.getConfigurator().apply(motorConfig);
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Elevator Position (Ticks)", driver.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Elevator I (Amps)", driver.getStatorCurrent().getValueAsDouble());
-        SmartDashboard.putBoolean("Elevator Limit", getLimit());
     }
 
     //NOTE: target is in inches from the bottom of the elevators range
@@ -86,10 +83,23 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void moveAtSpeed(double speed) {
         driver.set(Math.min(Math.max(speed, -1), 1));
     }
-    public boolean getLimit() {
-        return !limit.get();
-    }
     public void setAsZero() {
         driver.setPosition(0); //might work
+    }
+    public void coast() {
+        TalonFXConfiguration config = new TalonFXConfiguration();
+        config.MotorOutput.PeakForwardDutyCycle = 0.6;
+        config.MotorOutput.PeakReverseDutyCycle = -0.6;
+        config.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
+
+        driver.getConfigurator().apply(config.MotorOutput);
+    }
+    public void brake() {
+        TalonFXConfiguration config = new TalonFXConfiguration();
+        config.MotorOutput.PeakForwardDutyCycle = 0.6;
+        config.MotorOutput.PeakReverseDutyCycle = -0.6;
+        config.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
+
+        driver.getConfigurator().apply(config.MotorOutput);
     }
 }
