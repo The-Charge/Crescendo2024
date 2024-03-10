@@ -25,6 +25,7 @@ public class VisionSubsystem extends SubsystemBase{
     public double distance;         //distance to target
     public Pose2d robotpose;        //Robot in Fieldspace (blue side)
     public double[] campose = new double[6];          //3D tranform of thecamerai n the coordinate system of the robot
+    public double prevtag;
 
     public VisionSubsystem(){
     
@@ -94,6 +95,9 @@ public class VisionSubsystem extends SubsystemBase{
 
 
     //Setters
+    public void setPrevTag(double tagid){
+        prevtag = tagid;
+    }
     public void setCurrentLimelightName(String newname){
         LimelightHelpers.setLEDMode_ForceOff(limelightname);
         limelightname = newname;
@@ -149,11 +153,15 @@ public class VisionSubsystem extends SubsystemBase{
     public double getlimelightshooterLatency(){
         return limelightlatency;
     }
+    public double getprevtag(){
+        return prevtag;
+    }
     public Pose2d getRobotFieldPose(){
         return robotpose;
     }
     public double[] getCampose(){
         return campose;
     }    
+    
 
 }

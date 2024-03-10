@@ -5,8 +5,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,6 +22,7 @@ import frc.robot.commands.led.*;
 import frc.robot.commands.swervedrive.drivebase.TargetLockDriveCommandGroup;
 import frc.robot.commands.Pivot.*;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
+import frc.robot.commands.vision.AutonDriveToTag;
 import frc.robot.commands.vision.DriveToNoteCommandGroup;
 import frc.robot.commands.vision.DriveToTagCommandGroup;
 import frc.robot.commands.vision.SwapCurrentLimelight;
@@ -30,6 +33,7 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.commands.*;
 
 import java.io.File;
+import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -37,6 +41,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import frc.robot.commands.CollectorHead.*;
 import frc.robot.commands.Elevator.*;
 import frc.robot.Constants.StateLocations;
+import frc.robot.Constants.ApriltagConstants;
 import frc.robot.Constants.ButtonBox;
 
 /**
@@ -77,10 +82,8 @@ public class RobotContainer
    */
   public RobotContainer()
   {
-    UpdateRobotPose updateRobotPose = new UpdateRobotPose(drivebase, m_limelight);
-    LEDVision LEDLimelight = new LEDVision(m_ledSubsystem, m_limelight);
-  
-    NamedCommands.registerCommand("Update Robot Pose", updateRobotPose);
+   
+    LEDVision LEDLimelight = new LEDVision(m_ledSubsystem, m_limelight);  
     // Configure the trigger bindings
     configureBindings();
     //m_collector.zero();
@@ -94,10 +97,14 @@ public class RobotContainer
         NamedCommands.registerCommand("drive to note", new DriveToNoteCommandGroup(m_limelight, drivebase));
         NamedCommands.registerCommand("Shoot", new CollectorShoot(m_collector));
         NamedCommands.registerCommand("Intake", new CollectorIntakeGround(m_collector, m_pivot));
+        NamedCommands.registerCommand("drive to center subwoofer", new AutonDriveToTag(m_limelight, drivebase, getSpeakerCenterTagID()));
+        NamedCommands.registerCommand("drive to amp", new AutonDriveToTag(m_limelight, drivebase, getAmpID()));
+
+        NamedCommands.registerCommand("Update Robot Pose", new UpdateRobotPose(drivebase, m_limelight));
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
-        /*   
-      } */
+        
+        
     
       // in robot in auton init: m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -125,7 +132,7 @@ public class RobotContainer
    * named factories in
    * {@link edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses
    * for
-   * {@link CommandXboxController
+   * {@link CommandXboxController`
    * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4}
    * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick
    * Flight joysticks}.
@@ -192,13 +199,37 @@ public class RobotContainer
   public Command getAutonomousCommand() {
       return autoChooser.getSelected();
   }
+  public double getSpeakerCenterTagID(){
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    if (ally.get() == Alliance.Red){
+      return ApriltagConstants.RED_SPEAKER_CENTER_TAG; 
+    }
+    else{
+      return ApriltagConstants.BLUE_SPEAKER_CENTER_TAG;
+    }
+  }
+
+  public double getAmpID(){
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    if (ally.get() == Alliance.Red){
+      return ApriltagConstants.RED_AMP_TAG; 
+    }
+    else{
+      return ApriltagConstants.BLUE_AMP_TAG;
+    }
+  }
+
+   public double getSpeakerSideID(){
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    if (ally.get() == Alliance.Red){
+      return ApriltagConstants.RED_SPEAKER_SIDE_TAG; 
+    }
+    else{
+      return ApriltagConstants.RED_SPEAKER_SIDE_TAG;
+    }
+  }
 
   public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}
   public CollectorHeadSubsystem getCollectorHeadSubsystem() {return m_collector;}
   public static VisionSubsystem getlimelight(){return m_limelight;}
-  /*public static VisionSubsystem getlimelightShooter(){
-    return m_limelightshooter;
-  }
-   * 
-   */
 }

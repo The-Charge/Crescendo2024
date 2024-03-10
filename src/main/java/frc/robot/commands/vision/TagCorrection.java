@@ -19,14 +19,14 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
  * An example command that uses an example subsystem.
  */
 
-public class DriveToNote extends InstantCommand {
+public class TagCorrection extends InstantCommand {
     private final SwerveSubsystem swerve;
     private final VisionSubsystem limelight;
     private final PIDController heading_controller;
-    private final PIDController drive_controller;
+    private double tx;
     private Timer detectiontimer;
     private boolean timerstarted = false;
-    public DriveToNote(SwerveSubsystem swerve, VisionSubsystem limelight){
+    public TagCorrection(SwerveSubsystem swerve, VisionSubsystem limelight){
         this.swerve = swerve;
         this.limelight = limelight;
         addRequirements(swerve);
@@ -35,62 +35,35 @@ public class DriveToNote extends InstantCommand {
         heading_controller.setTolerance(VisionConstants.TX_TOLERANCE_THRESHOLD);
         heading_controller.setSetpoint(0.0);
 
-        drive_controller = new PIDController(0.5, 0.0, 0.0);
-        drive_controller.setTolerance(VisionConstants.TARGET_DISTANCE_TOLERANCE_THRESHOLD);
-        drive_controller.setSetpoint(0.0);
-
     }
 
  
 
 
-@Override
+  @Override
   public void initialize() {
 
   }
 
   @Override
   public void execute() {
-    double tx = limelight.gettx();
-    double distance = limelight.getdistance();
+    tx = limelight.gettx();
     heading_controller.reset();
-    drive_controller.reset();
-    double RotationVal = MathUtil.clamp(heading_controller.calculate(tx, 0.0), -1, 1);
-    double TranslationVal = MathUtil.clamp(drive_controller.calculate(distance, 0.0), -0.5, 0.5);
-
-    if (limelight.gettv() > 0.0){
-      timerstarted = false;
-      if (detectiontimer != null){
-        detectiontimer.stop();
-      }
-      
-      swerve.drive(new Translation2d(-1 * TranslationVal * 14.5,0), RotationVal * swerve.getSwerveController().config.maxAngularVelocity, false);
-    }
-    if (limelight.gettv() < 0.0 && detectiontimer.hasElapsed(0.0)){
-       detectiontimer = new Timer();
-       detectiontimer.start();
-       timerstarted = true;
-
-    }
-  }
+    double TranslationVal = MathUtil.clamp(heading_controller.calculate(tx, 0.0), -1, 1);
+    swerve.drive(new Translation2d(0, -1 * TranslationVal * 14.0), 0, false);  
+}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     heading_controller.reset();
-    drive_controller.reset();
     swerve.lock();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (detectiontimer == null){
-      return false;
-    }  
-    else{
-      return detectiontimer.hasElapsed(0.2);
-    }
+      return tx < VisionConstants.TX_TOLERANCE_THRESHOLD && tx > - 1 * VisionConstants.TX_TOLERANCE_THRESHOLD;
   }
 
 }

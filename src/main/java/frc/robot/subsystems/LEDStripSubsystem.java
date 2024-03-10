@@ -74,29 +74,13 @@ public class LEDStripSubsystem extends SubsystemBase {
     hasChanged = true;
   }
 
-  public void setVisionPixelRGB(VisionSubsystem limelight){
-    double tv = limelight.gettv();
-    
-    switch ((int) limelight.getcurrentpipeline()){
-      case 0: //General Apriltag
-       if (tv > 0){
+  public void setVisionPixelRGB(){
+     if (RobotContainer.getlimelight().gettv() > 0){
           setRange(0, getStripLength(), Color.kGreen);
         }
        else{
           setRange(0, getStripLength(), Color.kRed);
         }
-      break;
-      
-      case 1: //Neural Network
-        if (tv > 0){
-          setRange(0, getStripLength(), Color.kGreen);
-        }
-       else{
-          setRange(0, getStripLength(), Color.kRed);
-        }
-      break;
-    }
-
    
   }
 

@@ -37,7 +37,7 @@ public class LEDVision extends Command {
 
   @Override
   public void execute() {
-    strip.setVisionPixelRGB(limelight);
+    strip.setVisionPixelRGB();
   }
 
   // Called once the command ends or is interrupted.
