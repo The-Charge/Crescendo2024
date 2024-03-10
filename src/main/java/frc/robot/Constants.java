@@ -62,7 +62,7 @@ public final class Constants {
     public static final int rangeTime = 20; //in frames (runs at roughly 50 FPS)
     
     public static final double minPos = 0; //in ticks
-    public static final double maxPos = 123; //in ticks
+    public static final double maxPos = 123 * (80.0 / 40.0); //in ticks
     public static final double ticksPerInch = maxPos / 27.0;
   }
 
@@ -134,12 +134,15 @@ public final class Constants {
     public static final double pivStartup = -3;
     public static final double elevPickupFloor = 0; //done
     public static final double pivPickupFloor = -35.2;
-    public static final double elevPickupSource = 68.34/Elevator.ticksPerInch; //done
+    // public static final double pivPickupFloor = -34.2;
+    public static final double elevPickupSource = 68.34 / Elevator.ticksPerInch; //done
     public static final double pivPickupSource = -7.99;
     public static final double elevShootAmp = 27; //done
     public static final double pivShootAmp = -30.58;
-    public static final double elevHighRear = 86.56/Elevator.ticksPerInch; //touching subwoofer done
+    public static final double elevHighRear = 86.56 / Elevator.ticksPerInch; //touching subwoofer done
+    // public static final double elevHighRear = 95.0/Elevator.ticksPerInch; 
     public static final double pivHighRear = -28.52;
+    // public static final double pivHighRear = -25;
     public static final double elevShallowFront = 27 * 0.5;
     public static final double pivShallowFront = -45;
     public static final double elevSteepFront = 27 * 0.33;

@@ -8,8 +8,8 @@ import frc.robot.subsystems.CollectorHeadSubsystem;
 public class CollectorShoot extends Command {
 
     private CollectorHeadSubsystem m_collector;
-    private Timer timeout, feedTimer;
-    private boolean hasStartedIndexers, hasSetTime;
+    private Timer timeout, feedTimer, delay;
+    private boolean hasReachedSpeed;
 
     public CollectorShoot(CollectorHeadSubsystem collector) {
         this.m_collector = collector;
@@ -19,25 +19,27 @@ public class CollectorShoot extends Command {
     @Override
     public void initialize() {
         timeout = new Timer();
-        feedTimer = null;
         timeout.start();
+        feedTimer = null;
+        delay = null;
 
         m_collector.resetTargetCounter();
         m_collector.spinShooter(CollectorHeadSubsystem.Direction.FORWARD, 1);
-        hasStartedIndexers = false;
-        hasSetTime = false;
+        hasReachedSpeed = false;
     }
     @Override
     public void execute() {
-        if((m_collector.shootIsATarget(10000, 10700) && !hasStartedIndexers) || ( timeout.hasElapsed(3))) {
-            m_collector.spinIndexer(CollectorHeadSubsystem.Direction.FORWARD, 1);
-            m_collector.spinIntake(CollectorHeadSubsystem.Direction.FORWARD, 1);
-            hasStartedIndexers = true;
-        }
-        if(!m_collector.getNoteSensor1() && !m_collector.getNoteSensor2() && !hasSetTime) {
+        if((m_collector.shootIsATarget(10000, 10700) && !hasReachedSpeed)) {
+            hasReachedSpeed = true;
+            
             feedTimer = new Timer();
             feedTimer.start();
-            hasSetTime = true;
+            delay = new Timer();
+            delay.start();
+        }
+        if(delay.hasElapsed(0.5)) {
+            m_collector.spinIndexer(CollectorHeadSubsystem.Direction.FORWARD, 1);
+            m_collector.spinIntake(CollectorHeadSubsystem.Direction.FORWARD, 1);
         }
     }
     @Override
@@ -46,9 +48,9 @@ public class CollectorShoot extends Command {
     }
     @Override
     public boolean isFinished() {
-        if(hasSetTime) {
+        if(hasReachedSpeed) {
             SmartDashboard.putNumber("feed timer", feedTimer.get());
         }
-        return timeout.hasElapsed(3.75) || (feedTimer == null ? false : feedTimer.hasElapsed(0.75));
+        return timeout.hasElapsed(4) || (feedTimer == null ? false : feedTimer.hasElapsed(1.25 + 0.5));
     }
 }
