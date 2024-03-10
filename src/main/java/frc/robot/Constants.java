@@ -276,9 +276,10 @@ public final class Constants {
   }
 
   public static class FixedLLConstants{
+    public static final String FIXED_LL_NAME = "limelight-fixed";
     //pipelines
     public static final double FIXED_APRILTAG_PIPELINE = 0;
-    public static final double FIXED_DRIVER_PIPELINE = 1; //FIXED LL I NOT ABLE TO USE THIS
+    public static final double FIXED_DRIVER_PIPELINE = 1;
 
     //default position of limelight in robotspace when in rest position (meters, degrees)
     public static final double DEFAULT_X_POSITION = -0.3556;
@@ -290,9 +291,11 @@ public final class Constants {
 
   }
   public static class ShooterLLConstants{
+    public static final String SHOOTER_LL_NAME = "limelight-shooter";
     //pipelines
     public static final double SHOOTER_APRILTAG_PIPELINE = 0;
     public static final double SHOOTER_NEURAL_NETWORK_PIPELINE = 1;
+    public static final double FIXED_DRIVER_PIPELINE = 2;
 
     //default position of limelight in robotspace when in rest position
     public static final double DEFAULT_X_POSITION = 0.572;

@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -21,31 +20,24 @@ import frc.robot.commands.led.*;
 import frc.robot.commands.swervedrive.drivebase.TargetLockDriveCommandGroup;
 import frc.robot.commands.Pivot.*;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
-import frc.robot.subsystems.*;
 import frc.robot.commands.vision.DriveToNoteCommandGroup;
 import frc.robot.commands.vision.DriveToTagCommandGroup;
-import frc.robot.commands.vision.SetCenterSpeakerPriorityID;
 import frc.robot.commands.vision.SwapCurrentLimelight;
-import frc.robot.commands.vision.UpdateCameraPose;
 import frc.robot.commands.vision.UpdateRobotPose;
 import frc.robot.commands.vision.swapPipeline;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.commands.*;
 
 import java.io.File;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import frc.robot.subsystems.*;
-import frc.robot.commands.*;
-import frc.robot.commands.Climber.*;
 import frc.robot.commands.CollectorHead.*;
 import frc.robot.commands.Elevator.*;
-import frc.robot.commands.Pivot.*;
 import frc.robot.Constants.StateLocations;
 import frc.robot.Constants.ButtonBox;
-
-import com.pathplanner.lib.auto.NamedCommands;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -60,7 +52,7 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),"swerve"));
   private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem(); 
-  private static final VisionSubsystem m_limelight = new VisionSubsystem();
+  private final VisionSubsystem m_limelight = new VisionSubsystem();
 
  
   // CommandJoystick rotationController = new CommandJoystick(1);
@@ -203,9 +195,7 @@ public class RobotContainer
 
   public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}
   public CollectorHeadSubsystem getCollectorHeadSubsystem() {return m_collector;}
-  public static VisionSubsystem getlimelight(){
-    return m_limelight;
-  }
+  public VisionSubsystem getlimelight(){return m_limelight;}
   /*public static VisionSubsystem getlimelightShooter(){
     return m_limelightshooter;
   }

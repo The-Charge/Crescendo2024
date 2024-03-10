@@ -6,6 +6,7 @@ package frc.robot.commands.vision;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.FixedLLConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.LEDStripSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -20,7 +21,7 @@ public class DriveToTagCommandGroup extends SequentialCommandGroup{
     public DriveToTagCommandGroup(VisionSubsystem limelight, SwerveSubsystem swerve){
 
             addCommands(
-                new SetCurrentCamera(limelight, "limelight-fixed"),
+                new SetCurrentCamera(limelight, FixedLLConstants.FIXED_LL_NAME),
                 new SetPipeline(limelight, VisionConstants.APRILTAG_PIPELINE),
                 new UpdateRobotPose(swerve, limelight),
                 new DriveToTag(swerve, limelight),

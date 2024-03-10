@@ -6,11 +6,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.LimelightHelpers;
-import frc.robot.RobotContainer;
+import frc.robot.Constants.FixedLLConstants;
+import frc.robot.Constants.ShooterLLConstants;
 import frc.robot.Constants.VisionConstants;
 
 public class VisionSubsystem extends SubsystemBase{
-    public String limelightname = "limelight-fixed";
+    public String limelightname = FixedLLConstants.FIXED_LL_NAME;
     public boolean targetIdentified = false;    
     public double tx;               //X-offset
     public double ty;               //Y-offset
@@ -82,11 +83,11 @@ public class VisionSubsystem extends SubsystemBase{
 
     public void swapCurrentLimelightName(){
         LimelightHelpers.setLEDMode_ForceOff(limelightname);
-        if (limelightname == "limelight-fixed"){
-            limelightname = "limelight-shooter";
+        if (limelightname == FixedLLConstants.FIXED_LL_NAME){
+            limelightname = ShooterLLConstants.SHOOTER_LL_NAME;
         }
         else{
-            limelightname = "limelight-fixed";
+            limelightname = FixedLLConstants.FIXED_LL_NAME;
         }
         LimelightHelpers.setLEDMode_ForceOn(limelightname);
     }
@@ -105,7 +106,7 @@ public class VisionSubsystem extends SubsystemBase{
     
     
     public void setCameraPose(){ //elevator and pivot will change camera location, must adjust to that
-        if (limelightname == "limelight-shooter"){
+        if (limelightname == ShooterLLConstants.SHOOTER_LL_NAME){
             double x = 0;
             double z = 0;
             double pitch = 0; //other 3 values will not change hopefully
@@ -120,7 +121,6 @@ public class VisionSubsystem extends SubsystemBase{
     public void setPriorityID(double id){
          NetworkTableInstance.getDefault().getTable(limelightname).getEntry("priorityid").setNumber(id);   
     }
-
     //Getters
     public String getlimelightshootername(){
         return limelightname;

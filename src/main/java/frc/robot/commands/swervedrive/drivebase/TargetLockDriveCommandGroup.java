@@ -6,14 +6,16 @@ package frc.robot.commands.swervedrive.drivebase;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.vision.SetCenterSpeakerPriorityID;
 import frc.robot.commands.vision.SetPipeline;
+import frc.robot.commands.vision.SetPriorityID;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-
-
+import frc.robot.commands.vision.SetPriorityID;
+import frc.robot.commands.swervedrive.drivebase.TargetLockDrive;
 /**
  * An example command that uses an example subsystem.
  */
@@ -22,8 +24,9 @@ public class TargetLockDriveCommandGroup extends SequentialCommandGroup{
     public TargetLockDriveCommandGroup(VisionSubsystem limelight, SwerveSubsystem swerve,  DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading){
             addCommands(
                 new SetPipeline(limelight, VisionConstants.APRILTAG_PIPELINE),
-                //new SetCenterSpeakerPriorityID(limelight),
-                new TargetLockDrive(swerve, vX, vY, heading, true, limelight)  
+                new SetCenterSpeakerPriorityID(limelight),
+                new TargetLockDrive(swerve, vX, vY, heading, true, limelight),
+                new SetPriorityID(limelight, -1)
                 //Field relative moves "freely", robot relative creates a radius around speaker depending on where command is initiated
             );  
             
