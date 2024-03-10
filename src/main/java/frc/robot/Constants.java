@@ -97,11 +97,10 @@ public final class Constants {
     // public static final double kG = 0.03;
 
     //absolute PID
-    public static final PIDFConfig pid = new PIDFConfig(0.12, 0, 0.03);
-    public static final double kF = 0.03;
+    public static final PIDFConfig pid = new PIDFConfig(0.12, 0, 0.03, 0.03);
 
     // public static final double relToAbsConversion = (abs1 - abs2) / (rel1 - rel2);
-    public static final double relToAbsConversion =1;    
+    public static final double relToAbsConversion = 1; //temp until actual value is calculated. See above for calc    
     public static final double absOffset = 0;
     
   }
