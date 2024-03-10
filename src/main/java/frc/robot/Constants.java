@@ -62,7 +62,7 @@ public final class Constants {
     public static final int rangeTime = 20; //in frames (runs at roughly 50 FPS)
     
     public static final double minPos = 0; //in ticks
-    public static final double maxPos = 123; //in ticks
+    public static final double maxPos = 205; //in ticks
     public static final double ticksPerInch = maxPos / 27.0;
   }
 
@@ -134,12 +134,13 @@ public final class Constants {
     public static final double pivStartup = -3;
     public static final double elevPickupFloor = 0; //done
     public static final double pivPickupFloor = -35.2;
-    public static final double elevPickupSource = 68.34/Elevator.ticksPerInch; //done
+    public static final double pivLevel = pivStartup + 15;
+    public static final double elevPickupSource = 15; //done
     public static final double pivPickupSource = -7.99;
     public static final double elevShootAmp = 27; //done
-    public static final double pivShootAmp = -30.58;
-    public static final double elevHighRear = 86.56/Elevator.ticksPerInch; //touching subwoofer done
-    public static final double pivHighRear = -28.52;
+    public static final double pivShootAmp = -30.58 + 8;
+    public static final double elevHighRear = 9; //touching subwoofer done
+    public static final double pivHighRear = -28.52 + 1;
     public static final double elevShallowFront = 27 * 0.5;
     public static final double pivShallowFront = -45;
     public static final double elevSteepFront = 27 * 0.33;
@@ -147,9 +148,9 @@ public final class Constants {
     public static final double elevTravel = 27 * 0.5;
     public static final double pivTravel = 0;
     public static final double elevClimb = 27;
-    public static final double pivClimb = pivPickupFloor + 5;
+    public static final double pivClimb = pivStartup;
 
-    public static final double safeElevatorPoint = 27 * 0.5; //the elevator hight required to turn the pivot freely and not hit anything
+    public static final double safeElevatorPoint = 5; //the elevator hight required to turn the pivot freely and not hit anything
   }
 
   public static abstract class ButtonBox {

@@ -49,7 +49,7 @@ public class MovePivotElev extends Command {
     @Override
     public void initialize() {
         if((elevSetpoint < Constants.StateLocations.safeElevatorPoint) && (pivSetpoint != Constants.StateLocations.pivStartup && pivSetpoint != Constants.StateLocations.pivPickupFloor)) {
-            // DriverStation.reportError("Invalid location for elev/piv", null);
+            //DriverStation.reportError("Invalid location for elev/piv", null);
             return;
         } 
         else if(elevSetpoint < Constants.StateLocations.safeElevatorPoint && m_elevator.elevPos() > Constants.StateLocations.safeElevatorPoint) {
@@ -76,7 +76,7 @@ public class MovePivotElev extends Command {
 
     @Override
     public void execute() {
-        SmartDashboard.putBoolean("auto", action.isScheduled());
+        //SmartDashboard.putBoolean("auto", action.isScheduled());
         x+=1;
         SmartDashboard.putNumber("auto 3", x);
     }

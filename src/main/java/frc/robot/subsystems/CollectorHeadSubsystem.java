@@ -226,11 +226,11 @@ public class CollectorHeadSubsystem extends SubsystemBase {
     }
     public void spinIntake(Direction dir, double speed) {
         if(dir == Direction.FORWARD) {
-            intakeBottom.set(speed);
+            intakeBottom.set(speed + 0.05);
             intakeTop.set(speed);
         }
         else {
-            intakeBottom.set(-speed);
+            intakeBottom.set(-speed - 0.05);
             intakeTop.set(-speed);
         }
     }

@@ -29,15 +29,12 @@ public class CollectorShoot extends Command {
     }
     @Override
     public void execute() {
-        if((m_collector.shootIsATarget(10000, 10700) && !hasStartedIndexers) || ( timeout.hasElapsed(3))) {
+        if((m_collector.shootIsATarget(10000, 10700) && !hasStartedIndexers) || (timeout.hasElapsed(3))) {
             m_collector.spinIndexer(CollectorHeadSubsystem.Direction.FORWARD, 1);
             m_collector.spinIntake(CollectorHeadSubsystem.Direction.FORWARD, 1);
-            hasStartedIndexers = true;
-        }
-        if(!m_collector.getNoteSensor1() && !m_collector.getNoteSensor2() && !hasSetTime) {
             feedTimer = new Timer();
             feedTimer.start();
-            hasSetTime = true;
+            hasStartedIndexers = true;
         }
     }
     @Override
@@ -49,6 +46,6 @@ public class CollectorShoot extends Command {
         if(hasSetTime) {
             SmartDashboard.putNumber("feed timer", feedTimer.get());
         }
-        return timeout.hasElapsed(3.75) || (feedTimer == null ? false : feedTimer.hasElapsed(0.75));
+        return timeout.hasElapsed(4.25) || (feedTimer == null ? false : feedTimer.hasElapsed(1.25));
     }
 }
