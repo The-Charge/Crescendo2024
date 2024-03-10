@@ -23,11 +23,13 @@ public class PivotSubsystem extends SubsystemBase {
     private DutyCycleEncoder absEncoder;
     private double lastTarget = -1;
     private int inRangeCounter = 0;
+    private PIDController pivotRioPID;
 
     public PivotSubsystem() {
         pivotMotor = new TalonFX(Constants.Pivot.pivotId);
         pivotMotor.setInverted(true); //constant
 
+        pivotRioPID = new PIDController(Constants.Pivot.pid.p, Constants.Pivot.pid.i, Constants.Pivot.pid.d);
         //set status frame period 
         TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
 
@@ -38,19 +40,19 @@ public class PivotSubsystem extends SubsystemBase {
         talonFXConfigs.MotorOutput.PeakForwardDutyCycle = 0.8;
         talonFXConfigs.MotorOutput.PeakReverseDutyCycle = -0.8;
 
-        talonFXConfigs.Slot0.kS = Constants.Pivot.kS;
-        talonFXConfigs.Slot0.kV = Constants.Pivot.kV;
-        talonFXConfigs.Slot0.kP = Constants.Pivot.pid.p;
-        talonFXConfigs.Slot0.kI = Constants.Pivot.pid.i;
-        talonFXConfigs.Slot0.kD = Constants.Pivot.pid.d;
-        talonFXConfigs.Slot0.kG = Constants.Pivot.kG;
-        //slot0Configs.GravityType = GravityTypeValue.Arm_Cosine; config the arm sensor stuff
+        // talonFXConfigs.Slot0.kS = Constants.Pivot.kS;
+        // talonFXConfigs.Slot0.kV = Constants.Pivot.kV;
+        // talonFXConfigs.Slot0.kP = Constants.Pivot.pid.p;
+        // talonFXConfigs.Slot0.kI = Constants.Pivot.pid.i;
+        // talonFXConfigs.Slot0.kD = Constants.Pivot.pid.d;
+        // talonFXConfigs.Slot0.kG = Constants.Pivot.kF;
+        //slot0Configs.GravityType = GravityTypeValue.Arm_Cosine; config the arm sensor stuff *LOOK AT THIS* 
         
          talonFXConfigs.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
-        //talonFXConfigs.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
+        // talonFXConfigs.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
         
 
-        // talonFXConfigs.Feedback.SensorToMechanismRatio = 100;
+        // talonFXConfigs.Feedback.SensorToMechanismRatio = 100; *LOOK AT THIS?*
 
         pivotMotor.getConfigurator().apply(talonFXConfigs);
 
@@ -67,37 +69,26 @@ public class PivotSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Pivot Position (Ticks)", pivotMotor.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Pivot abs position (ticks)", absEncoder.getAbsolutePosition());
 
-        
+        pivotMotor.set(pivotRioPID.calculate(absEncoder.getAbsolutePosition(), lastTarget) + Constants.Pivot.pid.f * lastTarget);
     }
 
     public void pivotToAngle(double ticks) {
-    //    if(Math.abs(pivotMotor.getPosition().getValueAsDouble() - angle) <0.2) {
-    //         pivotMotor.set(0.0);
-    //         atSetpoint = true;
-    //    }
-        // double nTicks = Math.min(Math.max(ticks, Constants.Pivot.minPos), Constants.Pivot.maxPos);
-        double nTicks = ticks;
+        double nTicks = ticks * Constants.Pivot.relToAbsConversion;
+
         SmartDashboard.putNumber("Pivot Target (Ticks)", nTicks);
         lastTarget = nTicks;
         inRangeCounter = 0;
 
-        pivotMotor.setControl(new PositionDutyCycle(nTicks).withSlot(0));
-        //atSetpoint = false;
-        //pivotMotor.set(angle);
+        // pivotMotor.setControl(new PositionDutyCycle(ticks).withSlot(0));
     }
-    // public boolean atSetpoint() {
-    //     return atSetpoint;
-    // }
+ 
     public void pivotUp() {
-        pivotToAngle( pivotMotor.getPosition().getValueAsDouble() + 15);
-    }
-    
-    private double getCurrentAngle() {
-        return pivotMotor.getPosition().getValueAsDouble() / Constants.Pivot.ticksPerDeg * Constants.Pivot.gearRat; //getPosition() is in rotations
+        // pivotToAngle( pivotMotor.getPosition().getValueAsDouble() + 15);
+        pivotToAngle(absEncoder.getAbsolutePosition() + 15 * Constants.Pivot.relToAbsConversion);
     }
 
     public boolean isAtTarget() {
-        double error = lastTarget - pivotMotor.getPosition().getValueAsDouble();
+        double error = lastTarget - absEncoder.getAbsolutePosition();
         final int timeRequired = 8;
         final double deadzone = 0.6;
 

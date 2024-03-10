@@ -88,24 +88,22 @@ public final class Constants {
 
   public static final class Pivot {
     public static final int pivotId = 3;
-    public static final double kF = 0;
-    public static final PIDFConfig pid = new PIDFConfig(0.12, 0, 0.03);
-    public static final double kS = 0;
-    public static final double kV = 0;
-    public static final double kG = 0.03;
-
-    public static final int kPIDLoopIdx = 0;
-    public static final int kTimeoutMs = 30;
     public static final int encoderId = 7;
+
+    //relaltive PID
+    // public static final PIDFConfig pid = new PIDFConfig(0.12, 0, 0.03);
+    // public static final double kS = 0;
+    // public static final double kV = 0;
+    // public static final double kG = 0.03;
+
+    //absolute PID
+    public static final PIDFConfig pid = new PIDFConfig(0.12, 0, 0.03);
+    public static final double kF = 0.03;
+
+    // public static final double relToAbsConversion = (abs1 - abs2) / (rel1 - rel2);
+    public static final double relToAbsConversion =1;    
+    public static final double absOffset = 0;
     
-    public static final double minPos = 0;
-    public static final double maxPos = 0;
-    public static final double gearRat = 1 / 100.0;
-    public static final double ticksPerDeg = 2048 / gearRat / 360.0;
-    public static final double absEncoderAngleOffset = 0;
-    public static final double absTicksPerDeg = 2048 / 360.0;
-    public static final double absStart = 0.93; //0.56
-    public static final double absRatio = -1* (0.93-0.56)/(37.19-0);
   }
 
   public static final class Climber {
