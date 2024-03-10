@@ -37,7 +37,7 @@ public class CollectorShoot extends Command {
             delay = new Timer();
             delay.start();
         }
-        if(delay.hasElapsed(0.5)) {
+        if(delay != null && delay.hasElapsed(0.5)) {
             m_collector.spinIndexer(CollectorHeadSubsystem.Direction.FORWARD, 1);
             m_collector.spinIntake(CollectorHeadSubsystem.Direction.FORWARD, 1);
         }

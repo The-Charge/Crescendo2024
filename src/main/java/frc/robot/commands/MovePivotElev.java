@@ -76,7 +76,7 @@ public class MovePivotElev extends Command {
 
     @Override
     public void execute() {
-        SmartDashboard.putBoolean("auto", action.isScheduled());
+        //SmartDashboard.putBoolean("auto", action.isScheduled());
         x+=1;
         SmartDashboard.putNumber("auto 3", x);
     }

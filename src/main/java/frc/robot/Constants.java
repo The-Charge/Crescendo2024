@@ -62,7 +62,7 @@ public final class Constants {
     public static final int rangeTime = 20; //in frames (runs at roughly 50 FPS)
     
     public static final double minPos = 0; //in ticks
-    public static final double maxPos = 123 * (80.0 / 40.0); //in ticks
+    public static final double maxPos = 123 * (80.0 / 48.0); //in ticks
     public static final double ticksPerInch = maxPos / 27.0;
   }
 
