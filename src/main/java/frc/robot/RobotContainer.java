@@ -52,7 +52,7 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),"swerve"));
   private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem(); 
-  private final VisionSubsystem m_limelight = new VisionSubsystem();
+  private static final VisionSubsystem m_limelight = new VisionSubsystem();
 
  
   // CommandJoystick rotationController = new CommandJoystick(1);
@@ -91,7 +91,7 @@ public class RobotContainer
         NamedCommands.registerCommand("intake pivot pos", new MoveToAngle(m_pivot, Constants.StateLocations.pivPickupFloor));
         NamedCommands.registerCommand("shoot elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.elevHighRear));
         NamedCommands.registerCommand("intake elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.pivPickupFloor));
-        
+        NamedCommands.registerCommand("drive to note", new DriveToNoteCommandGroup(m_limelight, drivebase));
         NamedCommands.registerCommand("Shoot", new CollectorShoot(m_collector));
         NamedCommands.registerCommand("Intake", new CollectorIntakeGround(m_collector, m_pivot));
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -195,7 +195,7 @@ public class RobotContainer
 
   public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}
   public CollectorHeadSubsystem getCollectorHeadSubsystem() {return m_collector;}
-  public VisionSubsystem getlimelight(){return m_limelight;}
+  public static VisionSubsystem getlimelight(){return m_limelight;}
   /*public static VisionSubsystem getlimelightShooter(){
     return m_limelightshooter;
   }

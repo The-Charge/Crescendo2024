@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.FixedLLConstants;
 import frc.robot.Constants.ShooterLLConstants;
 import frc.robot.Constants.StateLocations;
@@ -15,7 +16,6 @@ public class StateMachine extends Command {
 
     private final ElevatorSubsystem elevSub;
     private final PivotSubsystem pivSub;
-    private final VisionSubsystem limelight;
     private final State targetState;
     private final boolean waitForTask;
     
@@ -32,18 +32,16 @@ public class StateMachine extends Command {
         TRAVEL
     }
 
-    public StateMachine(ElevatorSubsystem elevSub, PivotSubsystem pivSub, VisionSubsystem limelight, State targetState) {
+    public StateMachine(ElevatorSubsystem elevSub, PivotSubsystem pivSub, State targetState) {
         this.elevSub = elevSub;
         this.pivSub = pivSub;
-        this.limelight = limelight;
         this.targetState = targetState;
         this.waitForTask = false;
         this.task = null;
     }
-    public StateMachine(ElevatorSubsystem elevSub, PivotSubsystem pivSub, VisionSubsystem limelight, State targetState, boolean waitForTask) {
+    public StateMachine(ElevatorSubsystem elevSub, PivotSubsystem pivSub, State targetState, boolean waitForTask) {
         this.elevSub = elevSub;
         this.pivSub = pivSub;
-        this.limelight = limelight;
         this.targetState = targetState;
         this.waitForTask = waitForTask;
         this.task = null;
@@ -57,49 +55,49 @@ public class StateMachine extends Command {
             case STARTUP:
             task = goToStartup();
             currentState = State.STARTUP;
-            new SetCurrentCamera(limelight, ShooterLLConstants.SHOOTER_LL_NAME);
+            new SetCurrentCamera(RobotContainer.getlimelight(), ShooterLLConstants.SHOOTER_LL_NAME);
             break;
 
             case PICKUPFLOOR:
             task = goToPickupFloor();
             currentState = State.PICKUPFLOOR;
-            new SetCurrentCamera(limelight, ShooterLLConstants.SHOOTER_LL_NAME);
+            new SetCurrentCamera(RobotContainer.getlimelight(), ShooterLLConstants.SHOOTER_LL_NAME);
             break;
 
             case PICKUPSOURCE:
             task = goToPickupSource();
             currentState = State.PICKUPSOURCE;
-            new SetCurrentCamera(limelight, ShooterLLConstants.SHOOTER_LL_NAME);    //Maybe???
+            new SetCurrentCamera(RobotContainer.getlimelight(), ShooterLLConstants.SHOOTER_LL_NAME);    //Maybe???
             break;
 
             case SHOOTAMPTRAP:
             task = goToShootAmpTrap();
             currentState = State.SHOOTAMPTRAP;
-            new SetCurrentCamera(limelight, FixedLLConstants.FIXED_LL_NAME);
+            new SetCurrentCamera(RobotContainer.getlimelight(), FixedLLConstants.FIXED_LL_NAME);
             break;
 
             case SHOOTHIGHREAR:
             task = goToHighRear();
             currentState = State.SHOOTHIGHREAR;
-            new SetCurrentCamera(limelight, FixedLLConstants.FIXED_LL_NAME);
+            new SetCurrentCamera(RobotContainer.getlimelight(), FixedLLConstants.FIXED_LL_NAME);
             break;
 
             case SHOOOTSHALLOWFRONT:
             task = goToShallowFront();
             currentState = State.SHOOOTSHALLOWFRONT;
-            new SetCurrentCamera(limelight, ShooterLLConstants.SHOOTER_LL_NAME);
+            new SetCurrentCamera(RobotContainer.getlimelight(), ShooterLLConstants.SHOOTER_LL_NAME);
             break;
 
             case SHOOTSTEEPFRONT:
             task = goToSteepFront();
             currentState = State.SHOOTSTEEPFRONT;
-            new SetCurrentCamera(limelight, ShooterLLConstants.SHOOTER_LL_NAME);
+            new SetCurrentCamera(RobotContainer.getlimelight(), ShooterLLConstants.SHOOTER_LL_NAME);
             break;
 
             case TRAVEL:
             task = goToTravel();
             currentState = State.TRAVEL;
-            new SetCurrentCamera(limelight, FixedLLConstants.FIXED_LL_NAME);
+            new SetCurrentCamera(RobotContainer.getlimelight(), FixedLLConstants.FIXED_LL_NAME);
             break;
         }
 
