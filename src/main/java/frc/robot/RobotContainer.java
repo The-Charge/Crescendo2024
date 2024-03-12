@@ -24,11 +24,14 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.StateMachine;
+import frc.robot.commands.CollectorHead.CollectorIntakeGround;
 import frc.robot.commands.CollectorHead.CollectorIntakeSource;
 import frc.robot.commands.CollectorHead.CollectorReverseAll;
 import frc.robot.commands.CollectorHead.CollectorShoot;
 import frc.robot.commands.CollectorHead.CollectorZero;
 import frc.robot.commands.Elevator.MoveElevWithJoystick;
+import frc.robot.commands.StateMachine.State;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.CollectorHeadSubsystem;
@@ -70,7 +73,13 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    Command state_ground = new StateMachine(m_elevator, m_pivot, State.PICKUPFLOOR);
+    Command state_shoot_back = new StateMachine(m_elevator, m_pivot, State.SHOOTHIGHREAR);
+    Command shoot = new CollectorShoot(m_collector);
+    Command intake_ground = new CollectorIntakeGround(m_collector, m_pivot);
     NamedCommands.registerCommand("print hello", Commands.print("hello"));
+    NamedCommands.registerCommand("Run Intake", Commands.sequence(state_ground, intake_ground));
+    NamedCommands.registerCommand("Shoot Back", Commands.sequence(state_shoot_back, shoot));
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -113,8 +122,7 @@ public class RobotContainer {
     new Trigger(() -> buttonBox.getRawButton(2)).onTrue(new CollectorShoot(m_collector));
 
     new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    new JoystickButton(driverXbox, XboxController.Button.kX.value)
-        .whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+    new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
   /**
