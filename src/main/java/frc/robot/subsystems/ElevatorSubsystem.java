@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
+import frc.robot.commands.Elevator.MoveToSetpoint;
 
 public class ElevatorSubsystem extends SubsystemBase {
 

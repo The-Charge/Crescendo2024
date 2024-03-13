@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.Pivot.MoveToAngle;
 
 public class PivotSubsystem extends SubsystemBase {
 
@@ -40,12 +41,12 @@ public class PivotSubsystem extends SubsystemBase {
         talonFXConfigs.MotorOutput.PeakForwardDutyCycle = 0.8;
         talonFXConfigs.MotorOutput.PeakReverseDutyCycle = -0.8;
 
-        // talonFXConfigs.Slot0.kS = Constants.Pivot.kS;
-        // talonFXConfigs.Slot0.kV = Constants.Pivot.kV;
-        // talonFXConfigs.Slot0.kP = Constants.Pivot.pid.p;
-        // talonFXConfigs.Slot0.kI = Constants.Pivot.pid.i;
-        // talonFXConfigs.Slot0.kD = Constants.Pivot.pid.d;
-        // talonFXConfigs.Slot0.kG = Constants.Pivot.kF;
+        talonFXConfigs.Slot0.kS = 0;
+        talonFXConfigs.Slot0.kV = 0;
+        talonFXConfigs.Slot0.kP = Constants.Pivot.pid.p;
+        talonFXConfigs.Slot0.kI = Constants.Pivot.pid.i;
+        talonFXConfigs.Slot0.kD = Constants.Pivot.pid.d;
+        talonFXConfigs.Slot0.kG = 0;
         //slot0Configs.GravityType = GravityTypeValue.Arm_Cosine; config the arm sensor stuff *LOOK AT THIS* 
         
          talonFXConfigs.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
@@ -69,26 +70,28 @@ public class PivotSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Pivot Position (Ticks)", pivotMotor.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Pivot abs position (ticks)", absEncoder.getAbsolutePosition());
 
-        pivotMotor.set(pivotRioPID.calculate(absEncoder.getAbsolutePosition(), lastTarget) + Constants.Pivot.pid.f * lastTarget);
+        // pivotMotor.set(pivotRioPID.calculate(absEncoder.getAbsolutePosition(), lastTarget) + Constants.Pivot.pid.f * lastTarget);
     }
 
     public void pivotToAngle(double ticks) {
-        double nTicks = ticks * Constants.Pivot.relToAbsConversion;
+        double nTicks = ticks;
+        // double nTicks = ticks * Constants.Pivot.relToAbsConversion;
 
         SmartDashboard.putNumber("Pivot Target (Ticks)", nTicks);
         lastTarget = nTicks;
         inRangeCounter = 0;
 
-        // pivotMotor.setControl(new PositionDutyCycle(ticks).withSlot(0));
+        pivotMotor.setControl(new PositionDutyCycle(ticks).withSlot(0));
     }
  
     public void pivotUp() {
-        // pivotToAngle( pivotMotor.getPosition().getValueAsDouble() + 15);
-        pivotToAngle(absEncoder.getAbsolutePosition() + 15 * Constants.Pivot.relToAbsConversion);
+        pivotToAngle( pivotMotor.getPosition().getValueAsDouble() + 15);
+        // pivotToAngle(absEncoder.getAbsolutePosition() + 15 * Constants.Pivot.relToAbsConversion);
     }
 
     public boolean isAtTarget() {
-        double error = lastTarget - absEncoder.getAbsolutePosition();
+        double error = lastTarget - pivotMotor.getPosition().getValueAsDouble();
+        // double error = lastTarget - absEncoder.getAbsolutePosition();/
         final int timeRequired = 8;
         final double deadzone = 0.6;
 

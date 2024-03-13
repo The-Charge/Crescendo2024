@@ -149,10 +149,8 @@ public class RobotContainer {
     
     SmartDashboard.putNumber("elev setpoint", 0);
     SmartDashboard.putNumber("piv setpoint", 0);
-    elevTarget = SmartDashboard.getNumber("elev setpoint",  0.0);
-    SmartDashboard.putData("move elev", new MoveToSetpoint(m_elevator, elevTarget));
-    pivTarget = SmartDashboard.getNumber("piv setpoint", 0.0);
-    SmartDashboard.putData("move piv",new MoveToAngle(m_pivot, pivTarget));
+    SmartDashboard.putData("move elev", new MoveToSetpointShuffle(m_elevator));    
+    SmartDashboard.putData("move piv",new MoveToAngleShuffle(m_pivot));
 
     // new Trigger(() -> driverXbox.getLeftBumper()).onTrue(new ClimberUp(m_climber, 0.5));
     // new Trigger(() -> driverXbox.getRightBumper()).onTrue(new ClimberUp(m_climber, 0));
