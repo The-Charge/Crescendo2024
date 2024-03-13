@@ -5,17 +5,20 @@ import frc.robot.Constants;
 import frc.robot.subsystems.ClimbSubsystem;
 
 public class ClimberUp extends Command {
-  private final ClimbSubsystem m_climber;
+  private final ClimbSubsystem climber;
+  private final double power;
 
-  public ClimberUp(ClimbSubsystem subsystem) {
-    m_climber = subsystem;
+  public ClimberUp(ClimbSubsystem subsystem, double power) {
+    climber = subsystem;
     addRequirements(subsystem);
+
+    this.power = power;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+      climber.setPower(power);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

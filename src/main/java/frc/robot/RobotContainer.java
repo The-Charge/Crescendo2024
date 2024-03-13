@@ -146,12 +146,16 @@ public class RobotContainer {
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOverride)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevClimb, StateLocations.pivClimb));
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOverride)).onFalse(new MoveToSetpoint(m_elevator, 5));
     //new Trigger(() -> buttonBox.getRawButton(ButtonBox.pivOverride)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevClimb, StateLocations.pivPickupFloor));
-    elevTarget = SmartDashboard.getNumber(" elev setpoint",  0.0);
+    
+    SmartDashboard.putNumber("elev setpoint", 0);
+    SmartDashboard.putNumber("piv setpoint", 0);
+    elevTarget = SmartDashboard.getNumber("elev setpoint",  0.0);
     SmartDashboard.putData("move elev", new MoveToSetpoint(m_elevator, elevTarget));
     pivTarget = SmartDashboard.getNumber("piv setpoint", 0.0);
     SmartDashboard.putData("move piv",new MoveToAngle(m_pivot, pivTarget));
 
-    
+    // new Trigger(() -> driverXbox.getLeftBumper()).onTrue(new ClimberUp(m_climber, 0.5));
+    // new Trigger(() -> driverXbox.getRightBumper()).onTrue(new ClimberUp(m_climber, 0));
   }
 
   /**
