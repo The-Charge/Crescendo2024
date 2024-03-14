@@ -57,7 +57,6 @@ public class Robot extends TimedRobot
     // immediately when disabled, but then also let it be pushed more 
     disabledTimer = new Timer();
     // new SetLEDRange(m_robotContainer.getLEDSubsystem(), 0, Constants.LEDConstants.totalLength, Color.kLime).schedule();
-    new LEDRainbow(m_robotContainer.getLEDSubsystem(), () -> false).schedule();
   }
 
   /**
@@ -87,7 +86,7 @@ public class Robot extends TimedRobot
     disabledTimer.reset();
     disabledTimer.start();
 
-    new DisableLEDs(m_robotContainer.getLEDSubsystem()).schedule();
+    // new DisableLEDs(m_robotContainer.getLEDSubsystem()).schedule();
     new CollectorZero(m_robotContainer.getCollectorHeadSubsystem()).schedule();
   }
 
@@ -141,6 +140,9 @@ public class Robot extends TimedRobot
     }
     m_robotContainer.setDriveMode();
     m_robotContainer.setMotorBrake(true);
+
+    // new LEDRainbow(m_robotContainer.getLEDSubsystem(), () -> false).schedule();
+    new SetLEDRange(m_robotContainer.getLEDSubsystem(), 0, Constants.LEDConstants.totalLength, Color.kLime);
   }
 
   /**

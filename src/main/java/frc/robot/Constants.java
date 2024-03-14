@@ -111,8 +111,12 @@ public final class Constants {
   }
 
   public static final class LEDConstants {
-    public static final int ledId = 6;
-    public static final int totalLength = 32; //in pixels
+    public static final int ledId = 9;
+    public static final int totalLength = 72; //in pixels
+    public static final int driveStart = 0;
+    public static final int driveEnd = totalLength / 4;
+    public static final int visStart = totalLength / 4;
+    public static final int visEnd = totalLength / 2;
   }
 
   public static class OperatorConstants {
