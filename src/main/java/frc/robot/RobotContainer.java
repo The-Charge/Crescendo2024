@@ -37,7 +37,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
-import frc.robot.commands.Climber.*;
 import frc.robot.commands.CollectorHead.*;
 import frc.robot.commands.Elevator.*;
 import frc.robot.commands.Pivot.*;
@@ -72,7 +71,6 @@ public class RobotContainer {
   XboxController driverXbox = new XboxController(0);
 
   private int rotationXboxAxis = 4;
-  private final ClimbSubsystem m_climber = new ClimbSubsystem();
   private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
   private final PivotSubsystem m_pivot = new PivotSubsystem();
   public double elevTarget;
@@ -146,14 +144,12 @@ public class RobotContainer {
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOverride)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevClimb, StateLocations.pivClimb));
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOverride)).onFalse(new MoveToSetpoint(m_elevator, 5));
     //new Trigger(() -> buttonBox.getRawButton(ButtonBox.pivOverride)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevClimb, StateLocations.pivPickupFloor));
-    
+     
     SmartDashboard.putNumber("elev setpoint", 0);
     SmartDashboard.putNumber("piv setpoint", 0);
     SmartDashboard.putData("move elev", new MoveToSetpointShuffle(m_elevator));    
     SmartDashboard.putData("move piv",new MoveToAngleShuffle(m_pivot));
-
-    // new Trigger(() -> driverXbox.getLeftBumper()).onTrue(new ClimberUp(m_climber, 0.5));
-    // new Trigger(() -> driverXbox.getRightBumper()).onTrue(new ClimberUp(m_climber, 0));
+    SmartDashboard.putData("reset abs encoder", new ResetPivEncoder(m_pivot));
   }
 
   /**

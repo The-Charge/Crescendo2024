@@ -17,6 +17,7 @@ public class MoveToAngleShuffle extends Command {
 
   @Override
   public void initialize() {
+    m_pivot.setPIDCoefficients(SmartDashboard.getNumber("Piv kP", 0), SmartDashboard.getNumber("Piv kI", 0), SmartDashboard.getNumber("Piv kD", 0));
     m_pivot.pivotToAngle(SmartDashboard.getNumber("piv setpoint", 0));
     //SmartDashboard.putBoolean("auto", true);
   }

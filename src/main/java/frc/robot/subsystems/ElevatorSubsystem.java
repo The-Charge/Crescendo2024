@@ -50,6 +50,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Elevator Position (Ticks)", driver.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator Position (In)", driver.getPosition().getValueAsDouble() / Constants.Elevator.ticksPerInch);
         SmartDashboard.putNumber("Elevator I (Amps)", driver.getStatorCurrent().getValueAsDouble());
     }
 

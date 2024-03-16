@@ -97,17 +97,13 @@ public final class Constants {
     // public static final double kG = 0.03;
 
     //absolute PID
-    public static final PIDFConfig pid = new PIDFConfig(0.12, 0, 0.03, 0.03);
+    public static final PIDFConfig pid = new PIDFConfig(0.12, 0, 0.03, 0.035);
 
     // public static final double relToAbsConversion = (abs1 - abs2) / (rel1 - rel2);
-    public static final double relToAbsConversion = 1; //temp until actual value is calculated. See above for calc    
-    public static final double absOffset = 0;
+    // public static final double relToAbsConversion = (0.932 - 0.561) / (0.985 - -33.441); //temp until actual value is calculated. See above for calc    
+    public static final double absToDegConversion = 70.1 / 411; //temp until actual value is calculated. See above for calc 
+    public static final double absOffset = 942;
     
-  }
-
-  public static final class Climber {
-    public static final int climberId = 13;
-
   }
 
   public static final class LEDConstants {
