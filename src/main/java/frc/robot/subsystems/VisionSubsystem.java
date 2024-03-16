@@ -8,10 +8,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.LimelightHelpers;
 import frc.robot.Constants.FixedLLConstants;
 import frc.robot.Constants.ShooterLLConstants;
-import frc.robot.Constants.VisionConstants;
 
 public class VisionSubsystem extends SubsystemBase{
-    public String limelightname = FixedLLConstants.FIXED_LL_NAME;
+    public String limelightname = FixedLLConstants.FIXED_LL_NAME;   //first camera initialiation
     public boolean targetIdentified = false;    
     public double tx;               //X-offset
     public double ty;               //Y-offset
@@ -73,13 +72,23 @@ public class VisionSubsystem extends SubsystemBase{
     }
 
     public void swapPipeline(){
-        if (getpipe != 0.0){
-            NetworkTableInstance.getDefault().getTable(limelightname).getEntry("pipeline").setNumber(VisionConstants.APRILTAG_PIPELINE); 
+        if (limelightname == FixedLLConstants.FIXED_LL_NAME){
+            if (getpipe != FixedLLConstants.FIXED_APRILTAG_PIPELINE){
+                NetworkTableInstance.getDefault().getTable(limelightname).getEntry("pipeline").setNumber(FixedLLConstants.FIXED_APRILTAG_PIPELINE); 
+            }
+            else{
+                NetworkTableInstance.getDefault().getTable(limelightname).getEntry("pipeline").setNumber(FixedLLConstants.FIXED_DRIVER_PIPELINE);
+            }
         }
         else{
-            NetworkTableInstance.getDefault().getTable(limelightname).getEntry("pipeline").setNumber(VisionConstants.NEURAL_NETWORK_PIPELINE);
+            if (getpipe != ShooterLLConstants.SHOOTER_NEURAL_NETWORK_PIPELINE){
+                NetworkTableInstance.getDefault().getTable(limelightname).getEntry("pipeline").setNumber(ShooterLLConstants.SHOOTER_NEURAL_NETWORK_PIPELINE); 
+            }   
+            else{
+                NetworkTableInstance.getDefault().getTable(limelightname).getEntry("pipeline").setNumber(ShooterLLConstants.SHOOTER_DRIVER_PIPELINE);
+            }
         }
-        
+       
     }
 
     public void swapCurrentLimelightName(){

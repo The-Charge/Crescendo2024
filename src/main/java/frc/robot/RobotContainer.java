@@ -1,3 +1,4 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -45,7 +46,6 @@ import frc.robot.Constants.StateLocations;
 import frc.robot.Constants.ApriltagConstants;
 import frc.robot.Constants.ButtonBox;
 
-<<<<<<< HEAD
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a "declarative" paradigm, very
@@ -90,14 +90,14 @@ public class RobotContainer
     configureBindings();
     //m_collector.zero();
         autoChooser = AutoBuilder.buildAutoChooser();
-        NamedCommands.registerCommand("intake pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevPickupFloor, Constants.StateLocations.pivPickupFloor));
-        NamedCommands.registerCommand("shoot pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevHighRear, Constants.StateLocations.pivHighRear));
-        NamedCommands.registerCommand("shoot pivot pos", new MoveToAngle(m_pivot,  Constants.StateLocations.pivHighRear));
-        NamedCommands.registerCommand("intake pivot pos", new MoveToAngle(m_pivot, Constants.StateLocations.pivPickupFloor));
-        NamedCommands.registerCommand("shoot elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.elevHighRear));
-        NamedCommands.registerCommand("intake elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.pivPickupFloor));
+        NamedCommands.registerCommand("intake pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevFloor, Constants.StateLocations.pivFloor));
+        NamedCommands.registerCommand("shoot pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevShootSpeaker, Constants.StateLocations.pivShootSpeaker));
+        NamedCommands.registerCommand("shoot pivot pos", new MoveToAngle(m_pivot,  Constants.StateLocations.pivShootSpeaker));
+        NamedCommands.registerCommand("intake pivot pos", new MoveToAngle(m_pivot, Constants.StateLocations.pivFloor));
+        NamedCommands.registerCommand("shoot elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.elevShootSpeaker));
+        NamedCommands.registerCommand("intake elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.elevFloor));
         NamedCommands.registerCommand("drive to note", new DriveToNoteCommandGroup(m_limelight, drivebase));
-        NamedCommands.registerCommand("Shoot", new CollectorShoot(m_collector));
+        NamedCommands.registerCommand("Shoot", new CollectorShoot(m_collector, m_pivot));
         NamedCommands.registerCommand("Intake", new CollectorIntakeGround(m_collector, m_pivot));
         NamedCommands.registerCommand("drive to center subwoofer", new AutonDriveToTag(m_limelight, drivebase, getSpeakerCenterTagID()));
         NamedCommands.registerCommand("drive to amp", new AutonDriveToTag(m_limelight, drivebase, getAmpID()));
@@ -109,32 +109,12 @@ public class RobotContainer
         
     
       // in robot in auton init: m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-=======
-public class RobotContainer {
 
-  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),"swerve"));
-  private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem();
-  private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
-  private final PivotSubsystem m_pivot = new PivotSubsystem();
-  private final CollectorHeadSubsystem m_collector = new CollectorHeadSubsystem();
->>>>>>> MidlandComp
-
-  XboxController driverXbox = new XboxController(0);
-  Joystick buttonBox = new Joystick(1);
-  
-  private SendableChooser<Command> autoChooser;
-  
-  public RobotContainer() {
-    configureBindings();
-
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chooser", autoChooser);
-    addAutoCommands();
 
     TeleopDrive teleopDrive = new TeleopDrive(drivebase,
       () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
       () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-      () -> -driverXbox.getRawAxis(Constants.OperatorConstants.turnAxis),
+      () -> -driverXbox.getRawAxis(rotationXboxAxis),
       () -> driverXbox.getPOV(),
       () -> MathUtil.applyDeadband(driverXbox.getLeftTriggerAxis(), OperatorConstants.TRIGGER_DEADBAND) > 0,
       () -> MathUtil.applyDeadband(driverXbox.getRightTriggerAxis(), OperatorConstants.TRIGGER_DEADBAND) > 0,
@@ -142,7 +122,6 @@ public class RobotContainer {
     );
 
     drivebase.setDefaultCommand(teleopDrive);
-<<<<<<< HEAD
     m_ledSubsystem.setDefaultCommand(LEDLimelight);
  
   }
@@ -182,21 +161,6 @@ public class RobotContainer {
     new JoystickButton(driverXbox, XboxController.Button.kRightBumper.value).onTrue(new swapPipeline(m_limelight));
     new JoystickButton(driverXbox, XboxController.Button.kLeftStick.value).onTrue(new SwapCurrentLimelight(m_limelight));
 
-=======
-
-    m_collector.setDefaultCommand(new CollectorZero(m_collector));
->>>>>>> MidlandComp
-
-    SmartDashboard.putNumber("elev setpoint", 0);
-    SmartDashboard.putNumber("piv setpoint", 0);
-    SmartDashboard.putData("move elev", new MoveToSetpointShuffle(m_elevator));    
-    SmartDashboard.putData("move piv",new MoveToAngleShuffle(m_pivot));
-    SmartDashboard.putData("reset abs encoder", new ResetPivEncoder(m_pivot));
-  }
-
-  private void configureBindings() {
-    new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
 
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.rest)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevRest, StateLocations.pivRest));
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).onTrue(new CollectorReverseAll(m_collector, m_pivot));
@@ -212,21 +176,25 @@ public class RobotContainer {
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOverride)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevClimb, StateLocations.pivClimb));
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOverride)).onFalse(new MoveToSetpoint(m_elevator, 5));
     //new Trigger(() -> buttonBox.getRawButton(ButtonBox.pivOverride)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevClimb, StateLocations.pivPickupFloor));
+     
+    SmartDashboard.putNumber("elev setpoint", 0);
+    SmartDashboard.putNumber("piv setpoint", 0);
+    SmartDashboard.putData("move elev", new MoveToSetpointShuffle(m_elevator));    
+    SmartDashboard.putData("move piv",new MoveToAngleShuffle(m_pivot));
+    SmartDashboard.putData("reset abs encoder", new ResetPivEncoder(m_pivot));
   }
-  private void addAutoCommands() {
-    NamedCommands.registerCommand("intake pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevFloor, Constants.StateLocations.pivFloor));
-    NamedCommands.registerCommand("shoot pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevShootSpeaker, Constants.StateLocations.pivShootSpeaker));
-    NamedCommands.registerCommand("shoot pivot pos", new MoveToAngle(m_pivot,  Constants.StateLocations.pivShootSpeaker));
-    NamedCommands.registerCommand("intake pivot pos", new MoveToAngle(m_pivot, Constants.StateLocations.pivFloor));
-    NamedCommands.registerCommand("shoot elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.elevShootSpeaker));
-    NamedCommands.registerCommand("intake elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.pivFloor));
-    NamedCommands.registerCommand("Shoot", new CollectorShoot(m_collector, m_pivot));
-    NamedCommands.registerCommand("Intake", new CollectorIntakeGround(m_collector, m_pivot));
-  }
+
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+
 
   public void setDriveMode() {
     // drivebase.setDefaultCommand();
   }
+
   public void setMotorBrake(boolean brake) {
     drivebase.setMotorBrake(brake);
   }
