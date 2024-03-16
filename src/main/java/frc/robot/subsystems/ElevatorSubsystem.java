@@ -14,19 +14,19 @@ import frc.robot.commands.Elevator.MoveToSetpoint;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
-    private TalonFX driver;
-    private double lastTarget = -1;
-    private int inRangeCounter = 0;
+    private TalonFX elevMotor;
+    private int targetCounter;
+    private double currentTarget = 0;
 
     public ElevatorSubsystem() {
-        driver = new TalonFX(Constants.Elevator.elevatorId);
+        elevMotor = new TalonFX(Constants.Elevator.elevatorId);
 
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
-        motorConfig.MotorOutput.PeakForwardDutyCycle = 0.9;
-        motorConfig.MotorOutput.PeakReverseDutyCycle = -0.9;
+        motorConfig.MotorOutput.PeakForwardDutyCycle = Constants.Elevator.maxVBus;
+        motorConfig.MotorOutput.PeakReverseDutyCycle = -Constants.Elevator.maxVBus;
         motorConfig.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
 
-        motorConfig.CurrentLimits.StatorCurrentLimit = 40;
+        motorConfig.CurrentLimits.StatorCurrentLimit = Constants.Elevator.currentLimit;
         motorConfig.CurrentLimits.SupplyTimeThreshold = 0.3;
         motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
@@ -37,71 +37,76 @@ public class ElevatorSubsystem extends SubsystemBase {
         slotConfigs.kD = Constants.Elevator.pid.d;
         slotConfigs.kG = Constants.Elevator.kG;
         slotConfigs.GravityType = GravityTypeValue.Elevator_Static;
-        driver.getConfigurator().apply(slotConfigs);
+        elevMotor.getConfigurator().apply(slotConfigs);
 
+        elevMotor.getConfigurator().apply(motorConfig);
+        
         SoftwareLimitSwitchConfigs softLimits = new SoftwareLimitSwitchConfigs();
         softLimits.ForwardSoftLimitEnable = softLimits.ReverseSoftLimitEnable = true;
         softLimits.ForwardSoftLimitThreshold = Constants.Elevator.maxPos;
         softLimits.ReverseSoftLimitThreshold = Constants.Elevator.minPos;
-        driver.getConfigurator().apply(softLimits);
-        driver.getConfigurator().apply(motorConfig);
+        elevMotor.getConfigurator().apply(softLimits);
+
+        resetTargetCounter();
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Elevator Position (Ticks)", driver.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Elevator Position (In)", driver.getPosition().getValueAsDouble() / Constants.Elevator.ticksPerInch);
-        SmartDashboard.putNumber("Elevator I (Amps)", driver.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator I (Amps)", elevMotor.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator Position (Ticks)", elevMotor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator Position (In)", getPosition());
+        SmartDashboard.putNumber("Elevator Target (Inches)", currentTarget);
     }
 
-    //NOTE: target is in inches from the bottom of the elevators range
-    public void goToPosition(double target) {
-        //clamp target within a safe range
-        lastTarget = Math.min(Math.max(target * Constants.Elevator.ticksPerInch, Constants.Elevator.minPos), Constants.Elevator.maxPos);
-        inRangeCounter = 0;
+    public void goToPosition(double inches) {
+        currentTarget = Math.min(Math.max(inches, Constants.Elevator.minPos * Constants.Elevator.tickToInchConversion), Constants.Elevator.maxPos * Constants.Elevator.tickToInchConversion);
+        resetTargetCounter();
 
-        SmartDashboard.putNumber("Elevator Target (Ticks)", lastTarget);
-
-        PositionDutyCycle request = new PositionDutyCycle(lastTarget);
+        PositionDutyCycle request = new PositionDutyCycle(currentTarget / Constants.Elevator.tickToInchConversion);
         request.Slot = 0;
-        driver.setControl(request);
+        elevMotor.setControl(request);
     }
     public void stopElevator() {
-        driver.set(0);
-    }
-    public boolean isAtTarget() {
-        double error = lastTarget - driver.getPosition().getValueAsDouble();
-
-        if(Math.abs(error) <= Constants.Elevator.rangeSize * Constants.Elevator.ticksPerInch) inRangeCounter++;
-        else inRangeCounter = 0;
-
-        if(inRangeCounter >= Constants.Elevator.rangeTime) return true;
-
-        return false;
-    }
-    public double elevPos() {
-        return driver.getPosition().getValueAsDouble();
+        elevMotor.set(0);
     }
     public void moveAtSpeed(double speed) {
-        driver.set(Math.min(Math.max(speed, -1), 1));
-    }
-    public void setAsZero() {
-        driver.setPosition(0); //might work
-    }
-    public void coast() {
-        TalonFXConfiguration config = new TalonFXConfiguration();
-        config.MotorOutput.PeakForwardDutyCycle = 0.6;
-        config.MotorOutput.PeakReverseDutyCycle = -0.6;
-        config.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
-
-        driver.getConfigurator().apply(config.MotorOutput);
+        elevMotor.set(Math.min(Math.max(speed, -1), 1));
     }
     public void brake() {
         TalonFXConfiguration config = new TalonFXConfiguration();
-        config.MotorOutput.PeakForwardDutyCycle = 0.6;
-        config.MotorOutput.PeakReverseDutyCycle = -0.6;
+        config.MotorOutput.PeakForwardDutyCycle = Constants.Elevator.maxVBus;
+        config.MotorOutput.PeakReverseDutyCycle = -Constants.Elevator.maxVBus;
         config.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
 
-        driver.getConfigurator().apply(config.MotorOutput);
+        elevMotor.getConfigurator().apply(config.MotorOutput);
+    }
+    public void coast() {
+        TalonFXConfiguration config = new TalonFXConfiguration();
+        config.MotorOutput.PeakForwardDutyCycle = Constants.Elevator.maxVBus;
+        config.MotorOutput.PeakReverseDutyCycle = -Constants.Elevator.maxVBus;
+        config.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
+
+        elevMotor.getConfigurator().apply(config.MotorOutput);
+    }
+
+    public double getPosition() {
+        return elevMotor.getPosition().getValueAsDouble() * Constants.Elevator.tickToInchConversion;
+    }
+    public void setAsZero() {
+        elevMotor.setPosition(0);
+    }
+    public boolean isAtTarget() {
+        double error = currentTarget - getPosition();
+
+        if(Math.abs(error) <= Constants.Elevator.rangeSize) targetCounter++;
+        else resetTargetCounter();
+
+        if(targetCounter >= Constants.Elevator.rangeTime) return true;
+
+        return false;
+    }
+
+    private void resetTargetCounter() {
+        targetCounter = 0;
     }
 }

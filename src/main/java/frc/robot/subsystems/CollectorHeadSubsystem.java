@@ -17,11 +17,6 @@ import frc.robot.Constants;
 
 public class CollectorHeadSubsystem extends SubsystemBase {
 
-    public enum Direction {
-        FORWARD,
-        BACKWARD
-    }
-
     private CANSparkMax shooterLeft;
     private CANSparkMax shooterRight;
     private CANSparkMax indexerLeft;
@@ -30,18 +25,18 @@ public class CollectorHeadSubsystem extends SubsystemBase {
     private CANSparkMax intakeBottom;
     private DigitalInput noteSensor2;
     private DigitalInput noteSensor1;
-
-    private int inRangeCounter = 0;
+    private int targetCounter;
     
     public CollectorHeadSubsystem() {
-        noteSensor2 = new DigitalInput(Constants.Indexer.photosensor2Id); // stop for second one
-        noteSensor1 = new DigitalInput(Constants.Indexer.photosensor1Id); //pivot first one
+        noteSensor2 = new DigitalInput(Constants.Indexer.photosensor2Id);
+        noteSensor1 = new DigitalInput(Constants.Indexer.photosensor1Id);
+
         //shooterLeft
         shooterLeft = new CANSparkMax(Constants.Shooter.leftId, MotorType.kBrushless);
         shooterLeft.restoreFactoryDefaults();
         shooterLeft.set(0);
         shooterLeft.setIdleMode(IdleMode.kCoast);
-        shooterLeft.setSmartCurrentLimit(25);
+        shooterLeft.setSmartCurrentLimit(Constants.Shooter.maxCurrent);
         
         SparkPIDController pidControllerShooterLeft = shooterLeft.getPIDController();
         pidControllerShooterLeft.setOutputRange(-1, 1);
@@ -49,18 +44,16 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         pidControllerShooterLeft.setP(Constants.Shooter.pid.kP);
         pidControllerShooterLeft.setI(Constants.Shooter.pid.kI);
         pidControllerShooterLeft.setD(Constants.Shooter.pid.kD);
-
         pidControllerShooterLeft.setIZone(0);
         pidControllerShooterLeft.setFF(0);
         shooterLeft.burnFlash();
-        //set to coast mode 
 
         //shooterRight
         shooterRight = new CANSparkMax(Constants.Shooter.rightId, MotorType.kBrushless);
         shooterRight.restoreFactoryDefaults();
         shooterRight.set(0);
         shooterRight.setIdleMode(IdleMode.kCoast);
-        shooterRight.setSmartCurrentLimit(25);
+        shooterRight.setSmartCurrentLimit(Constants.Shooter.maxCurrent);
         shooterRight.setInverted(true);
         
         SparkPIDController pidControllerShooterRight = shooterRight.getPIDController();
@@ -77,7 +70,8 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         indexerLeft.restoreFactoryDefaults();
         indexerLeft.set(0);
         indexerLeft.setIdleMode(IdleMode.kCoast);
-        indexerLeft.setSmartCurrentLimit(25);
+        indexerLeft.setSmartCurrentLimit(Constants.Indexer.maxCurrent);
+
         SparkPIDController pidControllerIndexerLeft = indexerLeft.getPIDController();
         pidControllerIndexerLeft.setOutputRange(-1, 1);
         pidControllerIndexerLeft.setP(Constants.Indexer.pid.kP);
@@ -92,15 +86,14 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         indexerRight.restoreFactoryDefaults();
         indexerRight.set(0);
         indexerRight.setIdleMode(IdleMode.kCoast);
+        indexerRight.setSmartCurrentLimit(Constants.Indexer.maxCurrent);
         indexerRight.setInverted(true);
+
         SparkPIDController pidControllerIndexerRight = indexerLeft.getPIDController();
         pidControllerIndexerRight.setOutputRange(-1, 1);
-        indexerRight.setSmartCurrentLimit(25);
-
         pidControllerIndexerRight.setP(Constants.Indexer.pid.kP);
         pidControllerIndexerRight.setI(Constants.Indexer.pid.kI);
         pidControllerIndexerRight.setD(Constants.Indexer.pid.kD);
-
         pidControllerIndexerRight.setIZone(0);
         pidControllerIndexerRight.setFF(0);
         indexerRight.burnFlash();
@@ -108,17 +101,15 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         //intakeTop
         intakeTop = new CANSparkMax(Constants.Intake.topId, MotorType.kBrushless);
         intakeTop.restoreFactoryDefaults();
-        intakeTop.setIdleMode(IdleMode.kCoast);
         intakeTop.set(0);
-        intakeTop.setSmartCurrentLimit(25);
+        intakeTop.setIdleMode(IdleMode.kCoast);
+        intakeTop.setSmartCurrentLimit(Constants.Intake.maxCurrent);
+
         SparkPIDController pidControllerIntakeTop = intakeTop.getPIDController();
         pidControllerIntakeTop.setOutputRange(-1, 1);
-
-
         pidControllerIntakeTop.setP(Constants.Intake.pid.kP);
         pidControllerIntakeTop.setI(Constants.Intake.pid.kI);
         pidControllerIntakeTop.setD(Constants.Intake.pid.kD);
-
         pidControllerIntakeTop.setIZone(0);
         pidControllerIntakeTop.setFF(0);
         intakeTop.burnFlash();
@@ -126,73 +117,38 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         //intakeBottom
         intakeBottom = new CANSparkMax(Constants.Intake.bottomId, MotorType.kBrushless);
         intakeBottom.restoreFactoryDefaults();
-        intakeBottom.setIdleMode(IdleMode.kCoast);
         intakeBottom.set(0);
-        intakeBottom.setInverted(false);
-        intakeBottom.setSmartCurrentLimit(25);
+        intakeBottom.setIdleMode(IdleMode.kCoast);
+        intakeBottom.setSmartCurrentLimit(Constants.Intake.maxCurrent);
+
         SparkPIDController pidControllerIntakeBottom = intakeBottom.getPIDController();
         pidControllerIntakeBottom.setOutputRange(-1, 1);
-
         pidControllerIntakeBottom.setP(Constants.Intake.pid.kP);
         pidControllerIntakeBottom.setI(Constants.Intake.pid.kI);
         pidControllerIntakeBottom.setD(Constants.Intake.pid.kD);
-        
         pidControllerIntakeBottom.setIZone(0);
         pidControllerIntakeBottom.setFF(0);
         intakeBottom.burnFlash();
 
+        resetTargetCounter();
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("L Shooter Vel (RPM)", shooterLeft.getEncoder().getVelocity());
-        SmartDashboard.putNumber("R Shooter Vel (RPM)", shooterRight.getEncoder().getVelocity());
-        SmartDashboard.putNumber("L Indexer Vel (RPM)", indexerLeft.getEncoder().getVelocity());
-        SmartDashboard.putNumber("R Indexer Vel (RPM)", indexerRight.getEncoder().getVelocity());
-        SmartDashboard.putNumber("T Intake Vel (RPM)", intakeTop.getEncoder().getVelocity());
-        SmartDashboard.putNumber("B Intake Vel (RPM)", intakeBottom.getEncoder().getVelocity());
-
         SmartDashboard.putNumber("L Shooter I (Amps)", shooterLeft.getOutputCurrent());
         SmartDashboard.putNumber("R Shooter I (Amps)", shooterRight.getOutputCurrent());
         SmartDashboard.putNumber("L Indexer I (Amps)", indexerLeft.getOutputCurrent());
         SmartDashboard.putNumber("R Indexer I (Amps)", indexerRight.getOutputCurrent());
         SmartDashboard.putNumber("T Intake I (Amps)", intakeTop.getOutputCurrent());
         SmartDashboard.putNumber("B Intake I (Amps)", intakeBottom.getOutputCurrent());
-    }
 
-    public void setVelocity(double speed, CANSparkMax collectorMotor) {
-        collectorMotor.getPIDController().setReference(speed,CANSparkMax.ControlType.kVelocity);
+        SmartDashboard.putNumber("L Shooter Vel (RPM)", shooterLeft.getEncoder().getVelocity());
+        SmartDashboard.putNumber("R Shooter Vel (RPM)", shooterRight.getEncoder().getVelocity());
+        SmartDashboard.putNumber("L Indexer Vel (RPM)", indexerLeft.getEncoder().getVelocity());
+        SmartDashboard.putNumber("R Indexer Vel (RPM)", indexerRight.getEncoder().getVelocity());
+        SmartDashboard.putNumber("T Intake Vel (RPM)", intakeTop.getEncoder().getVelocity());
+        SmartDashboard.putNumber("B Intake Vel (RPM)", intakeBottom.getEncoder().getVelocity());
     }
-    
-    public void resetTargetCounter() {
-        inRangeCounter = 0;
-    }
-    public boolean shootIsATarget(double leftTarget, double rightTarget) {
-        return isAtTarget(leftTarget, rightTarget, shooterLeft, shooterRight);
-    }
-    private boolean isAtTarget(double target1, double target2, CANSparkMax motor1, CANSparkMax motor2) {
-        final double deadband = 750;
-        final int requiredTime = 12;
-
-        double error1 = target1 - motor1.getEncoder().getVelocity();
-        double error2 = target2 - motor2.getEncoder().getVelocity();
-
-        if(Math.abs(error1) <= deadband && Math.abs(error2) <= deadband) inRangeCounter++;
-        else inRangeCounter = 0;
-
-    
-        SmartDashboard.putNumber("left encoder value", motor1.getEncoder().getVelocity());
-        SmartDashboard.putNumber("right encoder value", motor2.getEncoder().getVelocity());
-        SmartDashboard.putBoolean(" is at target", inRangeCounter>=requiredTime);
-        SmartDashboard.putNumber("in Range Counter", inRangeCounter);
-        SmartDashboard.putNumber("current shooter left", shooterLeft.getOutputCurrent());
-        SmartDashboard.putNumber("current shooter right", shooterRight.getOutputCurrent());
-        
-        if(inRangeCounter >= requiredTime) return true;
-        return false;
-        
-    }
-
 
     public void zero() {
         intakeTop.disable();
@@ -204,35 +160,54 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         shooterLeft.disable();
         shooterRight.disable();
     }
-    public void spinIndexer(Direction dir, double speed) {
-        if(dir == Direction.FORWARD) {
-            indexerLeft.set(speed);
-            indexerRight.set(speed);
-        }
-        else {
-            indexerLeft.set(-speed);
-            indexerRight.set(-speed);
-        }
+    public void shooterVBus(double percent) {
+        shooterLeft.set(percent);
+        shooterRight.set(percent);
     }
-    public void spinShooter(Direction dir, double speed) {
-        if(dir == Direction.FORWARD) {
-            shooterLeft.set(speed);
-            shooterRight.set(speed);
-        }
-        else {
-            shooterLeft.set(-speed);
-            shooterRight.set(-speed);
-        }
+    public void indexerVBus(double percent) {
+        indexerLeft.set(percent);
+        indexerRight.set(percent);
     }
-    public void spinIntake(Direction dir, double speed) {
-        if(dir == Direction.FORWARD) {
-            intakeBottom.set(speed + 0.05);
-            intakeTop.set(speed);
-        }
-        else {
-            intakeBottom.set(-speed - 0.05);
-            intakeTop.set(-speed);
-        }
+    public void intakeVBus(double percent) {
+        intakeBottom.set(percent + 0.05);
+        intakeTop.set(percent);
+    }
+    public void shooterVel(double vel) {
+        setTargetVel(vel, shooterLeft);
+        setTargetVel(vel, shooterRight);
+    }
+    public void indexerVel(double vel) {
+        setTargetVel(vel, indexerLeft);
+        setTargetVel(vel, indexerRight);
+    }
+    public void intakeVel(double vel) {
+        setTargetVel(vel, intakeBottom);
+        setTargetVel(vel, intakeTop);
+    }
+    private void setTargetVel(double speed, CANSparkMax motor) {
+        motor.getPIDController().setReference(speed,CANSparkMax.ControlType.kVelocity);
+    }
+    
+    public boolean shootIsATarget() {
+        return isAtTarget(Constants.Shooter.leftVelTarget, Constants.Shooter.rightVelTarget, Constants.Shooter.velDeadband, Constants.Shooter.velDeadbandTime, shooterLeft, shooterRight);
+    }
+    private boolean isAtTarget(double target1, double target2, double deadband, double requiredTime, CANSparkMax motor1, CANSparkMax motor2) {
+        double error1 = target1 - motor1.getEncoder().getVelocity();
+        double error2 = target2 - motor2.getEncoder().getVelocity();
+
+        if(Math.abs(error1) <= deadband && Math.abs(error2) <= deadband) targetCounter++;
+        else resetTargetCounter();
+    
+        SmartDashboard.putNumber("L encoder value", motor1.getEncoder().getVelocity());
+        SmartDashboard.putNumber("R encoder value", motor2.getEncoder().getVelocity());
+        SmartDashboard.putBoolean("Has Reached Target", targetCounter >= requiredTime);
+        SmartDashboard.putNumber("Deadband Timer", targetCounter);
+        
+        if(targetCounter >= requiredTime) return true;
+        return false;
+    }
+    public void resetTargetCounter() {
+        targetCounter = 0;
     }
 
     public boolean getNoteSensor1() {

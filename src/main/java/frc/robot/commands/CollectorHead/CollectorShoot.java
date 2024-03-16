@@ -23,15 +23,15 @@ public class CollectorShoot extends Command {
         timeout.start();
 
         m_collector.resetTargetCounter();
-        m_collector.spinShooter(CollectorHeadSubsystem.Direction.FORWARD, 1);
+        m_collector.shooterVBus(1);
         hasStartedIndexers = false;
         hasSetTime = false;
     }
     @Override
     public void execute() {
-        if((m_collector.shootIsATarget(10000, 10700) && !hasStartedIndexers) || (timeout.hasElapsed(3))) {
-            m_collector.spinIndexer(CollectorHeadSubsystem.Direction.FORWARD, 1);
-            m_collector.spinIntake(CollectorHeadSubsystem.Direction.FORWARD, 1);
+        if((m_collector.shootIsATarget() && !hasStartedIndexers) || (timeout.hasElapsed(3))) {
+            m_collector.indexerVBus(1);
+            m_collector.intakeVBus(1);
             feedTimer = new Timer();
             feedTimer.start();
             hasStartedIndexers = true;

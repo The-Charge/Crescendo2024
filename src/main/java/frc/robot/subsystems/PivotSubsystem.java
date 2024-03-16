@@ -21,113 +21,83 @@ import frc.robot.commands.Pivot.MoveToAngle;
 public class PivotSubsystem extends SubsystemBase {
 
     private TalonFX pivotMotor;
-    private Encoder absEncoder;
-    private int inRangeCounter = 0;
-    private PIDController pivotRioPID;
-    private double targetDeg = -1;
+    private int targetCounter;
+    private double targetDeg = 0;
 
     public PivotSubsystem() {
         pivotMotor = new TalonFX(Constants.Pivot.pivotId);
-        pivotMotor.setInverted(true); //constant
+        pivotMotor.setInverted(Constants.Pivot.invertMotor);
 
-        // pivotRioPID = new PIDController(Constants.Pivot.pid.p, Constants.Pivot.pid.i, Constants.Pivot.pid.d);
-        pivotRioPID = new PIDController(0, 0, 0);
-        pivotRioPID.setTolerance(0.5);
         //set status frame period 
         TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
 
-        talonFXConfigs.CurrentLimits.StatorCurrentLimit = 20.0;
+        talonFXConfigs.CurrentLimits.StatorCurrentLimit = Constants.Pivot.maxCurrent;
         talonFXConfigs.CurrentLimits.SupplyTimeThreshold = 0.3;
         talonFXConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
 
-        talonFXConfigs.MotorOutput.PeakForwardDutyCycle = 0.8;
-        talonFXConfigs.MotorOutput.PeakReverseDutyCycle = -0.8;
+        talonFXConfigs.MotorOutput.PeakForwardDutyCycle = Constants.Pivot.maxVBus;
+        talonFXConfigs.MotorOutput.PeakReverseDutyCycle = -Constants.Pivot.maxVBus;
 
-        // talonFXConfigs.Slot0.kS = 0;
-        // talonFXConfigs.Slot0.kV = 0;
-        // talonFXConfigs.Slot0.kP = Constants.Pivot.pid.p;
-        // talonFXConfigs.Slot0.kI = Constants.Pivot.pid.i;
-        // talonFXConfigs.Slot0.kD = Constants.Pivot.pid.d;
-        // talonFXConfigs.Slot0.kG = 0;
+        talonFXConfigs.Slot0.kS = 0;
+        talonFXConfigs.Slot0.kV = 0;
+        talonFXConfigs.Slot0.kP = Constants.Pivot.pid.p;
+        talonFXConfigs.Slot0.kI = Constants.Pivot.pid.i;
+        talonFXConfigs.Slot0.kD = Constants.Pivot.pid.d;
+        talonFXConfigs.Slot0.kG = 0;
         //talonFXConfigs.Slot0.GravityType = GravityTypeValue.Arm_Cosine; 
         
          talonFXConfigs.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
         
-
         // talonFXConfigs.Feedback.SensorToMechanismRatio = 100; *LOOK AT THIS?*
 
         pivotMotor.getConfigurator().apply(talonFXConfigs);
 
-        absEncoder = new Encoder(Constants.Pivot.encoderId, 6);
-        //absEncoder.reset();
-        // absEncoder.setPositionOffset(0.2);
-        //pivotMotor.setPosition((absEncoder.getAbsolutePosition() / Constants.Pivot.absTicksPerDeg + Constants.Pivot.absEncoderAngleOffset) * Constants.Pivot.ticksPerDeg);
         // SoftwareLimitSwitchConfigs softLimits = new SoftwareLimitSwitchConfigs();
+        // softLimits.ForwardSoftLimitEnable = true;
+        // softLimits.ReverseSoftLimitEnable = true;
+        // softLimits.ForwardSoftLimitThreshold = Constants.Pivot.maxPosTicks;
+        // softLimits.ReverseSoftLimitThreshold = Constants.Pivot.minPosTicks;
         // pivotMotor.getConfigurator().apply(softLimits);
-        // pivotMotor.setPosition(absEncoder.getAbsolutePosition() / Constants.Pivot.absRatio);
 
-        SmartDashboard.putNumber("Piv kP", 0);
-        SmartDashboard.putNumber("Piv kI", 0);
-        SmartDashboard.putNumber("Piv kD", 0);
-        SmartDashboard.putNumber("Piv kF", 0);
+        resetTargetCounter();
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Pivot I (Amps)", pivotMotor.getStatorCurrent().getValueAsDouble());
         SmartDashboard.putNumber("Pivot Position (Ticks)", pivotMotor.getPosition().getValueAsDouble());
-        //SmartDashboard.putNumber("Pivot abs position (ticks)", absEncoder.getAbsolutePosition() );
-        // SmartDashboard.putNumber("Pivot abs position (ticks)", absEncoder.getAbsolutePosition() - absEncoder.getPositionOffset());
-        SmartDashboard.putNumber("Pivot abs position (ticks)", absEncoder.get());
         SmartDashboard.putNumber("Pivot Position (Deg)", getAngle());
-        
-       
-
-        double kF = SmartDashboard.getNumber("Piv kF", 0);
-
-        double output = pivotRioPID.calculate(getAngle(), targetDeg) + kF * Math.cos(getAngle());
-        output = Math.min(Math.max(output, -0.4), 0.4);
-
-        SmartDashboard.putNumber("output pid", output);
-        SmartDashboard.putNumber("target deg", targetDeg);
-        pivotMotor.set(output);
+        SmartDashboard.putNumber("Pivot Target (Deg)", targetDeg);
     }
 
     public void pivotToAngle(double deg) {
-        // double nTicks = ticks;
-        SmartDashboard.putNumber("Pivot Target (Deg)", deg);
         targetDeg = deg;
-        inRangeCounter = 0;
+        resetTargetCounter();
 
-        // pivotMotor.setControl(new PositionDutyCycle(ticks).withSlot(0));
+        pivotMotor.setControl(new PositionDutyCycle(deg / Constants.Pivot.relToDegConversion).withSlot(0));
     }
- 
     public void pivotUp() {
-        // pivotToAngle( pivotMotor.getPosition().getValueAsDouble() + 15);
         pivotToAngle(getAngle() + 20);
     }
-    public double getAngle() {
-        return -(absEncoder.get() - Constants.Pivot.absOffset) * Constants.Pivot.absToDegConversion;
+    public void resetEncoder() {
+        pivotMotor.setPosition(0);
     }
 
     public boolean isAtTarget() {
-        // double error = lastTarget - pivotMotor.getPosition().getValueAsDouble();
-        // final double deadzone = 0.6;
         double error = targetDeg - getAngle();
-        final double deadzone = 0.5;
-        final int timeRequired = 8;
 
-        if(Math.abs(error) <= deadzone) inRangeCounter++;
-        else inRangeCounter = 0;
+        if(Math.abs(error) <= Constants.Pivot.toleranceDeg) targetCounter++;
+        else resetTargetCounter();
 
-        if(inRangeCounter >= timeRequired) return true;
+        if(targetCounter >= Constants.Pivot.toleranceTime) return true;
 
         return false;
     }
-    public void resetEncoder() {
-        absEncoder.reset();
+    public double getAngle() {
+        return (pivotMotor.getPosition().getValueAsDouble() - Constants.Pivot.relOffset) * Constants.Pivot.relToDegConversion;
     }
-    public void setPIDCoefficients(double kP, double kI, double kD) {
-        pivotRioPID.setPID(kP, kI, kD);
+
+    private void resetTargetCounter() {
+        targetCounter = 0;
     }
 }

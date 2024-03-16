@@ -24,9 +24,6 @@ import swervelib.parser.PIDFConfig;
  */
 public final class Constants {
 
-  public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
-  public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
-  public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag
   public static final int FORWARD = 0;
   public static final int RIGHT = 90;
   public static final int BACKWARD = 180;
@@ -36,17 +33,12 @@ public final class Constants {
   public static final int BACKWARD_LEFT = 225;
   public static final int FORWARD_LEFT = 315;
 
-
   public static final class AutonConstants {
-
     public static final PIDConstants TRANSLATION_PID = new PIDConstants(5.0, 0.0, 0.0);
     public static final PIDConstants ANGLE_PID = new PIDConstants(4.0, 0.0, 1.0);
-
-    public static final double MAX_ACCELERATION = 2;
   }
 
   public static final class DrivebaseConstants {
-    // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds
     public static final double MAX_SPEED_FEET_PER_SECOND = 14.5;
   }
@@ -54,55 +46,72 @@ public final class Constants {
   public static final class Elevator {
     public static final int elevatorId = 12;
     
-    public static final int currentLimit = 20;
-
     public static final PIDFConfig pid = new PIDFConfig(0.8, 0.01, 0.05, 0);
     public static final double kG = 0.04;
     public static final double rangeSize = 0.2; //in inches
-    public static final int rangeTime = 20; //in frames (runs at roughly 50 FPS)
+    public static final int rangeTime = 8; //in frames (runs at roughly 50 FPS)
     
     public static final double minPos = 0; //in ticks
     public static final double maxPos = 205; //in ticks
-    public static final double ticksPerInch = maxPos / 27.0;
-  }
+    public static final int currentLimit = 40;
+    public static final double maxVBus = 0.9;
 
-  public static final class Intake {
-    public static final int topId = 5;
-    public static final int bottomId = 6;
-    public static final PIDConstants pid = new PIDConstants(0.0002, 0.0000001, 0);
+    public static final double tickToInchConversion = 27.0 / maxPos;
   }
 
   public static final class Shooter {
     public static final int leftId = 2;
     public static final int rightId = 1;
-    public static final PIDConstants pid = new PIDConstants(4.0, 0.0, 1.0);
-  }
 
+    public static final PIDConstants pid = new PIDConstants(4.0, 0.0, 1.0);
+    public static final double leftVelTarget = 10000;
+    public static final double rightVelTarget = 10700;
+    public static final double velDeadband = 750;
+    public static final double velDeadbandTime = 12;
+
+    public static final int maxCurrent = 25;
+  }
   public static final class Indexer {
-    public static final int photosensor1Id = 8;
-    public static final int photosensor2Id = 9;
     public static final int leftId = 7;
     public static final int rightId = 4;
+    public static final int photosensor1Id = 8;
+    public static final int photosensor2Id = 9;
+
     public static final PIDConstants pid = new PIDConstants(4.0, 0.0, 1.0);
+    
+    public static final int maxCurrent = 25;
+  }
+  public static final class Intake {
+    public static final int topId = 5;
+    public static final int bottomId = 6;
+
+    public static final PIDConstants pid = new PIDConstants(0.0002, 0.0000001, 0);
+    
+    public static final int maxCurrent = 25;
   }
 
   public static final class Pivot {
     public static final int pivotId = 3;
-    public static final int encoderId = 7;
 
-    //relaltive PID
-    // public static final PIDFConfig pid = new PIDFConfig(0.12, 0, 0.03);
-    // public static final double kS = 0;
-    // public static final double kV = 0;
-    // public static final double kG = 0.03;
+    public static final PIDFConfig pid = new PIDFConfig(0.12, 0, 0.03);
+    public static final double kS = 0;
+    public static final double kV = 0;
+    public static final double kG = 0.03;
+    public static final double toleranceDeg = 0.5;
+    public static final double toleranceTime = 8;
 
-    //absolute PID
-    public static final PIDFConfig pid = new PIDFConfig(0.12, 0, 0.03, 0.035);
+    public static final double minPosTicks = 0;
+    public static final double maxPosTicks = 0;
+    public static final double maxVBus = 0.8;
+    public static final double maxCurrent = 20;
+    public static final boolean invertMotor = false;
 
-    // public static final double relToAbsConversion = (abs1 - abs2) / (rel1 - rel2);
-    // public static final double relToAbsConversion = (0.932 - 0.561) / (0.985 - -33.441); //temp until actual value is calculated. See above for calc    
-    public static final double absToDegConversion = 70.1 / 411; //temp until actual value is calculated. See above for calc 
-    public static final double absOffset = 942;
+    /*
+    conversion math is (targetUnit1 - targetUnit2) / (currentUnit1 - currentUnit2). 1 and 2 are two reference positions to form a proportion
+    name with format <currentUnit>To<targetUnit>Conversion = ...;
+    */
+    public static final double relToDegConversion = (1 - 0) / (1 - 0); //temp until actual value is calculated. See above for calc 
+    public static final double relOffset = 0;
     
   }
 
@@ -122,32 +131,32 @@ public final class Constants {
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
     public static final double TRIGGER_DEADBAND = 0.3;
+    
+    public static final int turnAxis = 4;
   }
 
   public static abstract class StateLocations {
     //elev is in inches, piv in degrees
 
-    public static final double elevStartup = 0; //done
-    public static final double pivStartup = -3;
-    public static final double elevPickupFloor = 0; //done
-    public static final double pivPickupFloor = -35.2;
-    public static final double pivLevel = pivStartup + 15;
-    public static final double elevPickupSource = 15; //done
-    public static final double pivPickupSource = -7.99;
-    public static final double elevShootAmp = 27; //done
-    public static final double pivShootAmp = -30.58 + 8;
-    public static final double elevHighRear = 9; //touching subwoofer done
-    public static final double pivHighRear = -28.52 + 1;
-    public static final double elevShallowFront = 27 * 0.5;
-    public static final double pivShallowFront = -45;
-    public static final double elevSteepFront = 27 * 0.33;
-    public static final double pivSteepFront = -20;
-    public static final double elevTravel = 27 * 0.5;
-    public static final double pivTravel = 0;
-    public static final double elevClimb = 27;
-    public static final double pivClimb = pivStartup;
+    public static final double elevRest = 0; //done
+    public static final double pivRest = -3 * Pivot.relToDegConversion;
 
-    public static final double safeElevatorPoint = 5; //the elevator hight required to turn the pivot freely and not hit anything
+    public static final double elevFloor = 0; //done
+    public static final double pivFloor = -35.2 * Pivot.relToDegConversion;
+
+    public static final double elevSource = 15; //done
+    public static final double pivSource = -7.99 * Pivot.relToDegConversion;
+
+    public static final double elevShootAmp = 27; //done
+    public static final double pivShootAmp = (-30.58 + 8) * Pivot.relToDegConversion;
+
+    public static final double elevShootSpeaker = 9; //touching subwoofer done
+    public static final double pivShootSpeaker = (-28.52 + 1) * Pivot.relToDegConversion;
+
+    public static final double elevClimb = 27;
+    public static final double pivClimb = pivRest;
+
+    public static final double safeElevatorPoint = 6; //the elevator hight required to turn the pivot freely and not hit anything
   }
 
   public static abstract class ButtonBox {
@@ -159,11 +168,11 @@ public final class Constants {
     public static final int reset = 6; //move elevator down then reset
     public static final int inS = 7; //collector intake source
     public static final int inG = 8; //collector intake ground
-    public static final int unused3 = 9;
+    public static final int unused1 = 9;
     public static final int src = 10; //pickup source location
     public static final int amp = 11; //shoot amp location
     public static final int gnd = 12; //pickup ground location
-    public static final int unused4 = 13;
+    public static final int unused2 = 13;
     public static final int elevOverride = 14; //manual elevator control
     public static final int pivOverride = 15; //manual pivot control
   }

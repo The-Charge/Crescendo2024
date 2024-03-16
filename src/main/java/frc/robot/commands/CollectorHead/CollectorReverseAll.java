@@ -19,9 +19,9 @@ public class CollectorReverseAll extends Command {
 
     @Override
     public void initialize() {
-        m_collector.spinIndexer(CollectorHeadSubsystem.Direction.BACKWARD, 0.5);
-        m_collector.spinShooter(CollectorHeadSubsystem.Direction.BACKWARD, 0.5);
-        m_collector.spinIntake(CollectorHeadSubsystem.Direction.BACKWARD, 0.5);
+        m_collector.indexerVBus(0.5);
+        m_collector.shooterVBus(0.5);
+        m_collector.intakeVBus(0.5);
     }
     @Override
     public void end(boolean interrupted) {
@@ -29,7 +29,6 @@ public class CollectorReverseAll extends Command {
     }
     @Override
     public boolean isFinished() {
-        // return timer.hasElapsed(2.5);
         return false;
     }
 }
