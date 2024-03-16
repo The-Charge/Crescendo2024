@@ -9,7 +9,6 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,7 +23,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
+import frc.robot.Constants.ApriltagConstants;
 import frc.robot.Constants.AutonConstants;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.subsystems.VisionSubsystem;
+
 import java.io.File;
 import java.util.function.DoubleSupplier;
 import swervelib.SwerveController;
@@ -500,11 +506,32 @@ public class SwerveSubsystem extends SubsystemBase
     return swerveDrive.getPitch();
   }
 
-  /**
+
+  public void addVisionReading(VisionSubsystem limelight){
+    Pose2d setpose;
+    double latency;
+    if (limelight.gettv() > 0.0){
+      setpose = limelight.getRobotFieldPose();
+      latency = RobotContainer.getlimelight().getlimelightshooterLatency();
+    swerveDrive.addVisionMeasurement(setpose, Timer.getFPGATimestamp() - latency);
+    }
+  }
+  public boolean updatedPoseWithinThreshold(VisionSubsystem limelight){
+    boolean withinThreshold;
+    Pose2d setpose;
+    setpose = limelight.getRobotFieldPose();
+    withinThreshold = Math.abs(swerveDrive.getPose().getX() - setpose.getX()) < ApriltagConstants.BOTPOSE_THRESHOLD_TRANSLATION;
+    withinThreshold &= Math.abs(swerveDrive.getPose().getY() - setpose.getY()) < ApriltagConstants.BOTPOSE_THRESHOLD_TRANSLATION;
+    withinThreshold &= Math.abs(swerveDrive.getPose().getRotation().getDegrees() - setpose.getRotation().getDegrees()) < ApriltagConstants.BOTPOSE_THRESHOLD_ROTATION;
+    return withinThreshold;
+  }
+
+
+    /**
    * Add a fake vision reading for testing purposes.
    */
   public void addFakeVisionReading()
   {
-    swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());
+    swerveDrive.addVisionMeasurement(new Pose2d(1, 1, Rotation2d.fromDegrees(0)), Timer.getFPGATimestamp());
   }
 }

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -12,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.CollectorHead.CollectorZero;
 import frc.robot.commands.led.*;
-
 import java.io.File;
 import java.io.IOException;
 import swervelib.parser.SwerveParser;
@@ -57,6 +57,17 @@ public class Robot extends TimedRobot
     // immediately when disabled, but then also let it be pushed more 
     disabledTimer = new Timer();
     // new SetLEDRange(m_robotContainer.getLEDSubsystem(), 0, Constants.LEDConstants.totalLength, Color.kLime).schedule();
+    new LEDRainbow(m_robotContainer.getLEDSubsystem(), () -> false).schedule();
+
+    // Connect to 172.22.11.2:2011 to see fixed limelight
+    PortForwarder.add(2011, "limelight-fixed.local", 5800);
+    PortForwarder.add(2011, "limelight-fixed.local", 5801);
+    PortForwarder.add(2011, "limelight-fixed.local", 5805);
+
+    // Connect to 172.22.11.2:2012 to see shooter limelight
+    PortForwarder.add(2012, "limelight-shooter.local", 5800);
+    PortForwarder.add(2012, "limelight-shooter.local", 5801);
+    PortForwarder.add(2012, "limelight-shooter.local", 5805);
   }
 
   /**
