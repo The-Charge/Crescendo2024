@@ -71,10 +71,11 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     public void pivotToAngle(double deg) {
+        // targetDeg = Math.min(Math.max(deg, Constants.Pivot.minPosTicks * Constants.Pivot.ticksToDegConversion), Constants.Pivot.maxPosTicks * Constants.Pivot.ticksToDegConversion);
         targetDeg = deg;
         resetTargetCounter();
 
-        pivotMotor.setControl(new PositionDutyCycle(deg / Constants.Pivot.relToDegConversion).withSlot(0));
+        pivotMotor.setControl(new PositionDutyCycle(deg / Constants.Pivot.ticksToDegConversion).withSlot(0));
     }
     public void pivotUp() {
         pivotToAngle(getAngle() + 20);
@@ -94,7 +95,10 @@ public class PivotSubsystem extends SubsystemBase {
         return false;
     }
     public double getAngle() {
-        return (pivotMotor.getPosition().getValueAsDouble() - Constants.Pivot.relOffset) * Constants.Pivot.relToDegConversion;
+        return (pivotMotor.getPosition().getValueAsDouble() - Constants.Pivot.relOffset) * Constants.Pivot.ticksToDegConversion;
+    }
+    public boolean isInDeadzone() {
+        return getAngle() > Constants.Pivot.noActionStart && getAngle() < Constants.Pivot.noActionEnd;
     }
 
     private void resetTargetCounter() {

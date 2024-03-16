@@ -2,16 +2,19 @@ package frc.robot.commands.CollectorHead;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CollectorHeadSubsystem;
+import frc.robot.subsystems.*;
 
 public class CollectorReverseAll extends Command {
 
     private CollectorHeadSubsystem m_collector;
+    private PivotSubsystem m_pivot;
     private Timer timer;
 
-    public CollectorReverseAll(CollectorHeadSubsystem collector) {
+    public CollectorReverseAll(CollectorHeadSubsystem collector, PivotSubsystem pivot) {
         this.m_collector = collector;
-        addRequirements(collector);
+        addRequirements(collector); //do not require pivot
+
+        this.m_pivot = pivot;
 
         timer = new Timer();
         timer.start();
@@ -29,6 +32,6 @@ public class CollectorReverseAll extends Command {
     }
     @Override
     public boolean isFinished() {
-        return false;
+        return m_pivot.isInDeadzone() || m_pivot.isInDeadzone();
     }
 }

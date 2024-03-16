@@ -105,14 +105,16 @@ public final class Constants {
     public static final double maxVBus = 0.8;
     public static final double maxCurrent = 20;
     public static final boolean invertMotor = false;
+    public static final double noActionStart = 0;
+    public static final double noActionEnd = 0;
 
     /*
     conversion math is (targetUnit1 - targetUnit2) / (currentUnit1 - currentUnit2). 1 and 2 are two reference positions to form a proportion
-    name with format <currentUnit>To<targetUnit>Conversion = ...;
+    FORMAT:
+    public static final double <currentUnit>To<targetUnit>Conversion = ...;
     */
-    public static final double relToDegConversion = (1 - 0) / (1 - 0); //temp until actual value is calculated. See above for calc 
+    public static final double ticksToDegConversion = (1 - 0) / (1 - 0);
     public static final double relOffset = 0;
-    
   }
 
   public static final class LEDConstants {
@@ -139,19 +141,19 @@ public final class Constants {
     //elev is in inches, piv in degrees
 
     public static final double elevRest = 0; //done
-    public static final double pivRest = -3 * Pivot.relToDegConversion;
+    public static final double pivRest = -3 * Pivot.ticksToDegConversion;
 
     public static final double elevFloor = 0; //done
-    public static final double pivFloor = -35.2 * Pivot.relToDegConversion;
+    public static final double pivFloor = -35.2 * Pivot.ticksToDegConversion;
 
     public static final double elevSource = 15; //done
-    public static final double pivSource = -7.99 * Pivot.relToDegConversion;
+    public static final double pivSource = -7.99 * Pivot.ticksToDegConversion;
 
     public static final double elevShootAmp = 27; //done
-    public static final double pivShootAmp = (-30.58 + 8) * Pivot.relToDegConversion;
+    public static final double pivShootAmp = (-30.58 + 8) * Pivot.ticksToDegConversion;
 
     public static final double elevShootSpeaker = 9; //touching subwoofer done
-    public static final double pivShootSpeaker = (-28.52 + 1) * Pivot.relToDegConversion;
+    public static final double pivShootSpeaker = (-28.52 + 1) * Pivot.ticksToDegConversion;
 
     public static final double elevClimb = 27;
     public static final double pivClimb = pivRest;

@@ -1,8 +1,7 @@
 package frc.robot.commands.CollectorHead;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CollectorHeadSubsystem;
-
+import frc.robot.subsystems.*;
 
 public class CollectorIntakeSource extends Command {
     
