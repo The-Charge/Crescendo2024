@@ -2,7 +2,6 @@ package frc.robot.commands.led;
 
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LEDStripSubsystem;
 

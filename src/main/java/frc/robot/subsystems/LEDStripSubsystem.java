@@ -105,6 +105,16 @@ public class LEDStripSubsystem extends SubsystemBase {
 
     animationTimer++;
   }
+  public void blink(Color col) {
+    final int onLength = 25;
+    final int offLength = 25;
+
+    for(int i = 0; i < getStripLength(); i++) {
+      setPixelColor(i, (animationTimer % onLength + offLength < onLength ? col : Color.kBlack));
+    }
+
+    animationTimer++;
+  }
 
   /**
    * Sets the brightness modifier

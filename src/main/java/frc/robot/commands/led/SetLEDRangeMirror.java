@@ -30,7 +30,7 @@ public class SetLEDRangeMirror extends Command {
     @Override
     public void initialize() {
         strip.setRange(start, end, col);
-        // strip.setRange(Constants.LEDConstants)
+        strip.setRange(Constants.LEDConstants.totalLength - end - start, Constants.LEDConstants.totalLength - start, col);
     }
     @Override
     public void execute() {}
