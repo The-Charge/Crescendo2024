@@ -37,7 +37,8 @@ public class Robot extends TimedRobot {
         m_container = new RobotContainer();
         
         disabledTimer = new Timer();
-        new LEDRainbow(m_container.getLEDSubsystem(), () -> false).schedule();
+        new SetLEDBrightness(m_container.getLEDSubsystem(), 0.5, false);
+        new LEDChase(m_container.getLEDSubsystem(), Color.kLime, Color.kGold, () -> false).schedule();
     }
     @Override
     public void robotPeriodic() {

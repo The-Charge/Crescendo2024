@@ -41,11 +41,11 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         SparkPIDController pidControllerShooterLeft = shooterLeft.getPIDController();
         pidControllerShooterLeft.setOutputRange(-1, 1);
         
-        pidControllerShooterLeft.setP(Constants.Shooter.pid.kP);
-        pidControllerShooterLeft.setI(Constants.Shooter.pid.kI);
-        pidControllerShooterLeft.setD(Constants.Shooter.pid.kD);
+        pidControllerShooterLeft.setP(Constants.Shooter.pid.p);
+        pidControllerShooterLeft.setI(Constants.Shooter.pid.i);
+        pidControllerShooterLeft.setD(Constants.Shooter.pid.d);
         pidControllerShooterLeft.setIZone(0);
-        pidControllerShooterLeft.setFF(0);
+        pidControllerShooterLeft.setFF(Constants.Shooter.pid.f);
         shooterLeft.burnFlash();
         
         //shooterRight
@@ -58,11 +58,11 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         
         SparkPIDController pidControllerShooterRight = shooterRight.getPIDController();
         pidControllerShooterRight.setOutputRange(-1, 1);
-        pidControllerShooterRight.setP(Constants.Shooter.pid.kP);
-        pidControllerShooterRight.setI(Constants.Shooter.pid.kI);
-        pidControllerShooterRight.setD(Constants.Shooter.pid.kD);
+        pidControllerShooterRight.setP(Constants.Shooter.pid.p);
+        pidControllerShooterRight.setI(Constants.Shooter.pid.i);
+        pidControllerShooterRight.setD(Constants.Shooter.pid.d);
         pidControllerShooterRight.setIZone(0);
-        pidControllerShooterRight.setFF(0);
+        pidControllerShooterRight.setFF(Constants.Shooter.pid.f);
         shooterRight.burnFlash();
         
         //indexerLeft
@@ -189,7 +189,8 @@ public class CollectorHeadSubsystem extends SubsystemBase {
     }
     
     public boolean shootIsATarget() {
-        return isAtTarget(Constants.Shooter.leftVelTarget, Constants.Shooter.rightVelTarget, Constants.Shooter.velDeadband, Constants.Shooter.velDeadbandTime, shooterLeft, shooterRight);
+        // return isAtTarget(Constants.Shooter.leftVelTarget, Constants.Shooter.rightVelTarget, Constants.Shooter.velDeadband, Constants.Shooter.velDeadbandTime, shooterLeft, shooterRight);
+        return shooterLeft.getEncoder().getVelocity() > Constants.Shooter.leftVelTarget && shooterRight.getEncoder().getVelocity() > Constants.Shooter.rightVelTarget;
     }
     private boolean isAtTarget(double target1, double target2, double deadband, double requiredTime, CANSparkMax motor1, CANSparkMax motor2) {
         double error1 = target1 - motor1.getEncoder().getVelocity();

@@ -9,6 +9,7 @@ public class ResetPivEncoder extends Command {
     
     public ResetPivEncoder(PivotSubsystem piv) {
         this.piv = piv;
+        addRequirements(this.piv);
     }
 
     @Override

@@ -76,11 +76,12 @@ public class RobotContainer {
         
         m_collector.setDefaultCommand(new CollectorZero(m_collector));
         
-        SmartDashboard.putNumber("elev setpoint", 0);
-        SmartDashboard.putNumber("piv setpoint", 0);
-        SmartDashboard.putData("move elev", new MoveToSetpointShuffle(m_elevator));    
-        SmartDashboard.putData("move piv",new MoveToAngleShuffle(m_pivot));
-        SmartDashboard.putData("reset abs encoder", new ResetPivEncoder(m_pivot));
+        SmartDashboard.putNumber("elevSetpoint", 0);
+        SmartDashboard.putNumber("pivSetpoint", 0);
+        SmartDashboard.putData("MoveToSetpoint", new MoveToSetpointShuffle(m_elevator));    
+        SmartDashboard.putData("MoveToAngle",new MoveToAngleShuffle(m_pivot));
+        SmartDashboard.putData("ResetPivEncoder", new ResetPivEncoder(m_pivot));
+        SmartDashboard.putData("ResetElevEncoder", new ResetElevEncoder(m_elevator));
     }
     
     private void configureBindings() {
@@ -88,7 +89,7 @@ public class RobotContainer {
         new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
         
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.rest)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevRest, StateLocations.pivRest));
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).onTrue(new CollectorReverseAll(m_collector, m_pivot));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).whileTrue(new CollectorReverseAll(m_collector, m_pivot));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.zero)).onTrue(new CollectorZero(m_collector));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.shoot)).onTrue(new CollectorShoot(m_collector, m_pivot));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.shB)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootSpeaker, StateLocations.pivShootSpeaker));

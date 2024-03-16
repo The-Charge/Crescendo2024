@@ -16,7 +16,7 @@ public class MoveToSetpointShuffle extends Command {
     
     @Override
     public void initialize() {
-        elevatorSub.goToPosition(SmartDashboard.getNumber("elev setpoint", 0));
+        elevatorSub.goToPosition(SmartDashboard.getNumber("elevSetpoint", 0));
     }
     @Override
     public boolean isFinished() {

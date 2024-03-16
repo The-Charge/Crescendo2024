@@ -27,6 +27,7 @@ public class CollectorShoot extends Command {
 
         m_collector.resetTargetCounter();
         m_collector.shooterVBus(1);
+        // m_collector.shooterVel(10750);
         hasStartedIndexers = false;
         hasSetTime = false;
     }
@@ -49,6 +50,6 @@ public class CollectorShoot extends Command {
         if(hasSetTime) {
             SmartDashboard.putNumber("feed timer", feedTimer.get());
         }
-        return timeout.hasElapsed(4.25) || (feedTimer == null ? false : feedTimer.hasElapsed(1.25)) || m_pivot.isInDeadzone();
+        return timeout.hasElapsed(4.25) || (feedTimer == null ? false : feedTimer.hasElapsed(0.75)) || m_pivot.isInDeadzone();
     }
 }

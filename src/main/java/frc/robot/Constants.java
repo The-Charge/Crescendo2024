@@ -47,7 +47,9 @@ public final class Constants {
         public static final int elevatorId = 12;
         
         public static final PIDFConfig pid = new PIDFConfig(0.8, 0.01, 0.05, 0);
-        public static final double kG = 0.04;
+        // public static final double kG = 0.04;
+        public static final double kG = 0
+        ;
         public static final double rangeSize = 0.2; //in inches
         public static final int rangeTime = 8; //in frames (runs at roughly 50 FPS)
         
@@ -58,14 +60,15 @@ public final class Constants {
         
         public static final double tickToInchConversion = 27.0 / maxPos;
     }
+
     
     public static final class Shooter {
         public static final int leftId = 2;
         public static final int rightId = 1;
         
-        public static final PIDConstants pid = new PIDConstants(4.0, 0.0, 1.0);
-        public static final double leftVelTarget = 10000;
-        public static final double rightVelTarget = 10700;
+        public static final PIDFConfig pid = new PIDFConfig(5.5e-8, 7e-8, 0.0005, 0.000095);
+        public static final double leftVelTarget = 10200;
+        public static final double rightVelTarget = 10200;
         public static final double velDeadband = 750;
         public static final double velDeadbandTime = 12;
         
@@ -100,8 +103,8 @@ public final class Constants {
         public static final double toleranceDeg = 0.5;
         public static final double toleranceTime = 8;
         
-        public static final double minPosTicks = 0;
-        public static final double maxPosTicks = 0;
+        public static final double minPosTicks = -63.30;
+        public static final double maxPosTicks = 3.21;
         public static final double maxVBus = 0.8;
         public static final double maxCurrent = 20;
         public static final boolean invertMotor = false;
@@ -113,7 +116,7 @@ public final class Constants {
         FORMAT:
         public static final double <currentUnit>To<targetUnit>Conversion = ...;
         */
-        public static final double ticksToDegConversion = (1 - 0) / (1 - 0);
+        public static final double ticksToDegConversion = (55.3 - 70 + 90) / (-1.67 - -34.78);
         public static final double relOffset = 0;
     }
     

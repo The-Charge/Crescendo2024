@@ -46,7 +46,7 @@ public class PivotSubsystem extends SubsystemBase {
         talonFXConfigs.Slot0.kG = 0;
         //talonFXConfigs.Slot0.GravityType = GravityTypeValue.Arm_Cosine; 
         
-        talonFXConfigs.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
+        talonFXConfigs.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
         
         // talonFXConfigs.Feedback.SensorToMechanismRatio = 100; *LOOK AT THIS?*
         
@@ -75,7 +75,7 @@ public class PivotSubsystem extends SubsystemBase {
         targetDeg = deg;
         resetTargetCounter();
         
-        pivotMotor.setControl(new PositionDutyCycle(deg / Constants.Pivot.ticksToDegConversion).withSlot(0));
+        pivotMotor.setControl(new PositionDutyCycle(targetDeg / Constants.Pivot.ticksToDegConversion).withSlot(0));
     }
     public void pivotUp() {
         pivotToAngle(getAngle() + 20);
