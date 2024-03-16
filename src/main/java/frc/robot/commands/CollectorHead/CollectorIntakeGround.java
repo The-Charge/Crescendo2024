@@ -17,8 +17,8 @@ public class CollectorIntakeGround extends Command {
 
     @Override
     public void initialize() {
-        m_collector.spinIntake(CollectorHeadSubsystem.Direction.FORWARD, 0.3);
-        m_collector.spinIndexer(CollectorHeadSubsystem.Direction.FORWARD, 0.3);
+        m_collector.intakeVBus(0.3);
+        m_collector.indexerVBus(0.3);
     }
     @Override
     public void execute() {

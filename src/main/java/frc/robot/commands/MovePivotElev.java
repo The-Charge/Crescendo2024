@@ -48,17 +48,17 @@ public class MovePivotElev extends Command {
 
     @Override
     public void initialize() {
-        if((elevSetpoint < Constants.StateLocations.safeElevatorPoint) && (pivSetpoint != Constants.StateLocations.pivStartup && pivSetpoint != Constants.StateLocations.pivPickupFloor)) {
+        if((elevSetpoint < Constants.StateLocations.safeElevatorPoint) && (pivSetpoint != Constants.StateLocations.pivRest && pivSetpoint != Constants.StateLocations.pivFloor)) {
             //DriverStation.reportError("Invalid location for elev/piv", null);
             return;
         } 
-        else if(elevSetpoint < Constants.StateLocations.safeElevatorPoint && m_elevator.elevPos() > Constants.StateLocations.safeElevatorPoint) {
+        else if(elevSetpoint < Constants.StateLocations.safeElevatorPoint && m_elevator.getPosition() > Constants.StateLocations.safeElevatorPoint) {
             action = new SequentialCommandGroup(
                 new MoveToAngle(m_pivot, pivSetpoint),
                 new MoveToSetpoint(m_elevator, elevSetpoint)
             );
         }
-        else if(elevSetpoint > Constants.StateLocations.safeElevatorPoint && m_elevator.elevPos() < Constants.StateLocations.safeElevatorPoint) {
+        else if(elevSetpoint > Constants.StateLocations.safeElevatorPoint && m_elevator.getPosition() < Constants.StateLocations.safeElevatorPoint) {
             action = new SequentialCommandGroup(
                 new MoveToSetpoint(m_elevator, elevSetpoint),
                 new MoveToAngle(m_pivot, pivSetpoint)
