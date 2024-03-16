@@ -6,21 +6,21 @@ import frc.robot.Constants;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 public class MoveToSetpointShuffle extends Command {
-
-  private final ElevatorSubsystem elevatorSub;
-
-  public MoveToSetpointShuffle(ElevatorSubsystem elev) {
-    elevatorSub = elev;
-    addRequirements(elev);
-  }
-
-  @Override
-  public void initialize() {
-    elevatorSub.goToPosition(SmartDashboard.getNumber("elev setpoint", 0));
-  }
-  @Override
-  public boolean isFinished() {
-    return elevatorSub.isAtTarget();
-   // return true;
-  }
+    
+    private final ElevatorSubsystem elevatorSub;
+    
+    public MoveToSetpointShuffle(ElevatorSubsystem elev) {
+        elevatorSub = elev;
+        addRequirements(elev);
+    }
+    
+    @Override
+    public void initialize() {
+        elevatorSub.goToPosition(SmartDashboard.getNumber("elev setpoint", 0));
+    }
+    @Override
+    public boolean isFinished() {
+        return elevatorSub.isAtTarget();
+        // return true;
+    }
 }

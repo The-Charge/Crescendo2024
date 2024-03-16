@@ -43,86 +43,86 @@ import frc.robot.Constants.StateLocations;
 import frc.robot.Constants.ButtonBox;
 
 public class RobotContainer {
-
-  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),"swerve"));
-  private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem();
-  private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
-  private final PivotSubsystem m_pivot = new PivotSubsystem();
-  private final CollectorHeadSubsystem m_collector = new CollectorHeadSubsystem();
-
-  XboxController driverXbox = new XboxController(0);
-  Joystick buttonBox = new Joystick(1);
-  
-  private SendableChooser<Command> autoChooser;
-  
-  public RobotContainer() {
-    configureBindings();
-
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chooser", autoChooser);
-    addAutoCommands();
-
-    TeleopDrive teleopDrive = new TeleopDrive(drivebase,
-      () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-      () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-      () -> -driverXbox.getRawAxis(Constants.OperatorConstants.turnAxis),
-      () -> driverXbox.getPOV(),
-      () -> MathUtil.applyDeadband(driverXbox.getLeftTriggerAxis(), OperatorConstants.TRIGGER_DEADBAND) > 0,
-      () -> MathUtil.applyDeadband(driverXbox.getRightTriggerAxis(), OperatorConstants.TRIGGER_DEADBAND) > 0,
-      () -> driverXbox.getRawButtonPressed(XboxController.Button.kBack.value)
-    );
-
-    drivebase.setDefaultCommand(teleopDrive);
-
-    m_collector.setDefaultCommand(new CollectorZero(m_collector));
-
-    SmartDashboard.putNumber("elev setpoint", 0);
-    SmartDashboard.putNumber("piv setpoint", 0);
-    SmartDashboard.putData("move elev", new MoveToSetpointShuffle(m_elevator));    
-    SmartDashboard.putData("move piv",new MoveToAngleShuffle(m_pivot));
-    SmartDashboard.putData("reset abs encoder", new ResetPivEncoder(m_pivot));
-  }
-
-  private void configureBindings() {
-    new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
-
-    new Trigger(() -> buttonBox.getRawButton(ButtonBox.rest)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevRest, StateLocations.pivRest));
-    new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).onTrue(new CollectorReverseAll(m_collector, m_pivot));
-    new Trigger(() -> buttonBox.getRawButton(ButtonBox.zero)).onTrue(new CollectorZero(m_collector));
-    new Trigger(() -> buttonBox.getRawButton(ButtonBox.shoot)).onTrue(new CollectorShoot(m_collector, m_pivot));
-    new Trigger(() -> buttonBox.getRawButton(ButtonBox.shB)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootSpeaker, StateLocations.pivShootSpeaker));
-    new Trigger(() -> buttonBox.getRawButton(ButtonBox.reset)).whileTrue(new ResetElevator(m_elevator, m_pivot));
-    new Trigger(() -> buttonBox.getRawButton(ButtonBox.inS)).onTrue(new CollectorIntakeSource(m_collector));
-    new Trigger(() -> buttonBox.getRawButton(ButtonBox.inG)).onTrue(new CollectorIntakeGround(m_collector, m_pivot));
-    new Trigger(() -> buttonBox.getRawButton(ButtonBox.src)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevSource, StateLocations.pivSource));
-    new Trigger(() -> buttonBox.getRawButton(ButtonBox.amp)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootAmp, StateLocations.pivShootAmp));
-    new Trigger(() -> buttonBox.getRawButton(ButtonBox.gnd)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevFloor, StateLocations.pivFloor));
-    new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOverride)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevClimb, StateLocations.pivClimb));
-    new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOverride)).onFalse(new MoveToSetpoint(m_elevator, 5));
-    //new Trigger(() -> buttonBox.getRawButton(ButtonBox.pivOverride)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevClimb, StateLocations.pivPickupFloor));
-  }
-  private void addAutoCommands() {
-    NamedCommands.registerCommand("intake pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevFloor, Constants.StateLocations.pivFloor));
-    NamedCommands.registerCommand("shoot pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevShootSpeaker, Constants.StateLocations.pivShootSpeaker));
-    NamedCommands.registerCommand("shoot pivot pos", new MoveToAngle(m_pivot,  Constants.StateLocations.pivShootSpeaker));
-    NamedCommands.registerCommand("intake pivot pos", new MoveToAngle(m_pivot, Constants.StateLocations.pivFloor));
-    NamedCommands.registerCommand("shoot elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.elevShootSpeaker));
-    NamedCommands.registerCommand("intake elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.pivFloor));
-    NamedCommands.registerCommand("Shoot", new CollectorShoot(m_collector, m_pivot));
-    NamedCommands.registerCommand("Intake", new CollectorIntakeGround(m_collector, m_pivot));
-  }
-
-  public void setDriveMode() {
-    // drivebase.setDefaultCommand();
-  }
-  public void setMotorBrake(boolean brake) {
-    drivebase.setMotorBrake(brake);
-  }
-  public Command getAutonomousCommand() {
-      return autoChooser.getSelected();
-  }
-
-  public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}
-  public CollectorHeadSubsystem getCollectorHeadSubsystem() {return m_collector;}
+    
+    private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),"swerve"));
+    private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem();
+    private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
+    private final PivotSubsystem m_pivot = new PivotSubsystem();
+    private final CollectorHeadSubsystem m_collector = new CollectorHeadSubsystem();
+    
+    XboxController driverXbox = new XboxController(0);
+    Joystick buttonBox = new Joystick(1);
+    
+    private SendableChooser<Command> autoChooser;
+    
+    public RobotContainer() {
+        configureBindings();
+        
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autoChooser);
+        addAutoCommands();
+        
+        TeleopDrive teleopDrive = new TeleopDrive(drivebase,
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> -driverXbox.getRawAxis(Constants.OperatorConstants.turnAxis),
+        () -> driverXbox.getPOV(),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftTriggerAxis(), OperatorConstants.TRIGGER_DEADBAND) > 0,
+        () -> MathUtil.applyDeadband(driverXbox.getRightTriggerAxis(), OperatorConstants.TRIGGER_DEADBAND) > 0,
+        () -> driverXbox.getRawButtonPressed(XboxController.Button.kBack.value)
+        );
+        
+        drivebase.setDefaultCommand(teleopDrive);
+        
+        m_collector.setDefaultCommand(new CollectorZero(m_collector));
+        
+        SmartDashboard.putNumber("elev setpoint", 0);
+        SmartDashboard.putNumber("piv setpoint", 0);
+        SmartDashboard.putData("move elev", new MoveToSetpointShuffle(m_elevator));    
+        SmartDashboard.putData("move piv",new MoveToAngleShuffle(m_pivot));
+        SmartDashboard.putData("reset abs encoder", new ResetPivEncoder(m_pivot));
+    }
+    
+    private void configureBindings() {
+        new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
+        new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+        
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.rest)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevRest, StateLocations.pivRest));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).onTrue(new CollectorReverseAll(m_collector, m_pivot));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.zero)).onTrue(new CollectorZero(m_collector));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.shoot)).onTrue(new CollectorShoot(m_collector, m_pivot));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.shB)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootSpeaker, StateLocations.pivShootSpeaker));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.reset)).whileTrue(new ResetElevator(m_elevator, m_pivot));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.inS)).onTrue(new CollectorIntakeSource(m_collector));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.inG)).onTrue(new CollectorIntakeGround(m_collector, m_pivot));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.src)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevSource, StateLocations.pivSource));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.amp)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootAmp, StateLocations.pivShootAmp));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.gnd)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevFloor, StateLocations.pivFloor));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOverride)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevClimb, StateLocations.pivClimb));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOverride)).onFalse(new MoveToSetpoint(m_elevator, 5));
+        //new Trigger(() -> buttonBox.getRawButton(ButtonBox.pivOverride)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevClimb, StateLocations.pivPickupFloor));
+    }
+    private void addAutoCommands() {
+        NamedCommands.registerCommand("intake pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevFloor, Constants.StateLocations.pivFloor));
+        NamedCommands.registerCommand("shoot pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevShootSpeaker, Constants.StateLocations.pivShootSpeaker));
+        NamedCommands.registerCommand("shoot pivot pos", new MoveToAngle(m_pivot,  Constants.StateLocations.pivShootSpeaker));
+        NamedCommands.registerCommand("intake pivot pos", new MoveToAngle(m_pivot, Constants.StateLocations.pivFloor));
+        NamedCommands.registerCommand("shoot elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.elevShootSpeaker));
+        NamedCommands.registerCommand("intake elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.pivFloor));
+        NamedCommands.registerCommand("Shoot", new CollectorShoot(m_collector, m_pivot));
+        NamedCommands.registerCommand("Intake", new CollectorIntakeGround(m_collector, m_pivot));
+    }
+    
+    public void setDriveMode() {
+        // drivebase.setDefaultCommand();
+    }
+    public void setMotorBrake(boolean brake) {
+        drivebase.setMotorBrake(brake);
+    }
+    public Command getAutonomousCommand() {
+        return autoChooser.getSelected();
+    }
+    
+    public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}
+    public CollectorHeadSubsystem getCollectorHeadSubsystem() {return m_collector;}
 }

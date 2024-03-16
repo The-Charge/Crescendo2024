@@ -13,23 +13,23 @@ import frc.robot.Constants;
 import frc.robot.commands.Elevator.MoveToSetpoint;
 
 public class ElevatorSubsystem extends SubsystemBase {
-
+    
     private TalonFX elevMotor;
     private int targetCounter;
     private double currentTarget = 0;
-
+    
     public ElevatorSubsystem() {
         elevMotor = new TalonFX(Constants.Elevator.elevatorId);
-
+        
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
         motorConfig.MotorOutput.PeakForwardDutyCycle = Constants.Elevator.maxVBus;
         motorConfig.MotorOutput.PeakReverseDutyCycle = -Constants.Elevator.maxVBus;
         motorConfig.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
-
+        
         motorConfig.CurrentLimits.StatorCurrentLimit = Constants.Elevator.currentLimit;
         motorConfig.CurrentLimits.SupplyTimeThreshold = 0.3;
         motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-
+        
         Slot0Configs slotConfigs = motorConfig.Slot0;
         slotConfigs.kS = slotConfigs.kV = 0;
         slotConfigs.kP = Constants.Elevator.pid.p;
@@ -38,7 +38,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         slotConfigs.kG = Constants.Elevator.kG;
         slotConfigs.GravityType = GravityTypeValue.Elevator_Static;
         elevMotor.getConfigurator().apply(slotConfigs);
-
+        
         elevMotor.getConfigurator().apply(motorConfig);
         
         SoftwareLimitSwitchConfigs softLimits = new SoftwareLimitSwitchConfigs();
@@ -46,10 +46,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         softLimits.ForwardSoftLimitThreshold = Constants.Elevator.maxPos;
         softLimits.ReverseSoftLimitThreshold = Constants.Elevator.minPos;
         elevMotor.getConfigurator().apply(softLimits);
-
+        
         resetTargetCounter();
     }
-
+    
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Elevator I (Amps)", elevMotor.getStatorCurrent().getValueAsDouble());
@@ -57,11 +57,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Elevator Position (In)", getPosition());
         SmartDashboard.putNumber("Elevator Target (Inches)", currentTarget);
     }
-
+    
     public void goToPosition(double inches) {
         currentTarget = Math.min(Math.max(inches, Constants.Elevator.minPos * Constants.Elevator.tickToInchConversion), Constants.Elevator.maxPos * Constants.Elevator.tickToInchConversion);
         resetTargetCounter();
-
+        
         PositionDutyCycle request = new PositionDutyCycle(currentTarget / Constants.Elevator.tickToInchConversion);
         request.Slot = 0;
         elevMotor.setControl(request);
@@ -77,7 +77,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         config.MotorOutput.PeakForwardDutyCycle = Constants.Elevator.maxVBus;
         config.MotorOutput.PeakReverseDutyCycle = -Constants.Elevator.maxVBus;
         config.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
-
+        
         elevMotor.getConfigurator().apply(config.MotorOutput);
     }
     public void coast() {
@@ -85,10 +85,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         config.MotorOutput.PeakForwardDutyCycle = Constants.Elevator.maxVBus;
         config.MotorOutput.PeakReverseDutyCycle = -Constants.Elevator.maxVBus;
         config.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
-
+        
         elevMotor.getConfigurator().apply(config.MotorOutput);
     }
-
+    
     public double getPosition() {
         return elevMotor.getPosition().getValueAsDouble() * Constants.Elevator.tickToInchConversion;
     }
@@ -97,15 +97,15 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
     public boolean isAtTarget() {
         double error = currentTarget - getPosition();
-
+        
         if(Math.abs(error) <= Constants.Elevator.rangeSize) targetCounter++;
         else resetTargetCounter();
-
+        
         if(targetCounter >= Constants.Elevator.rangeTime) return true;
-
+        
         return false;
     }
-
+    
     private void resetTargetCounter() {
         targetCounter = 0;
     }

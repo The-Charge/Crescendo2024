@@ -19,25 +19,25 @@ import frc.robot.Constants;
 import frc.robot.commands.Pivot.MoveToAngle;
 
 public class PivotSubsystem extends SubsystemBase {
-
+    
     private TalonFX pivotMotor;
     private int targetCounter;
     private double targetDeg = 0;
-
+    
     public PivotSubsystem() {
         pivotMotor = new TalonFX(Constants.Pivot.pivotId);
         pivotMotor.setInverted(Constants.Pivot.invertMotor);
-
+        
         //set status frame period 
         TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
-
+        
         talonFXConfigs.CurrentLimits.StatorCurrentLimit = Constants.Pivot.maxCurrent;
         talonFXConfigs.CurrentLimits.SupplyTimeThreshold = 0.3;
         talonFXConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
-
+        
         talonFXConfigs.MotorOutput.PeakForwardDutyCycle = Constants.Pivot.maxVBus;
         talonFXConfigs.MotorOutput.PeakReverseDutyCycle = -Constants.Pivot.maxVBus;
-
+        
         talonFXConfigs.Slot0.kS = 0;
         talonFXConfigs.Slot0.kV = 0;
         talonFXConfigs.Slot0.kP = Constants.Pivot.pid.p;
@@ -46,22 +46,22 @@ public class PivotSubsystem extends SubsystemBase {
         talonFXConfigs.Slot0.kG = 0;
         //talonFXConfigs.Slot0.GravityType = GravityTypeValue.Arm_Cosine; 
         
-         talonFXConfigs.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
+        talonFXConfigs.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
         
         // talonFXConfigs.Feedback.SensorToMechanismRatio = 100; *LOOK AT THIS?*
-
+        
         pivotMotor.getConfigurator().apply(talonFXConfigs);
-
+        
         // SoftwareLimitSwitchConfigs softLimits = new SoftwareLimitSwitchConfigs();
         // softLimits.ForwardSoftLimitEnable = true;
         // softLimits.ReverseSoftLimitEnable = true;
         // softLimits.ForwardSoftLimitThreshold = Constants.Pivot.maxPosTicks;
         // softLimits.ReverseSoftLimitThreshold = Constants.Pivot.minPosTicks;
         // pivotMotor.getConfigurator().apply(softLimits);
-
+        
         resetTargetCounter();
     }
-
+    
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Pivot I (Amps)", pivotMotor.getStatorCurrent().getValueAsDouble());
@@ -69,12 +69,12 @@ public class PivotSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Pivot Position (Deg)", getAngle());
         SmartDashboard.putNumber("Pivot Target (Deg)", targetDeg);
     }
-
+    
     public void pivotToAngle(double deg) {
         // targetDeg = Math.min(Math.max(deg, Constants.Pivot.minPosTicks * Constants.Pivot.ticksToDegConversion), Constants.Pivot.maxPosTicks * Constants.Pivot.ticksToDegConversion);
         targetDeg = deg;
         resetTargetCounter();
-
+        
         pivotMotor.setControl(new PositionDutyCycle(deg / Constants.Pivot.ticksToDegConversion).withSlot(0));
     }
     public void pivotUp() {
@@ -83,15 +83,15 @@ public class PivotSubsystem extends SubsystemBase {
     public void resetEncoder() {
         pivotMotor.setPosition(0);
     }
-
+    
     public boolean isAtTarget() {
         double error = targetDeg - getAngle();
-
+        
         if(Math.abs(error) <= Constants.Pivot.toleranceDeg) targetCounter++;
         else resetTargetCounter();
-
+        
         if(targetCounter >= Constants.Pivot.toleranceTime) return true;
-
+        
         return false;
     }
     public double getAngle() {
@@ -100,7 +100,7 @@ public class PivotSubsystem extends SubsystemBase {
     public boolean isInDeadzone() {
         return getAngle() > Constants.Pivot.noActionStart && getAngle() < Constants.Pivot.noActionEnd;
     }
-
+    
     private void resetTargetCounter() {
         targetCounter = 0;
     }
