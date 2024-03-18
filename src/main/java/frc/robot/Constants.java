@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
 import com.pathplanner.lib.util.PIDConstants;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
@@ -164,21 +166,26 @@ public final class Constants {
         public static final double safeElevatorPoint = 6; //the elevator hight required to turn the pivot freely and not hit anything
     }
     
-    public static abstract class ButtonBox {
-        public static final int rest = 1; //startup location
-        public static final int clear = 2; //collector reverse all
-        public static final int zero = 3; //collector zero
-        public static final int shoot = 4; //collector shoot
-        public static final int shB = 5; //shoot high rear location
-        public static final int reset = 6; //move elevator down then reset
-        public static final int inS = 7; //collector intake source
-        public static final int inG = 8; //collector intake ground
-        public static final int unused1 = 9;
-        public static final int src = 10; //pickup source location
-        public static final int amp = 11; //shoot amp location
-        public static final int gnd = 12; //pickup ground location
-        public static final int unused2 = 13;
-        public static final int elevOverride = 14; //manual elevator control
-        public static final int pivOverride = 15; //manual pivot control
+    public static class ButtonBox {
+        public static final int zero = 1;
+        public static final int clear = 2;
+        public static final int shoot = 3;
+        public static final int reset = 4;
+        public static final int speaker = 5;
+        public static final int amp = 6;
+        public static final int in = 7;
+        public static final int rest = 8;
+        public static final int source = 9;
+        public static final int ground = 10;
+
+        public static final int sliderAxis = 0;
+        public static final double sliderUp = -0.69;
+        public static final double sliderDown = 0.83;
+        public static boolean getSliderUp(double sliderVal) {
+            return sliderVal < sliderUp;
+        }
+        public static boolean getSliderDown(double sliderVal) {
+            return sliderVal > sliderDown;
+        }
     }
 }

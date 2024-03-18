@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -88,20 +89,19 @@ public class RobotContainer {
         new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
         new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
         
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.rest)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevRest, StateLocations.pivRest));
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).whileTrue(new CollectorReverseAll(m_collector, m_pivot));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.zero)).onTrue(new CollectorZero(m_collector));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).onTrue(new CollectorReverseAll(m_collector, m_pivot));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.shoot)).onTrue(new CollectorShoot(m_collector, m_pivot));
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.shB)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootSpeaker, StateLocations.pivShootSpeaker));
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.reset)).whileTrue(new ResetElevator(m_elevator, m_pivot));
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.inS)).onTrue(new CollectorIntakeSource(m_collector));
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.inG)).onTrue(new CollectorIntakeGround(m_collector, m_pivot));
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.src)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevSource, StateLocations.pivSource));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.reset)).onTrue(new ResetElevator(m_elevator, m_pivot));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.speaker)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootSpeaker, StateLocations.pivShootSpeaker));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.amp)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootAmp, StateLocations.pivShootAmp));
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.gnd)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevFloor, StateLocations.pivFloor));
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOverride)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevClimb, StateLocations.pivClimb));
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOverride)).onFalse(new MoveToSetpoint(m_elevator, 5));
-        //new Trigger(() -> buttonBox.getRawButton(ButtonBox.pivOverride)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevClimb, StateLocations.pivPickupFloor));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.in)).onTrue(new CollectorIntake(m_collector, m_pivot));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.reset)).onTrue(new SequentialCommandGroup(new CollectorZero(m_collector), new MovePivotElev(m_elevator, m_pivot, StateLocations.elevRest, StateLocations.pivRest)));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.source)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevSource, StateLocations.pivSource));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.ground)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevFloor, StateLocations.pivFloor));
+        
+        new Trigger(() -> ButtonBox.getSliderUp(buttonBox.getRawAxis(ButtonBox.sliderAxis))).onTrue();
+        new Trigger(() -> ButtonBox.getSliderDown(buttonBox.getRawAxis(ButtonBox.sliderAxis))).onTrue();
     }
     private void addAutoCommands() {
         NamedCommands.registerCommand("intake pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevFloor, Constants.StateLocations.pivFloor));
