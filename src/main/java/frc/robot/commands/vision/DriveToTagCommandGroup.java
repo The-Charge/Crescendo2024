@@ -23,7 +23,7 @@ public class DriveToTagCommandGroup extends SequentialCommandGroup{
 
             addCommands(
                 new SetCurrentCamera(limelight, FixedLLConstants.FIXED_LL_NAME),
-                new SetPipeline(limelight, FixedLLConstants.FIXED_APRILTAG_PIPELINE),
+                new SetPipeline(limelight, VisionConstants.APRILTAG_PIPELINE),
                 new UpdateRobotPose(swerve, limelight),
                 new DriveToTag(swerve, limelight, limelight.gettid(), false),
                 new SetPriorityID(limelight, limelight.getprevtag()),
