@@ -4,28 +4,44 @@
     {
       "anchor": {
         "x": 2.31,
-        "y": 6.98
+        "y": 7.05
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.37,
-        "y": 6.98
+        "y": 7.05
+      },
+      "isLocked": false,
+      "linkedName": "pick note"
+    },
+    {
+      "anchor": {
+        "x": 1.385354324682553,
+        "y": 7.060189683843188
+      },
+      "prevControl": {
+        "x": 1.8266723078582583,
+        "y": 7.135089641389247
+      },
+      "nextControl": {
+        "x": 0.9440363415068478,
+        "y": 6.985289726297128
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.6549898746346785,
-        "y": 6.631709206474043
+        "x": 0.6647280672971791,
+        "y": 6.68
       },
       "prevControl": {
-        "x": 0.5949898746346786,
-        "y": 6.631709206474043
+        "x": 0.6047280672971792,
+        "y": 6.68
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "side speaker"
     }
   ],
   "rotationTargets": [],

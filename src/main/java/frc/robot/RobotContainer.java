@@ -57,10 +57,11 @@ public class RobotContainer {
     
     public RobotContainer() {
         configureBindings();
-        
+
+        addAutoCommands();
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
-        addAutoCommands();
+
         
         TeleopDrive teleopDrive = new TeleopDrive(drivebase,
         () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
@@ -112,6 +113,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("intake elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.pivFloor));
         NamedCommands.registerCommand("Shoot", new CollectorShoot(m_collector, m_pivot));
         NamedCommands.registerCommand("Intake", new CollectorIntakeGround(m_collector, m_pivot));
+
     }
     
     public void setDriveMode() {

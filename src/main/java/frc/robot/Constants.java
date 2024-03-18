@@ -35,7 +35,7 @@ public final class Constants {
     
     public static final class AutonConstants {
         public static final PIDConstants TRANSLATION_PID = new PIDConstants(5.0, 0.0, 0.0);
-        public static final PIDConstants ANGLE_PID = new PIDConstants(4.0, 0.0, 1.0);
+        public static final PIDConstants ANGLE_PID = new PIDConstants(5.0, 0.0, 0.0001);
     }
     
     public static final class DrivebaseConstants {
@@ -155,9 +155,9 @@ public final class Constants {
         public static final double elevShootAmp = 27; //done
         public static final double pivShootAmp = (-30.58 + 8) * Pivot.ticksToDegConversion;
         
-        public static final double elevShootSpeaker = 9; //touching subwoofer done
-        public static final double pivShootSpeaker = (-28.52 + 1) * Pivot.ticksToDegConversion;
-        
+        public static final double elevShootSpeaker = 27; //touching subwoofer done
+       // public static final double pivShootSpeaker = (-28.52 + 1) * Pivot.ticksToDegConversion;
+         public static final double pivShootSpeaker = -60;
         public static final double elevClimb = 27;
         public static final double pivClimb = pivRest;
         
@@ -178,7 +178,8 @@ public final class Constants {
         public static final int amp = 11; //shoot amp location
         public static final int gnd = 12; //pickup ground location
         public static final int unused2 = 13;
-        public static final int elevOverride = 14; //manual elevator control
+        public static final int elevOverride = 14;
+         //manual elevator control
         public static final int pivOverride = 15; //manual pivot control
     }
 }

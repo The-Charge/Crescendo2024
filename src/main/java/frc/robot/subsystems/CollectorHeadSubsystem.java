@@ -102,7 +102,7 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         intakeTop = new CANSparkMax(Constants.Intake.topId, MotorType.kBrushless);
         intakeTop.restoreFactoryDefaults();
         intakeTop.set(0);
-        intakeTop.setIdleMode(IdleMode.kCoast);
+        intakeTop.setIdleMode(IdleMode.kBrake);
         intakeTop.setSmartCurrentLimit(Constants.Intake.maxCurrent);
         
         SparkPIDController pidControllerIntakeTop = intakeTop.getPIDController();
@@ -118,7 +118,7 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         intakeBottom = new CANSparkMax(Constants.Intake.bottomId, MotorType.kBrushless);
         intakeBottom.restoreFactoryDefaults();
         intakeBottom.set(0);
-        intakeBottom.setIdleMode(IdleMode.kCoast);
+        intakeBottom.setIdleMode(IdleMode.kBrake);
         intakeBottom.setSmartCurrentLimit(Constants.Intake.maxCurrent);
         
         SparkPIDController pidControllerIntakeBottom = intakeBottom.getPIDController();

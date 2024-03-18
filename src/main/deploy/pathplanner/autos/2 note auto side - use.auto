@@ -12,7 +12,7 @@
     "data": {
       "commands": [
         {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -26,7 +26,14 @@
                 "data": {
                   "name": "shoot pivot pos"
                 }
-              },
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
               {
                 "type": "named",
                 "data": {
