@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.LEDConstants;
 
 public class LEDStripSubsystem extends SubsystemBase {
 
@@ -20,9 +20,9 @@ public class LEDStripSubsystem extends SubsystemBase {
   private int animationTimer = 0;
 
   public LEDStripSubsystem() {
-    leds = new AddressableLED(Constants.LEDConstants.ledId);
+    leds = new AddressableLED(LEDConstants.ledId);
 
-    buffer = new AddressableLEDBuffer(Constants.LEDConstants.totalLength);
+    buffer = new AddressableLEDBuffer(LEDConstants.totalLength);
     leds.setLength(buffer.getLength());
 
     leds.setData(buffer);
