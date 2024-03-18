@@ -7,6 +7,9 @@ package frc.robot;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -24,6 +27,7 @@ import frc.robot.commands.Pivot.*;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.commands.vision.AutonDriveToTag;
 import frc.robot.commands.vision.DriveToNoteCommandGroup;
+import frc.robot.commands.vision.DriveToPoseCommandGroup;
 import frc.robot.commands.vision.DriveToTagCommandGroup;
 import frc.robot.commands.vision.SwapCurrentLimelight;
 import frc.robot.commands.vision.UpdateRobotPose;
@@ -101,7 +105,7 @@ public class RobotContainer
         NamedCommands.registerCommand("Intake", new CollectorIntakeGround(m_collector, m_pivot));
         NamedCommands.registerCommand("drive to center subwoofer", new AutonDriveToTag(m_limelight, drivebase, getSpeakerCenterTagID()));
         NamedCommands.registerCommand("drive to amp", new AutonDriveToTag(m_limelight, drivebase, getAmpID()));
-
+        NamedCommands.registerCommand("drive to left subwoofer", new DriveToPoseCommandGroup(m_limelight, drivebase, new Pose2d(new Translation2d(0.66, 6.68), new Rotation2d(60))));
         NamedCommands.registerCommand("Update Robot Pose", new UpdateRobotPose(drivebase, m_limelight));
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -160,7 +164,7 @@ public class RobotContainer
 
     new JoystickButton(driverXbox, XboxController.Button.kRightBumper.value).onTrue(new swapPipeline(m_limelight));
     new JoystickButton(driverXbox, XboxController.Button.kLeftStick.value).onTrue(new SwapCurrentLimelight(m_limelight));
-
+    
 
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.rest)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevRest, StateLocations.pivRest));
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).onTrue(new CollectorReverseAll(m_collector, m_pivot));

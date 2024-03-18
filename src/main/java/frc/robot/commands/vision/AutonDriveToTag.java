@@ -15,7 +15,7 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 
 /**
- * An example command that uses an example subsystem.
+ * Drives to tag given a manual tag input (BETA)
  */
 
 public class AutonDriveToTag extends SequentialCommandGroup{
@@ -23,7 +23,7 @@ public class AutonDriveToTag extends SequentialCommandGroup{
 
             addCommands(
                 new SetCurrentCamera(limelight, FixedLLConstants.FIXED_LL_NAME),
-                new SetPipeline(limelight, VisionConstants.APRILTAG_PIPELINE),
+                new SetPipeline(limelight, FixedLLConstants.FIXED_APRILTAG_PIPELINE),
                 new UpdateRobotPose(swerve, limelight),
                 new DriveToTag(swerve, limelight, settag, true),
                 new SetPriorityID(limelight, limelight.getprevtag()),
