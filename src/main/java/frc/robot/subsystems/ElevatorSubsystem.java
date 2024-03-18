@@ -17,6 +17,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private TalonFX elevMotor;
     private int targetCounter;
     private double currentTarget = 0;
+    private boolean hasClimbed = false;
     
     public ElevatorSubsystem() {
         elevMotor = new TalonFX(Constants.Elevator.elevatorId);
@@ -88,7 +89,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         
         elevMotor.getConfigurator().apply(config.MotorOutput);
     }
-    
+    public void setHasClimbed(boolean hasClimbed) {
+        this.hasClimbed = hasClimbed;
+    }
+    public boolean getHasClimbed() {return this.hasClimbed;}
+
     public double getPosition() {
         return elevMotor.getPosition().getValueAsDouble() * Constants.Elevator.tickToInchConversion;
     }

@@ -108,8 +108,6 @@ public final class Constants {
         public static final double maxVBus = 0.8;
         public static final double maxCurrent = 20;
         public static final boolean invertMotor = false;
-        public static final double noActionStart = 0;
-        public static final double noActionEnd = 0;
         
         /*
         conversion math is (targetUnit1 - targetUnit2) / (currentUnit1 - currentUnit2). 1 and 2 are two reference positions to form a proportion

@@ -8,15 +8,12 @@ import frc.robot.subsystems.*;
 public class CollectorShoot extends Command {
 
     private CollectorHeadSubsystem m_collector;
-    private PivotSubsystem m_pivot;
     private Timer timeout, feedTimer;
     private boolean hasStartedIndexers, hasSetTime;
 
-    public CollectorShoot(CollectorHeadSubsystem collector, PivotSubsystem pivot) {
+    public CollectorShoot(CollectorHeadSubsystem collector) {
         this.m_collector = collector;
         addRequirements(collector); //do not reequire pivot
-
-        this.m_pivot = pivot;
     }
 
     @Override
@@ -50,6 +47,6 @@ public class CollectorShoot extends Command {
         if(hasSetTime) {
             SmartDashboard.putNumber("feed timer", feedTimer.get());
         }
-        return timeout.hasElapsed(4.25) || (feedTimer == null ? false : feedTimer.hasElapsed(0.75)) || m_pivot.isInDeadzone();
+        return timeout.hasElapsed(4.25) || (feedTimer == null ? false : feedTimer.hasElapsed(0.75));
     }
 }
