@@ -47,7 +47,6 @@ public class PivotSubsystem extends SubsystemBase {
         //talonFXConfigs.Slot0.GravityType = GravityTypeValue.Arm_Cosine; 
         
         talonFXConfigs.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
-        
         // talonFXConfigs.Feedback.SensorToMechanismRatio = 100; *LOOK AT THIS?*
         
         pivotMotor.getConfigurator().apply(talonFXConfigs);
@@ -71,8 +70,8 @@ public class PivotSubsystem extends SubsystemBase {
     }
     
     public void pivotToAngle(double deg) {
-        // targetDeg = Math.min(Math.max(deg, Constants.Pivot.minPosTicks * Constants.Pivot.ticksToDegConversion), Constants.Pivot.maxPosTicks * Constants.Pivot.ticksToDegConversion);
-        targetDeg = deg;
+        targetDeg = Math.min(Math.max(deg, Constants.Pivot.minPosTicks * Constants.Pivot.ticksToDegConversion), Constants.Pivot.maxPosTicks * Constants.Pivot.ticksToDegConversion);
+        // targetDeg = deg;
         resetTargetCounter();
         
         pivotMotor.setControl(new PositionDutyCycle(targetDeg / Constants.Pivot.ticksToDegConversion).withSlot(0));
@@ -86,6 +85,8 @@ public class PivotSubsystem extends SubsystemBase {
     
     public boolean isAtTarget() {
         double error = targetDeg - getAngle();
+        SmartDashboard.putNumber("pivError", error);
+        SmartDashboard.putNumber("pivTimer", targetCounter);
         
         if(Math.abs(error) <= Constants.Pivot.toleranceDeg) targetCounter++;
         else resetTargetCounter();
@@ -98,7 +99,7 @@ public class PivotSubsystem extends SubsystemBase {
         return (pivotMotor.getPosition().getValueAsDouble() - Constants.Pivot.relOffset) * Constants.Pivot.ticksToDegConversion;
     }
     public boolean isInDeadzone() {
-        return getAngle() > Constants.Pivot.noActionStart && getAngle() < Constants.Pivot.noActionEnd;
+        return getAngle() > -40;
     }
     
     private void resetTargetCounter() {

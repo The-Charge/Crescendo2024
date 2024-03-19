@@ -20,7 +20,7 @@ import swervelib.parser.SwerveParser;
 public class Robot extends TimedRobot {
     
     private static Robot instance;
-    private RobotContainer m_container;
+    public RobotContainer m_container;
     
     private Command m_autoCommand;
     private Timer disabledTimer;
@@ -31,7 +31,10 @@ public class Robot extends TimedRobot {
     public static Robot getInstance() {
         return instance;
     }
-    
+    public static RobotContainer getContainer() {
+        return getInstance().m_container;
+    }
+
     @Override
     public void robotInit() {
         m_container = new RobotContainer();

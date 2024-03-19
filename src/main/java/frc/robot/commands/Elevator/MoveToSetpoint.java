@@ -19,6 +19,7 @@ public class MoveToSetpoint extends Command {
     @Override
     public void initialize() {
         elevatorSub.goToPosition(target);
+        System.out.println("RUNNING");
     }
     @Override
     public boolean isFinished() {

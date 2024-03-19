@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants;
+import frc.robot.*;
 
 public class CollectorHeadSubsystem extends SubsystemBase {
     
@@ -102,7 +102,7 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         intakeTop = new CANSparkMax(Constants.Intake.topId, MotorType.kBrushless);
         intakeTop.restoreFactoryDefaults();
         intakeTop.set(0);
-        intakeTop.setIdleMode(IdleMode.kCoast);
+        intakeTop.setIdleMode(IdleMode.kBrake);
         intakeTop.setSmartCurrentLimit(Constants.Intake.maxCurrent);
         
         SparkPIDController pidControllerIntakeTop = intakeTop.getPIDController();
@@ -118,7 +118,7 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         intakeBottom = new CANSparkMax(Constants.Intake.bottomId, MotorType.kBrushless);
         intakeBottom.restoreFactoryDefaults();
         intakeBottom.set(0);
-        intakeBottom.setIdleMode(IdleMode.kCoast);
+        intakeBottom.setIdleMode(IdleMode.kBrake);
         intakeBottom.setSmartCurrentLimit(Constants.Intake.maxCurrent);
         
         SparkPIDController pidControllerIntakeBottom = intakeBottom.getPIDController();
@@ -148,6 +148,8 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("R Indexer Vel (RPM)", indexerRight.getEncoder().getVelocity());
         SmartDashboard.putNumber("T Intake Vel (RPM)", intakeTop.getEncoder().getVelocity());
         SmartDashboard.putNumber("B Intake Vel (RPM)", intakeBottom.getEncoder().getVelocity());
+
+        if(Robot.getContainer().getPivotSubsystem().isInDeadzone()) zero();
     }
     
     public void zero() {
@@ -161,30 +163,44 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         shooterRight.disable();
     }
     public void shooterVBus(double percent) {
+        if(Robot.getContainer().getPivotSubsystem().isInDeadzone()) return;
+
         shooterLeft.set(percent);
         shooterRight.set(percent);
     }
     public void indexerVBus(double percent) {
+        if(Robot.getContainer().getPivotSubsystem().isInDeadzone()) return;
+
         indexerLeft.set(percent);
         indexerRight.set(percent);
     }
     public void intakeVBus(double percent) {
+        if(Robot.getContainer().getPivotSubsystem().isInDeadzone()) return;
+        
         intakeBottom.set(percent + 0.05);
         intakeTop.set(percent);
     }
     public void shooterVel(double vel) {
+        if(Robot.getContainer().getPivotSubsystem().isInDeadzone()) return;
+
         setTargetVel(vel, shooterLeft);
         setTargetVel(vel, shooterRight);
     }
     public void indexerVel(double vel) {
+        if(Robot.getContainer().getPivotSubsystem().isInDeadzone()) return;
+
         setTargetVel(vel, indexerLeft);
         setTargetVel(vel, indexerRight);
     }
     public void intakeVel(double vel) {
+        if(Robot.getContainer().getPivotSubsystem().isInDeadzone()) return;
+
         setTargetVel(vel, intakeBottom);
         setTargetVel(vel, intakeTop);
     }
     private void setTargetVel(double speed, CANSparkMax motor) {
+        if(Robot.getContainer().getPivotSubsystem().isInDeadzone()) return;
+        
         motor.getPIDController().setReference(speed,CANSparkMax.ControlType.kVelocity);
     }
     

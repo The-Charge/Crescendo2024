@@ -58,10 +58,11 @@ public class RobotContainer {
     
     public RobotContainer() {
         configureBindings();
-        
+
+        addAutoCommands();
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
-        addAutoCommands();
+
         
         TeleopDrive teleopDrive = new TeleopDrive(drivebase,
         () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
@@ -90,9 +91,9 @@ public class RobotContainer {
         new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
         
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.zero)).onTrue(new CollectorZero(m_collector));
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).onTrue(new CollectorReverseAll(m_collector, m_pivot));
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.shoot)).onTrue(new CollectorShoot(m_collector, m_pivot));
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.reset)).onTrue(new ResetElevator(m_elevator, m_pivot));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).onTrue(new CollectorReverseAll(m_collector));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.shoot)).onTrue(new CollectorShoot(m_collector));
+        // new Trigger(() -> buttonBox.getRawButton(ButtonBox.reset)).onTrue(new ResetElevator(m_elevator, m_pivot));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.speaker)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootSpeaker, StateLocations.pivShootSpeaker));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.amp)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootAmp, StateLocations.pivShootAmp));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.in)).onTrue(new CollectorIntake(m_collector, m_pivot));
@@ -100,8 +101,8 @@ public class RobotContainer {
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.source)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevSource, StateLocations.pivSource));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.ground)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevFloor, StateLocations.pivFloor));
         
-        new Trigger(() -> ButtonBox.getSliderUp(buttonBox.getRawAxis(ButtonBox.sliderAxis))).onTrue();
-        new Trigger(() -> ButtonBox.getSliderDown(buttonBox.getRawAxis(ButtonBox.sliderAxis))).onTrue();
+        new Trigger(() -> ButtonBox.getSliderUp(buttonBox.getRawAxis(ButtonBox.sliderAxis))).onTrue(new ClimbUp(m_elevator, m_pivot));
+        new Trigger(() -> ButtonBox.getSliderDown(buttonBox.getRawAxis(ButtonBox.sliderAxis))).onTrue(new ClimbDown(m_elevator, m_pivot));
     }
     private void addAutoCommands() {
         NamedCommands.registerCommand("intake pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevFloor, Constants.StateLocations.pivFloor));
@@ -110,8 +111,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("intake pivot pos", new MoveToAngle(m_pivot, Constants.StateLocations.pivFloor));
         NamedCommands.registerCommand("shoot elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.elevShootSpeaker));
         NamedCommands.registerCommand("intake elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.pivFloor));
-        NamedCommands.registerCommand("Shoot", new CollectorShoot(m_collector, m_pivot));
+        NamedCommands.registerCommand("Shoot", new CollectorShoot(m_collector));
         NamedCommands.registerCommand("Intake", new CollectorIntakeGround(m_collector, m_pivot));
+
     }
     
     public void setDriveMode() {
@@ -126,4 +128,5 @@ public class RobotContainer {
     
     public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}
     public CollectorHeadSubsystem getCollectorHeadSubsystem() {return m_collector;}
+    public PivotSubsystem getPivotSubsystem() {return m_pivot;}
 }
