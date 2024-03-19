@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -50,29 +51,21 @@ import frc.robot.Constants.StateLocations;
 import frc.robot.Constants.ApriltagConstants;
 import frc.robot.Constants.ButtonBox;
 
-/**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a "declarative" paradigm, very
- * little robot logic should actually be handled in the {@link Robot} periodic
- * methods (other than the scheduler calls).
- * Instead, the structure of the robot (including subsystems, commands, and
- * trigger mappings) should be declared here.
- */
-public class RobotContainer
-{
-  // The robot's subsystems and commands are defined here...
+public class RobotContainer {
+
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),"swerve"));
-  private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem(); 
+  private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem();
+  private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
+  private final PivotSubsystem m_pivot = new PivotSubsystem();
+  private final CollectorHeadSubsystem m_collector = new CollectorHeadSubsystem();
   private static final VisionSubsystem m_limelight = new VisionSubsystem();
 
- 
-  // CommandJoystick rotationController = new CommandJoystick(1);
 
-
-  // Replace with CommandPS4Controller or CommandJoystick if needed
+  XboxController driverXbox = new XboxController(0);
   Joystick buttonBox = new Joystick(1);
+  
   private SendableChooser<Command> autoChooser;
-
+  
   // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   XboxController driverXbox = new XboxController(0);
 
@@ -92,7 +85,7 @@ public class RobotContainer
     LEDVision LEDLimelight = new LEDVision(m_ledSubsystem, m_limelight);  
     // Configure the trigger bindings
     configureBindings();
-    //m_collector.zero();
+//m_collector.zero();
         autoChooser = AutoBuilder.buildAutoChooser();
         NamedCommands.registerCommand("intake pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevFloor, Constants.StateLocations.pivFloor));
         NamedCommands.registerCommand("shoot pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevShootSpeaker, Constants.StateLocations.pivShootSpeaker));
@@ -107,9 +100,9 @@ public class RobotContainer
         NamedCommands.registerCommand("drive to amp", new AutonDriveToTag(m_limelight, drivebase, getAmpID()));
         NamedCommands.registerCommand("drive to left subwoofer", new DriveToPoseCommandGroup(m_limelight, drivebase, new Pose2d(new Translation2d(0.66, 6.68), new Rotation2d(60))));
         NamedCommands.registerCommand("Update Robot Pose", new UpdateRobotPose(drivebase, m_limelight));
-        autoChooser = AutoBuilder.buildAutoChooser();
-        SmartDashboard.putData("Auto Chooser", autoChooser);
-        
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+    
         
     
       // in robot in auton init: m_autonomousCommand = m_robotContainer.getAutonomousCommand();
@@ -126,7 +119,7 @@ public class RobotContainer
     );
 
     drivebase.setDefaultCommand(teleopDrive);
-    m_ledSubsystem.setDefaultCommand(LEDLimelight);
+m_ledSubsystem.setDefaultCommand(LEDLimelight);
  
   }
 
@@ -144,11 +137,9 @@ public class RobotContainer
    * Flight joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-
     new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
-    new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new RepeatCommand(new UpdateRobotPose(drivebase, m_limelight)));
+new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new RepeatCommand(new UpdateRobotPose(drivebase, m_limelight)));
     
     new JoystickButton(driverXbox, XboxController.Button.kStart.value).whileTrue(new DriveToTagCommandGroup(m_limelight, drivebase));
     new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(new DriveToNoteCommandGroup(m_limelight, drivebase));
@@ -180,7 +171,7 @@ public class RobotContainer
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOverride)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevClimb, StateLocations.pivClimb));
     new Trigger(() -> buttonBox.getRawButton(ButtonBox.elevOverride)).onFalse(new MoveToSetpoint(m_elevator, 5));
     //new Trigger(() -> buttonBox.getRawButton(ButtonBox.pivOverride)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevClimb, StateLocations.pivPickupFloor));
-     
+  
     SmartDashboard.putNumber("elev setpoint", 0);
     SmartDashboard.putNumber("piv setpoint", 0);
     SmartDashboard.putData("move elev", new MoveToSetpointShuffle(m_elevator));    
@@ -198,14 +189,13 @@ public class RobotContainer
   public void setDriveMode() {
     // drivebase.setDefaultCommand();
   }
-
   public void setMotorBrake(boolean brake) {
     drivebase.setMotorBrake(brake);
   }
   public Command getAutonomousCommand() {
       return autoChooser.getSelected();
   }
-  public double getSpeakerCenterTagID(){
+public double getSpeakerCenterTagID(){
     Optional<Alliance> ally = DriverStation.getAlliance();
     if (ally.get() == Alliance.Red){
       return ApriltagConstants.RED_SPEAKER_CENTER_TAG; 
@@ -237,5 +227,5 @@ public class RobotContainer
 
   public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}
   public CollectorHeadSubsystem getCollectorHeadSubsystem() {return m_collector;}
-  public static VisionSubsystem getlimelight(){return m_limelight;}
+public static VisionSubsystem getlimelight(){return m_limelight;}
 }
