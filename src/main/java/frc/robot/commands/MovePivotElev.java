@@ -48,20 +48,20 @@ public class MovePivotElev extends Command {
 
     @Override
     public void initialize() {
-        if((elevSetpoint < Constants.StateLocations.safeElevatorPoint) && (pivSetpoint != Constants.StateLocations.pivRest && pivSetpoint != Constants.StateLocations.pivFloor)) {
+        if((pivSetpoint > 0 || pivSetpoint < StateLocations.pivFloor) && (elevSetpoint < StateLocations.safeElevatorPoint)) {
             //DriverStation.reportError("Invalid location for elev/piv", null);
             return;
         } 
-        else if(elevSetpoint < Constants.StateLocations.safeElevatorPoint && m_elevator.getPosition() > Constants.StateLocations.safeElevatorPoint) {
-            action = new SequentialCommandGroup(
-                new MoveToAngle(m_pivot, pivSetpoint),
-                new MoveToSetpoint(m_elevator, elevSetpoint)
-            );
-        }
-        else if(elevSetpoint > Constants.StateLocations.safeElevatorPoint && m_elevator.getPosition() < Constants.StateLocations.safeElevatorPoint) {
+        else if(m_elevator.getPosition() < StateLocations.safeElevatorPoint && elevSetpoint > StateLocations.safeElevatorPoint && (pivSetpoint > 0 || pivSetpoint < StateLocations.pivFloor)) {
             action = new SequentialCommandGroup(
                 new MoveToSetpoint(m_elevator, elevSetpoint),
                 new MoveToAngle(m_pivot, pivSetpoint)
+            );
+        }
+        else if((m_pivot.getAngle() > 0 || m_pivot.getAngle() < StateLocations.pivFloor) && m_elevator.getPosition() > StateLocations.safeElevatorPoint && elevSetpoint < StateLocations.safeElevatorPoint) {
+            action = new SequentialCommandGroup(
+                new MoveToAngle(m_pivot, pivSetpoint),
+                new MoveToSetpoint(m_elevator, elevSetpoint)
             );
         }
         else {

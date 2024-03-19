@@ -104,7 +104,7 @@ public final class Constants {
         public static final double toleranceTime = 8;
         
         public static final double minPosTicks = -63.30;
-        public static final double maxPosTicks = 3.21;
+        public static final double maxPosTicks = 1;
         public static final double maxVBus = 0.8;
         public static final double maxCurrent = 20;
         public static final boolean invertMotor = false;

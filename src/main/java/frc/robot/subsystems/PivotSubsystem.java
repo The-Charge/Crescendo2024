@@ -70,8 +70,8 @@ public class PivotSubsystem extends SubsystemBase {
     }
     
     public void pivotToAngle(double deg) {
-        // targetDeg = Math.min(Math.max(deg, Constants.Pivot.minPosTicks * Constants.Pivot.ticksToDegConversion), Constants.Pivot.maxPosTicks * Constants.Pivot.ticksToDegConversion);
-        targetDeg = deg;
+        targetDeg = Math.min(Math.max(deg, Constants.Pivot.minPosTicks * Constants.Pivot.ticksToDegConversion), Constants.Pivot.maxPosTicks * Constants.Pivot.ticksToDegConversion);
+        // targetDeg = deg;
         resetTargetCounter();
         
         pivotMotor.setControl(new PositionDutyCycle(targetDeg / Constants.Pivot.ticksToDegConversion).withSlot(0));
@@ -85,6 +85,8 @@ public class PivotSubsystem extends SubsystemBase {
     
     public boolean isAtTarget() {
         double error = targetDeg - getAngle();
+        SmartDashboard.putNumber("pivError", error);
+        SmartDashboard.putNumber("pivTimer", targetCounter);
         
         if(Math.abs(error) <= Constants.Pivot.toleranceDeg) targetCounter++;
         else resetTargetCounter();

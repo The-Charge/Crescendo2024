@@ -1,5 +1,6 @@
 package frc.robot.commands.Elevator;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.commands.Pivot.MoveToAngle;
@@ -13,7 +14,7 @@ public class ResetElevator extends Command {
 
     public ResetElevator(ElevatorSubsystem elev, PivotSubsystem piv) {
         this.elev = elev;
-        addRequirements(elev);
+        addRequirements(elev, piv);
 
         pivMove = new MoveToAngle(piv, Constants.StateLocations.pivSource);
     }
@@ -24,6 +25,7 @@ public class ResetElevator extends Command {
     }
     @Override
     public void execute() {
+        SmartDashboard.putBoolean("resetPivIsFinished", pivMove.isFinished());
         if(pivMove.isFinished() && !hasCoasted) {
             elev.coast();
             elev.stopElevator();
