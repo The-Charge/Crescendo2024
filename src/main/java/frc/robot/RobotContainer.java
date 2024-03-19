@@ -91,13 +91,14 @@ public class RobotContainer {
         new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
         
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.zero)).onTrue(new CollectorZero(m_collector));
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).onTrue(new CollectorReverseAll(m_collector));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).whileTrue(new CollectorReverseAll(m_collector));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.shoot)).onTrue(new CollectorShoot(m_collector));
-        // new Trigger(() -> buttonBox.getRawButton(ButtonBox.reset)).onTrue(new ResetElevator(m_elevator, m_pivot));
+        // new Trigger(() -> buttonBox.getRawButton(ButtonBox.reset)).whileTrue(new ResetElevator(m_elevator, m_pivot));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.speaker)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootSpeaker, StateLocations.pivShootSpeaker));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.amp)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootAmp, StateLocations.pivShootAmp));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.in)).onTrue(new CollectorIntake(m_collector, m_pivot));
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.reset)).onTrue(new SequentialCommandGroup(new CollectorZero(m_collector), new MovePivotElev(m_elevator, m_pivot, StateLocations.elevRest, StateLocations.pivRest)));
+        //new Trigger(() -> buttonBox.getRawButton(ButtonBox.in)).onTrue(new CollectorIntakeSource(m_collector));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.rest)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevRest, StateLocations.pivRest));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.source)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevSource, StateLocations.pivSource));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.ground)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevFloor, StateLocations.pivFloor));
         

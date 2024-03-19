@@ -25,8 +25,9 @@ public class CollectorIntake extends Command {
         }
         task.schedule();
     }
+
     @Override
     public boolean isFinished() {
-        return task.isFinished();
+        return true;
     }
 }

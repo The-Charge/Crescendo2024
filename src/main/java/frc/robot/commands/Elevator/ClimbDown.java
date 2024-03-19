@@ -28,6 +28,10 @@ public class ClimbDown extends Command {
         task.schedule();
     }
     @Override
+    public void end(boolean interrupted) {
+        elev.setHasClimbed(false);
+    }
+    @Override
     public boolean isFinished() {
         return task == null ? true : task.isFinished();
     }
