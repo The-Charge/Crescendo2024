@@ -58,12 +58,6 @@ public class VisionSubsystem extends SubsystemBase{
         distance = Math.pow((ta * 1.82), -0.468);   //formula: 1.82x^-0.468, in meters
 
         SmartDashboard.putNumber("ll latency", limelightlatency);
-        if (tv > 0){
-            LimelightHelpers.setLEDMode_ForceBlink(limelightname);
-        }
-        else{
-            LimelightHelpers.setLEDMode_ForceOn(limelightname);
-        }
     }
 
     @Override
