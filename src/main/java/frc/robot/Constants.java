@@ -157,7 +157,7 @@ public final class Constants {
         public static final double elevFloor = 0; //done
         public static final double pivFloor = -35.2 * Pivot.ticksToDegConversion;
         
-        public static final double elevSource = 15; //done
+        public static final double elevSource = 18.7; //done
         public static final double pivSource = -7.99 * Pivot.ticksToDegConversion;
         
         public static final double elevShootAmp = 27; //done
@@ -165,7 +165,7 @@ public final class Constants {
         
         public static final double elevShootSpeaker = 27; //touching subwoofer done
        // public static final double pivShootSpeaker = (-28.52 + 1) * Pivot.ticksToDegConversion;
-         public static final double pivShootSpeaker = -60;
+         public static final double pivShootSpeaker = -63;
         public static final double elevClimb = 27;
         public static final double pivClimb = pivRest;
         
