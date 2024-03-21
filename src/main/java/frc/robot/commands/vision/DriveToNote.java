@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
@@ -40,6 +41,8 @@ public class DriveToNote extends Command {
         drive_controller.setTolerance(VisionConstants.TARGET_DISTANCE_TOLERANCE_THRESHOLD);
         drive_controller.setSetpoint(0.0);
 
+        detectiontimer = new Timer();
+
     }
 
  
@@ -67,20 +70,23 @@ public class DriveToNote extends Command {
       
       swerve.drive(new Translation2d(-1 * TranslationVal * 14.5,0), RotationVal * swerve.getSwerveController().config.maxAngularVelocity, false);
     }
-    if (limelight.gettv() < 0.0 && detectiontimer.hasElapsed(0.0)){
-       detectiontimer = new Timer();
-       detectiontimer.start();
-       timerstarted = true;
+    if (limelight.gettv() <= 0.0){
+       if (!timerstarted){
+         detectiontimer = new Timer();
+         detectiontimer.start();
+         timerstarted = true;
+       } 
 
+    }
+    if (detectiontimer != null){
+      SmartDashboard.putNumber("detectiontimer", detectiontimer.get());
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    heading_controller.reset();
-    drive_controller.reset();
-    swerve.lock();
+    detectiontimer = new Timer();
   }
 
   // Returns true when the command should end.
