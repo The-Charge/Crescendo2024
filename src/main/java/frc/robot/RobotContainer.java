@@ -27,7 +27,11 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants;
 import frc.robot.commands.led.*;
 import frc.robot.commands.Pivot.*;
+import frc.robot.commands.swervedrive.drivebase.TargetLockDriveCommandGroup;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
+import frc.robot.commands.vision.DriveToNote;
+import frc.robot.commands.vision.DriveToNoteCommandGroup;
+import frc.robot.commands.vision.SwapCurrentLimelight;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
@@ -49,7 +53,8 @@ public class RobotContainer {
     private final LEDStripSubsystem m_ledSubsystem = new LEDStripSubsystem();
     private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
     private final PivotSubsystem m_pivot = new PivotSubsystem();
-    private final CollectorHeadSubsystem m_collector = new CollectorHeadSubsystem();
+    private static final CollectorHeadSubsystem m_collector = new CollectorHeadSubsystem();
+    private static final VisionSubsystem m_limelight = new VisionSubsystem();
     
     XboxController driverXbox = new XboxController(0);
     Joystick buttonBox = new Joystick(1);
@@ -89,6 +94,18 @@ public class RobotContainer {
     private void configureBindings() {
         new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue((new InstantCommand(drivebase::zeroGyro)));
         new JoystickButton(driverXbox, XboxController.Button.kX.value).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+        new JoystickButton(driverXbox, XboxController.Button.kRightBumper.value).whileTrue(new DriveToNoteCommandGroup(m_limelight, drivebase));
+        new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value).whileTrue(new TargetLockDriveCommandGroup(
+            m_limelight,
+            drivebase,        
+            () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
+                OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
+                OperatorConstants.LEFT_X_DEADBAND),
+            () -> -driverXbox.getRawAxis(Constants.OperatorConstants.turnAxis))
+                );
+    
+        new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new SwapCurrentLimelight(m_limelight));
         
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.zero)).onTrue(new CollectorZero(m_collector));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).whileTrue(new CollectorReverseAll(m_collector));
@@ -128,6 +145,7 @@ public class RobotContainer {
     }
     
     public LEDStripSubsystem getLEDSubsystem() {return m_ledSubsystem;}
-    public CollectorHeadSubsystem getCollectorHeadSubsystem() {return m_collector;}
+    public static CollectorHeadSubsystem getCollectorHeadSubsystem() {return m_collector;}
     public PivotSubsystem getPivotSubsystem() {return m_pivot;}
+    public static VisionSubsystem getlimelight() {return m_limelight;}
 }

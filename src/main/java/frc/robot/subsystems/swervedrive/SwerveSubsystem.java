@@ -24,7 +24,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.robot.Constants.ApriltagConstants;
 import frc.robot.Constants.AutonConstants;
+import frc.robot.subsystems.VisionSubsystem;
+
 import java.io.File;
 import java.util.function.DoubleSupplier;
 import swervelib.SwerveController;
@@ -500,6 +504,25 @@ public class SwerveSubsystem extends SubsystemBase
         return swerveDrive.getPitch();
     }
     
+    public void addVisionReading(VisionSubsystem limelight){
+      Pose2d setpose;
+      if (limelight.gettv() > 0.0){
+        setpose = limelight.getRobotFieldPose();
+      swerveDrive.addVisionMeasurement(setpose, Timer.getFPGATimestamp());
+      }
+    }
+    public boolean updatedPoseWithinThreshold(VisionSubsystem limelight){
+      boolean withinThreshold;
+      Pose2d setpose;
+      setpose = limelight.getRobotFieldPose();
+      withinThreshold = Math.abs(swerveDrive.getPose().getX() - setpose.getX()) < ApriltagConstants.BOTPOSE_THRESHOLD_TRANSLATION;
+      withinThreshold &= Math.abs(swerveDrive.getPose().getY() - setpose.getY()) < ApriltagConstants.BOTPOSE_THRESHOLD_TRANSLATION;
+      withinThreshold &= Math.abs(swerveDrive.getPose().getRotation().getDegrees() - setpose.getRotation().getDegrees()) < ApriltagConstants.BOTPOSE_THRESHOLD_ROTATION;
+      return withinThreshold;
+    }
+  
+
+
     /**
     * Add a fake vision reading for testing purposes.
     */

@@ -206,7 +206,7 @@ public class CollectorHeadSubsystem extends SubsystemBase {
     
     public boolean shootIsATarget() {
         // return isAtTarget(Constants.Shooter.leftVelTarget, Constants.Shooter.rightVelTarget, Constants.Shooter.velDeadband, Constants.Shooter.velDeadbandTime, shooterLeft, shooterRight);
-        return shooterLeft.getEncoder().getVelocity() > Constants.Shooter.leftVelTarget && shooterRight.getEncoder().getVelocity() > Constants.Shooter.rightVelTarget;
+        return Robot.getContainer().getPivotSubsystem().isInDeadzone() || shooterLeft.getEncoder().getVelocity() > Constants.Shooter.leftVelTarget && shooterRight.getEncoder().getVelocity() > Constants.Shooter.rightVelTarget;
     }
     private boolean isAtTarget(double target1, double target2, double deadband, double requiredTime, CANSparkMax motor1, CANSparkMax motor2) {
         double error1 = target1 - motor1.getEncoder().getVelocity();
