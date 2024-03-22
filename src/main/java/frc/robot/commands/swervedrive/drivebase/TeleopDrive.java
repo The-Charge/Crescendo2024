@@ -136,14 +136,19 @@ public class TeleopDrive extends Command {
         }
         
         boolean hasAlliance = DriverStation.getAlliance().isPresent();
-        if(hasAlliance && isFieldCentric && DriverStation.getAlliance().get() == Alliance.Red) allianceCorrection = -1;
+        if(hasAlliance && isFieldCentric && DriverStation.getAlliance().get() == Alliance.Red) {
+            allianceCorrection = -1;
+        }
+        else { 
+            allianceCorrection = 1;
+        }
         ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble() * allianceCorrection, vY.getAsDouble() * allianceCorrection, headingX, headingY);
         //ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble(), vY.getAsDouble(), new Rotation2d(swerve.getHeading().getRadians()));
         if (centricToggle.getAsBoolean()) {
             isFieldCentric = !isFieldCentric;
         }
         // Limit velocity to prevent tippy
-        Translation2d translation = new Translation2d(vX.getAsDouble()*Constants.DrivebaseConstants.MAX_SPEED_FEET_PER_SECOND, vY.getAsDouble()*Constants.DrivebaseConstants.MAX_SPEED_FEET_PER_SECOND);
+        Translation2d translation = new Translation2d(vX.getAsDouble()*Constants.DrivebaseConstants.MAX_SPEED_FEET_PER_SECOND * allianceCorrection, vY.getAsDouble()*Constants.DrivebaseConstants.MAX_SPEED_FEET_PER_SECOND * allianceCorrection);
         //translation = SwerveMath.limitVelocity(translation, swerve.getFieldVelocity(), swerve.getPose(),
         //   Constants.LOOP_TIME, Constants.ROBOT_MASS, List.of(Constants.CHASSIS),
         //  swerve.getSwerveDriveConfiguration());

@@ -62,8 +62,12 @@
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/SmartDashboard/Auto Chooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/MoveToAngle": "Command",
+      "/SmartDashboard/MoveToSetpoint": "Command",
       "/SmartDashboard/Pigeon 2 (v6) [13]": "Gyro",
       "/SmartDashboard/Pigeon 2 [13]": "Gyro",
+      "/SmartDashboard/ResetElevEncoder": "Command",
+      "/SmartDashboard/ResetPivEncoder": "Command",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
       "/SmartDashboard/move elev": "Command",
       "/SmartDashboard/move piv": "Command",
@@ -113,9 +117,6 @@
         }
       }
     }
-  },
-  "NetworkTables Info": {
-    "visible": true
   },
   "NetworkTables View": {
     "visible": false

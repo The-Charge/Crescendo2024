@@ -66,7 +66,6 @@ public class Robot extends TimedRobot {
         // new DisableLEDs(m_robotContainer.getLEDSubsystem()).schedule();
         new CollectorZero(RobotContainer.getCollectorHeadSubsystem()).schedule();
 
-        new SetLEDBrightness(m_container.getLEDSubsystem(), 0.5, false);
         new LEDChase(m_container.getLEDSubsystem(), Color.kLime, Color.kGold, () -> false).schedule();
 
     }
