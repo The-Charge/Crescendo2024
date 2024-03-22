@@ -9,6 +9,10 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
+import frc.robot.commands.led.LEDChase;
+import frc.robot.Constants.LEDConstants;
 
 public class LEDStripSubsystem extends SubsystemBase {
     
@@ -96,8 +100,8 @@ public class LEDStripSubsystem extends SubsystemBase {
         animationTimer++;
     }
     public void chase(Color col1, Color col2) {
-        final int segmentLength = 10;
-        final double speedModifier = 0.4;
+        final int segmentLength = 15;
+        final double speedModifier = 0.3;
         
         for(int i = 0; i < getStripLength(); i++) {
             setPixelColor(i, (Math.floor((i + animationTimer * speedModifier) / segmentLength) % 2 == 0 ? col1 : col2));
@@ -133,6 +137,33 @@ public class LEDStripSubsystem extends SubsystemBase {
             hasChanged = true;
         }
     }
+
+    public void setVisionPixelRGB(){
+        /*
+        if (RobotContainer.getlimelight().gettv() > 0 && (RobotContainer.getCollectorHeadSubsystem().getNoteSensor1() || RobotContainer.getCollectorHeadSubsystem().getNoteSensor2())){
+          setRange(0, getStripLength(), Color.kGold);
+        }
+        else if (RobotContainer.getlimelight().gettv() > 0 && (!RobotContainer.getCollectorHeadSubsystem().getNoteSensor1() || !RobotContainer.getCollectorHeadSubsystem().getNoteSensor2())){
+          setRange(0, getStripLength(), Color.kOrange);
+        }
+       else{
+          setRange(0, getStripLength(), Color.kGreen);
+        }
+         */
+        if (RobotContainer.getCollectorHeadSubsystem().getNoteSensor2()){
+          setRange(0, getStripLength(), Color.kLime);
+        }
+         else if (RobotContainer.getlimelight().gettv() > 0){
+          /*for(int i = 0; i < getStripLength(); i++) {
+            setPixelRGB(i, 255, 0, 0, false);
+          }*/
+          setRange(0, getStripLength(), Color.kGold);
+        }
+        else{
+          chase(Color.kLime, Color.kGold);
+       }
+   
+  }
     /**
     * Manually request and update to the LEDs
     */

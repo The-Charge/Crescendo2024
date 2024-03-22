@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -32,7 +33,7 @@ public class Robot extends TimedRobot {
         return instance;
     }
     public static RobotContainer getContainer() {
-        return getInstance().m_container;
+        return instance.m_container;
     }
 
     @Override
@@ -40,8 +41,16 @@ public class Robot extends TimedRobot {
         m_container = new RobotContainer();
         
         disabledTimer = new Timer();
-        new SetLEDBrightness(m_container.getLEDSubsystem(), 0.5, false);
-        new LEDChase(m_container.getLEDSubsystem(), Color.kLime, Color.kGold, () -> false).schedule();
+        
+        // Connect to 172.22.11.2:2011 to see fixed limelight
+         PortForwarder.add(2011, "limelight-fixed.local", 5800);
+         PortForwarder.add(2011, "limelight-fixed.local", 5801);
+         PortForwarder.add(2011, "limelight-fixed.local", 5805);
+
+        // Connect to 172.22.11.2:2012 to see shooter limelight
+         PortForwarder.add(2012, "limelight-shooter.local", 5800);
+         PortForwarder.add(2012, "limelight-shooter.local", 5801);
+         PortForwarder.add(2012, "limelight-shooter.local", 5805);
     }
     @Override
     public void robotPeriodic() {
@@ -55,7 +64,11 @@ public class Robot extends TimedRobot {
         disabledTimer.start();
         
         // new DisableLEDs(m_robotContainer.getLEDSubsystem()).schedule();
-        new CollectorZero(m_container.getCollectorHeadSubsystem()).schedule();
+        new CollectorZero(RobotContainer.getCollectorHeadSubsystem()).schedule();
+
+        new SetLEDBrightness(m_container.getLEDSubsystem(), 0.5, false);
+        new LEDChase(m_container.getLEDSubsystem(), Color.kLime, Color.kGold, () -> false).schedule();
+
     }
     @Override
     public void disabledPeriodic() {
@@ -75,6 +88,8 @@ public class Robot extends TimedRobot {
         if (m_autoCommand != null) {
             m_autoCommand.schedule();
         }
+        new SetLEDBrightness(m_container.getLEDSubsystem(), 0.5, false);
+        new LEDVision(m_container.getLEDSubsystem()).schedule();
     }
     @Override
     public void autonomousPeriodic() {}
@@ -88,6 +103,8 @@ public class Robot extends TimedRobot {
         }
         m_container.setDriveMode();
         m_container.setMotorBrake(true);
+        new SetLEDBrightness(m_container.getLEDSubsystem(), 0.5, false);
+        new LEDVision(m_container.getLEDSubsystem()).schedule();
     }
     @Override
     public void teleopPeriodic() {}

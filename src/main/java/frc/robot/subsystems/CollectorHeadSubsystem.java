@@ -149,7 +149,7 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("T Intake Vel (RPM)", intakeTop.getEncoder().getVelocity());
         SmartDashboard.putNumber("B Intake Vel (RPM)", intakeBottom.getEncoder().getVelocity());
 
-        if(Robot.getContainer().getPivotSubsystem().isInDeadzone()) zero();
+        if(Robot.getContainer().getPivotSubsystem().isInDeadzone() && (shooterLeft.getEncoder().getVelocity() > 100 || shooterRight.getEncoder().getVelocity() > 100)) zero();
     }
     
     public void zero() {
@@ -169,13 +169,13 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         shooterRight.set(percent);
     }
     public void indexerVBus(double percent) {
-        if(Robot.getContainer().getPivotSubsystem().isInDeadzone()) return;
+        if(Robot.getContainer().getPivotSubsystem().isInDeadzone() && percent >= 0.9) return;
 
         indexerLeft.set(percent);
         indexerRight.set(percent);
     }
     public void intakeVBus(double percent) {
-        if(Robot.getContainer().getPivotSubsystem().isInDeadzone()) return;
+        if(Robot.getContainer().getPivotSubsystem().isInDeadzone() && percent >= 0.9) return;
         
         intakeBottom.set(percent + 0.05);
         intakeTop.set(percent);
@@ -187,13 +187,13 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         setTargetVel(vel, shooterRight);
     }
     public void indexerVel(double vel) {
-        if(Robot.getContainer().getPivotSubsystem().isInDeadzone()) return;
+        if(Robot.getContainer().getPivotSubsystem().isInDeadzone() && vel >= 9000) return;
 
         setTargetVel(vel, indexerLeft);
         setTargetVel(vel, indexerRight);
     }
     public void intakeVel(double vel) {
-        if(Robot.getContainer().getPivotSubsystem().isInDeadzone()) return;
+        if(Robot.getContainer().getPivotSubsystem().isInDeadzone() && vel >= 9000) return;
 
         setTargetVel(vel, intakeBottom);
         setTargetVel(vel, intakeTop);
@@ -206,7 +206,7 @@ public class CollectorHeadSubsystem extends SubsystemBase {
     
     public boolean shootIsATarget() {
         // return isAtTarget(Constants.Shooter.leftVelTarget, Constants.Shooter.rightVelTarget, Constants.Shooter.velDeadband, Constants.Shooter.velDeadbandTime, shooterLeft, shooterRight);
-        return shooterLeft.getEncoder().getVelocity() > Constants.Shooter.leftVelTarget && shooterRight.getEncoder().getVelocity() > Constants.Shooter.rightVelTarget;
+        return Robot.getContainer().getPivotSubsystem().isInDeadzone() || shooterLeft.getEncoder().getVelocity() > Constants.Shooter.leftVelTarget && shooterRight.getEncoder().getVelocity() > Constants.Shooter.rightVelTarget;
     }
     private boolean isAtTarget(double target1, double target2, double deadband, double requiredTime, CANSparkMax motor1, CANSparkMax motor2) {
         double error1 = target1 - motor1.getEncoder().getVelocity();
