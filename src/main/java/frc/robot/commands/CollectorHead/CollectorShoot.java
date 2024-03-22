@@ -23,8 +23,8 @@ public class CollectorShoot extends Command {
         timeout.start();
 
         m_collector.resetTargetCounter();
-        m_collector.shooterVBus(1);
-        // m_collector.shooterVel(10750);
+        // m_collector.shooterVBus(1);
+        m_collector.shooterVel(6000);
         hasStartedIndexers = false;
         hasSetTime = false;
     }

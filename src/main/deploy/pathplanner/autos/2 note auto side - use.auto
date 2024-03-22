@@ -18,13 +18,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot elev pos"
+                  "name": "shoot side elev pos"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot pivot pos"
+                  "name": "shoot side pivot pos"
                 }
               }
             ]
@@ -88,13 +88,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot elev pos"
+                  "name": "shoot side elev pos"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot pivot pos"
+                  "name": "shoot side pivot pos"
                 }
               },
               {

@@ -106,14 +106,14 @@ public class RobotContainer {
             () -> -driverXbox.getRawAxis(Constants.OperatorConstants.turnAxis))
                 );
     
-        new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(new ManualDown(m_pivot, m_elevator));
-        new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new ManualUp(m_pivot, m_elevator));
+        new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new ManualDown(m_pivot, m_elevator));
+        new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(new ManualUp(m_pivot, m_elevator));
         
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.zero)).onTrue(new CollectorZero(m_collector));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).whileTrue(new CollectorReverseAll(m_collector));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.shoot)).onTrue(new CollectorShoot(m_collector));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.reset)).whileTrue(new ResetElevator(m_elevator, m_pivot)/*.withInterruptBehavior(InterruptionBehavior.kCancelIncoming)*/);
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.speaker)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootSpeaker, StateLocations.pivShootSpeaker));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.speaker)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootSpeakerCenter, StateLocations.pivShootSpeakerCenter));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.amp)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootAmp, StateLocations.pivShootAmp));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.in)).onTrue(new CollectorIntake(m_collector, m_pivot));
         //new Trigger(() -> buttonBox.getRawButton(ButtonBox.in)).onTrue(new CollectorIntakeSource(m_collector));
@@ -125,15 +125,20 @@ public class RobotContainer {
         new Trigger(() -> ButtonBox.getSliderDown(buttonBox.getRawAxis(ButtonBox.sliderAxis))).onTrue(new ClimbDown(m_elevator, m_pivot));
     }
     private void addAutoCommands() {
+        NamedCommands.registerCommand("shoot center pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevShootSpeakerCenter, Constants.StateLocations.pivShootSpeakerCenter));
+        NamedCommands.registerCommand("shoot center elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.elevShootSpeakerCenter));
+        NamedCommands.registerCommand("shoot center pivot pos", new MoveToAngle(m_pivot,  Constants.StateLocations.pivShootSpeakerCenter));
+        
+        NamedCommands.registerCommand("shoot side pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevShootSpeakerSide, Constants.StateLocations.pivShootSpeakerSide));
+        NamedCommands.registerCommand("shoot side elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.elevShootSpeakerSide));
+        NamedCommands.registerCommand("shoot side pivot pos", new MoveToAngle(m_pivot,  Constants.StateLocations.pivShootSpeakerSide));
+        
         NamedCommands.registerCommand("intake pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevFloor, Constants.StateLocations.pivFloor));
-        NamedCommands.registerCommand("shoot pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevShootSpeaker, Constants.StateLocations.pivShootSpeaker));
-        NamedCommands.registerCommand("shoot pivot pos", new MoveToAngle(m_pivot,  Constants.StateLocations.pivShootSpeaker));
         NamedCommands.registerCommand("intake pivot pos", new MoveToAngle(m_pivot, Constants.StateLocations.pivFloor));
-        NamedCommands.registerCommand("shoot elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.elevShootSpeaker));
         NamedCommands.registerCommand("intake elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.pivFloor));
+        
         NamedCommands.registerCommand("Shoot", new CollectorShoot(m_collector));
         NamedCommands.registerCommand("Intake", new CollectorIntakeGround(m_collector, m_pivot));
-
     }
     
     public void setDriveMode() {

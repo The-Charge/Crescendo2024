@@ -48,7 +48,7 @@ public class MovePivotElev extends Command {
 
     @Override
     public void initialize() {
-        if(pivSetpoint == Constants.StateLocations.pivShootSpeaker) {
+        if(pivSetpoint == Constants.StateLocations.pivShootSpeakerCenter) {
             pivSetpoint = m_pivot.getManualPivotOveride();
         }
 

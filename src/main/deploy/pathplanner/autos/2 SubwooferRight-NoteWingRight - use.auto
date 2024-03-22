@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 0.66,
+      "y": 4.41
+    },
+    "rotation": -60.0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -12,13 +18,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot elev pos"
+                  "name": "shoot side elev pos"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot pivot pos"
+                  "name": "shoot side pivot pos"
                 }
               }
             ]
@@ -62,76 +68,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "SubwooferLeft-NoteWingLeft"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "NoteWingLeft-SubwooferLeft"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot elev pos"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot pivot pos"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake elev pos"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake pivot pos"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SubwooferLeft-NoteWingCenter"
+                  "pathName": "SubwooferRight-NoteWingRight"
                 }
               }
             ]
@@ -144,19 +81,19 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot elev pos"
+                  "name": "shoot side elev pos"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot pivot pos"
+                  "name": "shoot side pivot pos"
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "NoteWingCenter-SubwooferCenter"
+                  "pathName": "NoteWingRight-SubwooferRight"
                 }
               }
             ]

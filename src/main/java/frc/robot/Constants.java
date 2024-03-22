@@ -76,9 +76,9 @@ public final class Constants {
         public static final int leftId = 2;
         public static final int rightId = 1;
         
-        public static final PIDFConfig pid = new PIDFConfig(5.5e-8, 7e-8, 0.0005, 0.000095);
-        public static final double leftVelTarget = 10200;
-        public static final double rightVelTarget = 10200;
+        public static final PIDFConfig pid = new PIDFConfig(5.5e-8, 7e-8, 0.0005, 0.000095/2);
+        public static final double leftVelTarget = 6000;
+        public static final double rightVelTarget = 6000;
         public static final double velDeadband = 750;
         public static final double velDeadbandTime = 12;
         
@@ -163,9 +163,11 @@ public final class Constants {
         public static final double elevShootAmp = 27; //done
         public static final double pivShootAmp = (-30.58 + 8) * Pivot.ticksToDegConversion;
         
-        public static final double elevShootSpeaker = 27; //touching subwoofer done
-       // public static final double pivShootSpeaker = (-28.52 + 1) * Pivot.ticksToDegConversion;
-         public static final double pivShootSpeaker = -60;
+        public static final double elevShootSpeakerCenter = 15;
+        public static final double pivShootSpeakerCenter = -64.32;
+        public static final double elevShootSpeakerSide = 14;
+        public static final double pivShootSpeakerSide = -64.32;
+
         public static final double elevClimb = 27;
         public static final double pivClimb = pivRest;
         

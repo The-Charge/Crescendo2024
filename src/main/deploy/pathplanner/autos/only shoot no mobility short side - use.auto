@@ -3,9 +3,9 @@
   "startingPose": {
     "position": {
       "x": 0.66,
-      "y": 4.41
+      "y": 6.68
     },
-    "rotation": -60.0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -18,13 +18,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot elev pos"
+                  "name": "shoot side elev pos"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot pivot pos"
+                  "name": "shoot side pivot pos"
                 }
               }
             ]
@@ -34,25 +34,6 @@
           "type": "named",
           "data": {
             "name": "Shoot"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake elev pos"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake pivot pos"
-                }
-              }
-            ]
           }
         }
       ]

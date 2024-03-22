@@ -15,7 +15,7 @@ public class ManualUp extends Command{
         m_pivot = subsystem;
         addRequirements(subsystem);
         m_elevator = elev;
-        movePiv = new SlewRateLimiter(3);
+        movePiv = new SlewRateLimiter(5);
     }
     @Override
     public void initialize() {
@@ -24,8 +24,8 @@ public class ManualUp extends Command{
 
     @Override
     public void execute() {
-        if(Math.abs(m_elevator.getPosition() - Constants.StateLocations.elevShootSpeaker) <= Constants.Elevator.rangeSize) {
-            double newpos = movePiv.calculate(Constants.StateLocations.pivShootSpeaker + 6.0);
+        if(Math.abs(m_elevator.getPosition() - Constants.StateLocations.elevShootSpeakerCenter) <= Constants.Elevator.rangeSize) {
+            double newpos = movePiv.calculate(Constants.StateLocations.pivShootSpeakerCenter + 6.0);
             m_pivot.setManualPivotOverride(newpos);
             m_pivot.pivotToAngle(newpos);
         }

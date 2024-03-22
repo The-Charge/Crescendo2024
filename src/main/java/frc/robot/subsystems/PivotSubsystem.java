@@ -23,7 +23,7 @@ public class PivotSubsystem extends SubsystemBase {
     private TalonFX pivotMotor;
     private int targetCounter;
     private double targetDeg = 0;
-    private double manualPivotOverride = Constants.StateLocations.pivShootSpeaker;
+    private double manualPivotOverride = Constants.StateLocations.pivShootSpeakerCenter;
     
     public PivotSubsystem() {
         pivotMotor = new TalonFX(Constants.Pivot.pivotId);
