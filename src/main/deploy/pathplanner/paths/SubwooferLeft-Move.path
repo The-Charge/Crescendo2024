@@ -9,48 +9,26 @@
       "prevControl": null,
       "nextControl": {
         "x": 0.656290778230412,
-        "y": 6.673969989161352
+        "y": 7.749742929511305
       },
       "isLocked": false,
       "linkedName": "SubwooferLeft"
     },
     {
       "anchor": {
-        "x": 2.755614671529465,
-        "y": 7.634854557235699
+        "x": 2.734725876576436,
+        "y": 7.676632147157425
       },
       "prevControl": {
-        "x": 1.496558774624545,
-        "y": 7.562216717029647
-      },
-      "nextControl": {
-        "x": 4.3849406782730815,
-        "y": 7.728854134547831
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 6.766263303513752,
-        "y": 7.342411427820178
-      },
-      "prevControl": {
-        "x": 6.758043354148485,
-        "y": 7.391731124011785
+        "x": 2.7265059272111682,
+        "y": 7.725951843349032
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.55,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
