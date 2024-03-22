@@ -14,7 +14,7 @@ public class ResetElevator extends Command {
 
     public ResetElevator(ElevatorSubsystem elev, PivotSubsystem piv) {
         this.elev = elev;
-        addRequirements(elev, piv);
+        addRequirements(elev);
 
         pivMove = new MoveToAngle(piv, Constants.StateLocations.pivSource);
     }
@@ -27,15 +27,19 @@ public class ResetElevator extends Command {
     public void execute() {
         SmartDashboard.putBoolean("resetPivIsFinished", pivMove.isFinished());
         if(pivMove.isFinished() && !hasCoasted) {
-            elev.coast();
-            elev.stopElevator();
+           elev.coast();
+           elev.stopElevator();
+        //    elev.moveAtSpeed(-0.03);
+
             hasCoasted = true;
         }
+
     }
     @Override
     public void end(boolean interrupted) {
         elev.setAsZero();
         elev.brake();
+        // elev.stopElevator();
     }
     @Override
     public boolean isFinished() {

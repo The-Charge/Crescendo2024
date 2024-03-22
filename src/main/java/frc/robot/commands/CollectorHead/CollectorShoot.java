@@ -30,7 +30,7 @@ public class CollectorShoot extends Command {
     }
     @Override
     public void execute() {
-        if((m_collector.shootIsATarget() && !hasStartedIndexers) || (timeout.hasElapsed(3))) {
+        if((m_collector.shootIsATarget() || timeout.hasElapsed(1.25)) && !hasStartedIndexers) {
             m_collector.indexerVBus(1);
             m_collector.intakeVBus(1);
             feedTimer = new Timer();
@@ -47,6 +47,6 @@ public class CollectorShoot extends Command {
         if(hasSetTime) {
             SmartDashboard.putNumber("feed timer", feedTimer.get());
         }
-        return timeout.hasElapsed(4.25) || (feedTimer == null ? false : feedTimer.hasElapsed(0.75));
+        return feedTimer == null ? false : feedTimer.hasElapsed(0.5);
     }
 }

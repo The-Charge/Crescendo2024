@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.commands.led.LEDBlink;
 import frc.robot.commands.led.LEDChase;
 import frc.robot.Constants.LEDConstants;
 
@@ -110,11 +111,11 @@ public class LEDStripSubsystem extends SubsystemBase {
         animationTimer++;
     }
     public void blink(Color col) {
-        final int onLength = 25;
-        final int offLength = 25;
+        final int onLength = 15;
+        final int offLength = 15;
         
         for(int i = 0; i < getStripLength(); i++) {
-            setPixelColor(i, (animationTimer % onLength + offLength < onLength ? col : Color.kBlack));
+            setPixelColor(i, (animationTimer % (onLength + offLength) < onLength ? col : Color.kBlack));
         }
         
         animationTimer++;
@@ -150,14 +151,15 @@ public class LEDStripSubsystem extends SubsystemBase {
           setRange(0, getStripLength(), Color.kGreen);
         }
          */
-        if (RobotContainer.getCollectorHeadSubsystem().getNoteSensor2()){
+        if (RobotContainer.getCollectorHeadSubsystem().getNoteSensor1() || RobotContainer.getCollectorHeadSubsystem().getNoteSensor2()){
           setRange(0, getStripLength(), Color.kLime);
         }
          else if (RobotContainer.getlimelight().gettv() > 0){
           /*for(int i = 0; i < getStripLength(); i++) {
             setPixelRGB(i, 255, 0, 0, false);
           }*/
-          setRange(0, getStripLength(), Color.kGold);
+        //   setRange(0, getStripLength(), Color.kGold);
+          blink(Color.kGold);
         }
         else{
           chase(Color.kLime, Color.kGold);

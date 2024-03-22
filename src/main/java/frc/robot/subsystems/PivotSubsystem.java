@@ -23,6 +23,7 @@ public class PivotSubsystem extends SubsystemBase {
     private TalonFX pivotMotor;
     private int targetCounter;
     private double targetDeg = 0;
+    private double manualPivotOverride = Constants.StateLocations.pivShootSpeaker;
     
     public PivotSubsystem() {
         pivotMotor = new TalonFX(Constants.Pivot.pivotId);
@@ -67,6 +68,8 @@ public class PivotSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Pivot Position (Ticks)", pivotMotor.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Pivot Position (Deg)", getAngle());
         SmartDashboard.putNumber("Pivot Target (Deg)", targetDeg);
+        SmartDashboard.putNumber("Manual Pivot Override", getManualPivotOveride());
+        
     }
     
     public void pivotToAngle(double deg) {
@@ -97,6 +100,14 @@ public class PivotSubsystem extends SubsystemBase {
     }
     public double getAngle() {
         return (pivotMotor.getPosition().getValueAsDouble() - Constants.Pivot.relOffset) * Constants.Pivot.ticksToDegConversion;
+    }
+
+    public double getManualPivotOveride() {
+        return manualPivotOverride;
+    }
+
+    public void setManualPivotOverride(double pivotloc) {
+        manualPivotOverride = pivotloc;
     }
     public boolean isInDeadzone() {
         return getAngle() > -40;

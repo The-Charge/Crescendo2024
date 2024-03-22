@@ -48,6 +48,10 @@ public class MovePivotElev extends Command {
 
     @Override
     public void initialize() {
+        if(pivSetpoint == Constants.StateLocations.pivShootSpeaker) {
+            pivSetpoint = m_pivot.getManualPivotOveride();
+        }
+
         if((pivSetpoint > 0 || pivSetpoint < StateLocations.pivFloor) && (elevSetpoint < StateLocations.safeElevatorPoint)) {
             //DriverStation.reportError("Invalid location for elev/piv", null);
             return;

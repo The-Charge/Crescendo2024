@@ -18,7 +18,6 @@ import frc.robot.commands.Pivot.MoveToAngle;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.List;
-import java.util.function.BooleanSupplier;
 import java.util.function.*;
 
 import javax.naming.spi.StateFactory;
@@ -93,34 +92,25 @@ public class TeleopDrive extends Command {
         double headingX = 0;
         double headingY = 0;
         
+        if(isFieldCentric && swerve.isRedAlliance()) {
+            allianceCorrection = -1;
+        }
+        else { 
+            allianceCorrection = 1;
+        }
+
         switch ((int) (POV.getAsDouble())) {
             case Constants.FORWARD:
-            headingY = 1;
-            break;
-            case Constants.FORWARD_RIGHT:
-            headingX = -1;
-            headingY = 1;
+            headingY = 1 * allianceCorrection;
             break;
             case Constants.RIGHT:
-            headingX = -1;
-            break;
-            case Constants.BACKWARD_RIGHT:
-            headingX = -1;
-            headingY = -1;
+            headingX = -1 * allianceCorrection;
             break;
             case Constants.BACKWARD:
-            headingY = -1;
-            break;
-            case Constants.BACKWARD_LEFT:
-            headingX = 1;
-            headingY = -1;
+            headingY = -1 * allianceCorrection;
             break;
             case Constants.LEFT:
-            headingX = 1;
-            break;
-            case Constants.FORWARD_LEFT:
-            headingX = 1;
-            headingY = 1;
+            headingX = 1 * allianceCorrection;
             break;
         }
         
@@ -135,13 +125,6 @@ public class TeleopDrive extends Command {
             rotationSpeed = 0;
         }
         
-        boolean hasAlliance = DriverStation.getAlliance().isPresent();
-        if(hasAlliance && isFieldCentric && DriverStation.getAlliance().get() == Alliance.Red) {
-            allianceCorrection = -1;
-        }
-        else { 
-            allianceCorrection = 1;
-        }
         ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble() * allianceCorrection, vY.getAsDouble() * allianceCorrection, headingX, headingY);
         //ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble(), vY.getAsDouble(), new Rotation2d(swerve.getHeading().getRadians()));
         if (centricToggle.getAsBoolean()) {

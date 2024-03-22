@@ -11,7 +11,7 @@
         "x": 0.9999999999999997,
         "y": 0.0
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": null
     },
     {
@@ -27,7 +27,7 @@
         "x": 0.6265625000000002,
         "y": 8.0441796875
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "SubwooferLeft"
     },
     {
@@ -43,7 +43,7 @@
         "x": 1.5450000000000002,
         "y": 5.6743749999999995
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "SubwooferCenter"
     },
     {
@@ -59,7 +59,7 @@
         "x": 0.9809375,
         "y": 4.7780078125
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "SubwooferRight"
     },
     {
@@ -75,7 +75,7 @@
         "x": 2.89,
         "y": 6.74
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "NoteWingLeft"
     },
     {
@@ -91,7 +91,7 @@
         "x": 2.98,
         "y": 5.380625
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "NoteWingCenter"
     },
     {
@@ -107,7 +107,7 @@
         "x": 2.9518750000000002,
         "y": 4.2654296875
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "NoteWingRight"
     },
     {
@@ -123,7 +123,7 @@
         "x": 9.29,
         "y": 7.44
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "NoteMidfieldLeftmost"
     },
     {
@@ -139,7 +139,7 @@
         "x": 9.29,
         "y": 5.784
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "NoteMidfieldLeftOfCenter"
     },
     {
@@ -155,7 +155,7 @@
         "x": 9.29,
         "y": 4.11
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "NoteMidfieldCenter"
     },
     {
@@ -171,7 +171,7 @@
         "x": 9.29,
         "y": 2.44
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "NoteMidfieldRightOfCenter"
     },
     {
@@ -187,7 +187,7 @@
         "x": 9.29,
         "y": 0.77
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "NoteMidfieldRightmost"
     },
     {
@@ -200,7 +200,7 @@
         "y": 6.0
       },
       "nextControl": null,
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": null
     }
   ],
