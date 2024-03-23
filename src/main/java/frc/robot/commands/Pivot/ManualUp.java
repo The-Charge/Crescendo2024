@@ -1,7 +1,6 @@
 package frc.robot.commands.Pivot;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -15,21 +14,19 @@ public class ManualUp extends Command{
         m_pivot = subsystem;
         addRequirements(subsystem);
         m_elevator = elev;
-        movePiv = new SlewRateLimiter(5);
+        movePiv = new SlewRateLimiter(Constants.Pivot.manualAdjustRate);
     }
     @Override
     public void initialize() {
         movePiv.reset(m_pivot.getAngle());
     }
-
     @Override
     public void execute() {
         if(Math.abs(m_elevator.getPosition() - Constants.StateLocations.elevShootSpeakerCenter) <= Constants.Elevator.rangeSize) {
-            double newpos = movePiv.calculate(Constants.StateLocations.pivShootSpeakerCenter + 6.0);
+            double newpos = movePiv.calculate(Constants.StateLocations.pivShootSpeakerCenter + Constants.Pivot.manualAdjustRange);
             m_pivot.setManualPivotOverride(newpos);
             m_pivot.pivotToAngle(newpos);
         }
-        
     }
     @Override
     public boolean isFinished() {

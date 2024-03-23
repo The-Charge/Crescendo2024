@@ -1,18 +1,13 @@
 package frc.robot.subsystems;
 
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.*;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.*;
 
 public class CollectorHeadSubsystem extends SubsystemBase {
@@ -25,7 +20,7 @@ public class CollectorHeadSubsystem extends SubsystemBase {
     private CANSparkMax intakeBottom;
     private DigitalInput noteSensor2;
     private DigitalInput noteSensor1;
-    private int targetCounter;
+    // private int targetCounter;
     
     public CollectorHeadSubsystem() {
         noteSensor2 = new DigitalInput(Constants.Indexer.photosensor2Id);
@@ -149,6 +144,9 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("T Intake Vel (RPM)", intakeTop.getEncoder().getVelocity());
         SmartDashboard.putNumber("B Intake Vel (RPM)", intakeBottom.getEncoder().getVelocity());
 
+        SmartDashboard.putBoolean("Photosensor 1", noteSensor1.get());
+        SmartDashboard.putBoolean("Photosensor 2", noteSensor2.get());
+
         if(Robot.getContainer().getPivotSubsystem().isInDeadzone() && (shooterLeft.getEncoder().getVelocity() > 100 || shooterRight.getEncoder().getVelocity() > 100)) zero();
     }
     
@@ -208,23 +206,23 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         // return isAtTarget(Constants.Shooter.leftVelTarget, Constants.Shooter.rightVelTarget, Constants.Shooter.velDeadband, Constants.Shooter.velDeadbandTime, shooterLeft, shooterRight);
         return Robot.getContainer().getPivotSubsystem().isInDeadzone() || shooterLeft.getEncoder().getVelocity() > Constants.Shooter.leftVelTarget && shooterRight.getEncoder().getVelocity() > Constants.Shooter.rightVelTarget;
     }
-    private boolean isAtTarget(double target1, double target2, double deadband, double requiredTime, CANSparkMax motor1, CANSparkMax motor2) {
-        double error1 = target1 - motor1.getEncoder().getVelocity();
-        double error2 = target2 - motor2.getEncoder().getVelocity();
+    // private boolean isAtTarget(double target1, double target2, double deadband, double requiredTime, CANSparkMax motor1, CANSparkMax motor2) {
+    //     double error1 = target1 - motor1.getEncoder().getVelocity();
+    //     double error2 = target2 - motor2.getEncoder().getVelocity();
         
-        if(Math.abs(error1) <= deadband && Math.abs(error2) <= deadband) targetCounter++;
-        else resetTargetCounter();
+    //     if(Math.abs(error1) <= deadband && Math.abs(error2) <= deadband) targetCounter++;
+    //     else resetTargetCounter();
         
-        SmartDashboard.putNumber("L encoder value", motor1.getEncoder().getVelocity());
-        SmartDashboard.putNumber("R encoder value", motor2.getEncoder().getVelocity());
-        SmartDashboard.putBoolean("Has Reached Target", targetCounter >= requiredTime);
-        SmartDashboard.putNumber("Deadband Timer", targetCounter);
+    //     SmartDashboard.putNumber("L encoder value", motor1.getEncoder().getVelocity());
+    //     SmartDashboard.putNumber("R encoder value", motor2.getEncoder().getVelocity());
+    //     SmartDashboard.putBoolean("Has Reached Target", targetCounter >= requiredTime);
+    //     SmartDashboard.putNumber("Deadband Timer", targetCounter);
         
-        if(targetCounter >= requiredTime) return true;
-        return false;
-    }
+    //     if(targetCounter >= requiredTime) return true;
+    //     return false;
+    // }
     public void resetTargetCounter() {
-        targetCounter = 0;
+        // targetCounter = 0;
     }
     
     public boolean getNoteSensor1() {

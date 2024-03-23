@@ -4,12 +4,8 @@
 
 package frc.robot.commands.vision;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
 import frc.robot.Constants.FixedLLConstants;
-import frc.robot.Constants.VisionConstants;
-import frc.robot.subsystems.LEDStripSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 

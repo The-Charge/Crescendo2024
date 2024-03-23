@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.function.BooleanSupplier;
-
 import com.pathplanner.lib.util.PIDConstants;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -77,8 +75,8 @@ public final class Constants {
         public static final int rightId = 1;
         
         public static final PIDFConfig pid = new PIDFConfig(5.5e-8, 7e-8, 0.0005, 0.000095/2);
-        public static final double leftVelTarget = 6000;
-        public static final double rightVelTarget = 6000;
+        public static final double leftVelTarget = 5150;
+        public static final double rightVelTarget = 5150;
         public static final double velDeadband = 750;
         public static final double velDeadbandTime = 12;
         
@@ -118,6 +116,8 @@ public final class Constants {
         public static final double maxVBus = 0.8;
         public static final double maxCurrent = 20;
         public static final boolean invertMotor = false;
+        public static final double manualAdjustRange = 6;
+        public static final int manualAdjustRate = 5;
         
         /*
         conversion math is (targetUnit1 - targetUnit2) / (currentUnit1 - currentUnit2). 1 and 2 are two reference positions to form a proportion
@@ -167,6 +167,9 @@ public final class Constants {
         public static final double pivShootSpeakerCenter = -64.32;
         public static final double elevShootSpeakerSide = 14;
         public static final double pivShootSpeakerSide = -64.32;
+
+        public static final double elevShootSpeakerFront = 18;
+        public static final double pivShootSpeakerFront = -104.5;
 
         public static final double elevClimb = 27;
         public static final double pivClimb = pivRest;

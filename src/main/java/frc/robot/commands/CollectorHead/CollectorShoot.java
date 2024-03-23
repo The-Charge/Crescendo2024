@@ -1,7 +1,6 @@
 package frc.robot.commands.CollectorHead;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.*;
 
@@ -9,7 +8,7 @@ public class CollectorShoot extends Command {
 
     private CollectorHeadSubsystem m_collector;
     private Timer timeout, feedTimer;
-    private boolean hasStartedIndexers, hasSetTime;
+    private boolean hasStartedIndexers;
 
     public CollectorShoot(CollectorHeadSubsystem collector) {
         this.m_collector = collector;
@@ -26,11 +25,10 @@ public class CollectorShoot extends Command {
         // m_collector.shooterVBus(1);
         m_collector.shooterVel(6000);
         hasStartedIndexers = false;
-        hasSetTime = false;
     }
     @Override
     public void execute() {
-        if((m_collector.shootIsATarget() || timeout.hasElapsed(1.25)) && !hasStartedIndexers) {
+        if((m_collector.shootIsATarget() || timeout.hasElapsed(2)) && !hasStartedIndexers) {
             m_collector.indexerVBus(1);
             m_collector.intakeVBus(1);
             feedTimer = new Timer();
@@ -44,9 +42,6 @@ public class CollectorShoot extends Command {
     }
     @Override
     public boolean isFinished() {
-        if(hasSetTime) {
-            SmartDashboard.putNumber("feed timer", feedTimer.get());
-        }
         return feedTimer == null ? false : feedTimer.hasElapsed(0.5);
     }
 }

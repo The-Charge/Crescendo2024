@@ -1,12 +1,10 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.Constants.Elevator;
 import frc.robot.Constants.StateLocations;
 import frc.robot.commands.Elevator.MoveToSetpoint;
 import frc.robot.commands.Pivot.MoveToAngle;
@@ -19,8 +17,8 @@ public class MovePivotElev extends Command {
     private double elevSetpoint;
     private double pivSetpoint;
     private Command action;
-    private boolean waitForTask;
-    private double x;
+    private static boolean shooterFront = true;
+    // private boolean waitForTask;
 
     public MovePivotElev(ElevatorSubsystem elev, PivotSubsystem piv, double elevTarget, double pivotSetpoint, boolean wait) {
         m_elevator = elev;
@@ -30,8 +28,7 @@ public class MovePivotElev extends Command {
         elevSetpoint = elevTarget;
         action = null;
         pivSetpoint = pivotSetpoint;
-        waitForTask = wait;
-        x=0;
+        // waitForTask = wait;
     }
 
     public MovePivotElev(ElevatorSubsystem elev, PivotSubsystem piv, double elevTarget, double pivotSetpoint) {
@@ -42,15 +39,26 @@ public class MovePivotElev extends Command {
         elevSetpoint = elevTarget;
         action = null;
         pivSetpoint = pivotSetpoint;
-        waitForTask = false;
-        x=0;
+        // waitForTask = false;
     }
 
     @Override
     public void initialize() {
+        // if(pivSetpoint==Constants.StateLocations.pivShootSpeakerFront) {
+        //     if(!shooterFront) { 
+        //         pivSetpoint = Constants.StateLocations.pivShootSpeakerCenter;
+        //         elevSetpoint = Constants.StateLocations.elevShootSpeakerCenter;
+        //     }
+        //     shooterFront=!shooterFront;
+        //     SmartDashboard.putBoolean("shooterfront", shooterFront);
+        // } else {
+        //     shooterFront = true;
+        
+
         if(pivSetpoint == Constants.StateLocations.pivShootSpeakerCenter) {
             pivSetpoint = m_pivot.getManualPivotOveride();
         }
+
 
         if((pivSetpoint > 0 || pivSetpoint < StateLocations.pivFloor) && (elevSetpoint < StateLocations.safeElevatorPoint)) {
             //DriverStation.reportError("Invalid location for elev/piv", null);
@@ -77,24 +85,11 @@ public class MovePivotElev extends Command {
 
         action.schedule();
     }
-
-    @Override
-    public void execute() {
-        //SmartDashboard.putBoolean("auto", action.isScheduled());
-        x+=1;
-        SmartDashboard.putNumber("auto 3", x);
-    }
-
     @Override
     public boolean isFinished() {
         // if(!waitForTask) return true;
      
         // return action == null ? true : action.isFinished();
         return false;
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        SmartDashboard.putBoolean("auto 2", true);
     }
 }

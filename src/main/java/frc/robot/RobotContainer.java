@@ -5,34 +5,19 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants;
-import frc.robot.commands.led.*;
 import frc.robot.commands.Pivot.*;
 import frc.robot.commands.swervedrive.drivebase.TargetLockDriveCommandGroup;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
-import frc.robot.commands.vision.DriveToNote;
 import frc.robot.commands.vision.DriveToNoteCommandGroup;
-import frc.robot.commands.vision.SwapCurrentLimelight;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
@@ -40,11 +25,9 @@ import java.io.File;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import frc.robot.commands.CollectorHead.*;
 import frc.robot.commands.Elevator.*;
-import frc.robot.commands.Pivot.*;
 import frc.robot.Constants.StateLocations;
 import frc.robot.Constants.ButtonBox;
 
@@ -104,19 +87,19 @@ public class RobotContainer {
             () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
                 OperatorConstants.LEFT_X_DEADBAND),
             () -> -driverXbox.getRawAxis(Constants.OperatorConstants.turnAxis))
-                );
+        );
     
         new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new ManualDown(m_pivot, m_elevator));
         new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(new ManualUp(m_pivot, m_elevator));
-        
+       // new JoystickButton(driverXbox, XboxController.Button.kStart.value).onTrue(new MovePivotElev(m_pivot, m_elevator, 18, -104.5));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.zero)).onTrue(new CollectorZero(m_collector));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.clear)).whileTrue(new CollectorReverseAll(m_collector));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.shoot)).onTrue(new CollectorShoot(m_collector));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.reset)).whileTrue(new ResetElevator(m_elevator, m_pivot)/*.withInterruptBehavior(InterruptionBehavior.kCancelIncoming)*/);
-        new Trigger(() -> buttonBox.getRawButton(ButtonBox.speaker)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootSpeakerCenter, StateLocations.pivShootSpeakerCenter));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.speaker)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootSpeakerFront, StateLocations.pivShootSpeakerFront));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.amp)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevShootAmp, StateLocations.pivShootAmp));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.in)).onTrue(new CollectorIntake(m_collector, m_pivot));
-        //new Trigger(() -> buttonBox.getRawButton(ButtonBox.in)).onTrue(new CollectorIntakeSource(m_collector));
+        new Trigger(() -> buttonBox.getRawButton(ButtonBox.in)).onTrue(new CollectorIntakeSource(m_collector));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.rest)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevRest, StateLocations.pivRest));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.source)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevSource, StateLocations.pivSource));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.ground)).onTrue(new MovePivotElev(m_elevator, m_pivot, StateLocations.elevFloor, StateLocations.pivFloor));

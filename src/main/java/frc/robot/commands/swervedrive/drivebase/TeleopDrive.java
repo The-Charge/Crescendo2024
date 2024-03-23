@@ -4,29 +4,13 @@
 
 package frc.robot.commands.swervedrive.drivebase;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.simulation.ElevatorSim;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.*;
-import frc.robot.commands.Elevator.MoveToSetpoint;
-import frc.robot.commands.Pivot.MoveToAngle;
-import frc.robot.subsystems.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import java.util.List;
 import java.util.function.*;
 
-import javax.naming.spi.StateFactory;
-
 import frc.robot.Constants;
-import frc.robot.Constants.StateLocations;
-
-import swervelib.SwerveController;
-import swervelib.math.SwerveMath;
 
 public class TeleopDrive extends Command {
     

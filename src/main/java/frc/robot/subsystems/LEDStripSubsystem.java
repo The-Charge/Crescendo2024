@@ -9,11 +9,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.commands.led.LEDBlink;
-import frc.robot.commands.led.LEDChase;
-import frc.robot.Constants.LEDConstants;
 
 public class LEDStripSubsystem extends SubsystemBase {
     

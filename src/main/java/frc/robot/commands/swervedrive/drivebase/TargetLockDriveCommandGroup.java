@@ -6,7 +6,6 @@ package frc.robot.commands.swervedrive.drivebase;
 
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.vision.SetCenterSpeakerPriorityID;
@@ -14,8 +13,6 @@ import frc.robot.commands.vision.SetPipeline;
 import frc.robot.commands.vision.SetPriorityID;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.commands.vision.SetPriorityID;
-import frc.robot.commands.swervedrive.drivebase.TargetLockDrive;
 /**
  * An example command that uses an example subsystem.
  */
