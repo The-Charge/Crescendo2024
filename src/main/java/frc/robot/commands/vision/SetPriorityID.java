@@ -5,6 +5,7 @@
 package frc.robot.commands.vision;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.VisionSubsystem;
 
 
@@ -31,7 +32,10 @@ public class SetPriorityID extends Command {
 
   @Override
   public void execute() {
-    limelight.setPriorityID(id);
+    if (RobotContainer.getlimelight().getlimelightshootername() == "limelight-fixed"){
+      limelight.setPriorityID(id);
+    }
+    
   }
 
   // Called once the command ends or is interrupted.

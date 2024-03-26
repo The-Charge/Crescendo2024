@@ -9,6 +9,7 @@ import java.util.Optional;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ApriltagConstants;
 import frc.robot.subsystems.VisionSubsystem;
 
@@ -30,14 +31,15 @@ public class SetCenterSpeakerPriorityID extends Command {
 
   @Override
   public void execute() {
-    Optional<Alliance> ally = DriverStation.getAlliance();
+    if (RobotContainer.getlimelight().getlimelightshootername() == "limelight-fixed"){
+      Optional<Alliance> ally = DriverStation.getAlliance();
     if (ally.get() == Alliance.Red){
       limelight.setPriorityID(ApriltagConstants.RED_SPEAKER_CENTER_TAG);
     }
     if (ally.get() == Alliance.Blue){
       limelight.setPriorityID(ApriltagConstants.BLUE_SPEAKER_CENTER_TAG);
     }
-
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -205,7 +205,6 @@ public final class Constants {
         //pipeline indexes - delete later
         public static final double APRILTAG_PIPELINE = 0.0;
         public static final double NEURAL_NETWORK_PIPELINE = 1.0;
-        public static final double SPEAKER_LOCK_PIPELINE = 2.0; 
     
         //note tolerances
         public static final double TX_TOLERANCE_THRESHOLD = 5;  //degrees

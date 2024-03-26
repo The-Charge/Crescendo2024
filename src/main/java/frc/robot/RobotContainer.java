@@ -21,6 +21,7 @@ import frc.robot.commands.led.LEDRainbow;
 import frc.robot.commands.swervedrive.drivebase.TargetLockDriveCommandGroup;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.commands.vision.DriveToNoteCommandGroup;
+import frc.robot.commands.vision.SwapCurrentLimelight;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
@@ -94,6 +95,8 @@ public class RobotContainer {
         new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new ManualDown(m_pivot, m_elevator));
         new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(new ManualUp(m_pivot, m_elevator));
         new JoystickButton(driverXbox, XboxController.Button.kStart.value).onTrue(new InstantCommand(m_ledSubsystem::incrementDefaultMode));
+        new JoystickButton(driverXbox, XboxController.Button.kRightStick.value).onTrue(new SwapCurrentLimelight(m_limelight));
+        
 
        // new JoystickButton(driverXbox, XboxController.Button.kStart.value).onTrue(new MovePivotElev(m_pivot, m_elevator, 18, -104.5));
         new Trigger(() -> buttonBox.getRawButton(ButtonBox.zero)).onTrue(new CollectorZero(m_collector));
