@@ -144,7 +144,6 @@ public class CollectorHeadSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("T Intake Vel (RPM)", intakeTop.getEncoder().getVelocity());
         SmartDashboard.putNumber("B Intake Vel (RPM)", intakeBottom.getEncoder().getVelocity());
 
-        SmartDashboard.putBoolean("Photosensor 1", noteSensor1.get());
         SmartDashboard.putBoolean("Photosensor 2", noteSensor2.get());
 
         if(Robot.getContainer().getPivotSubsystem().isInDeadzone() && (shooterLeft.getEncoder().getVelocity() > 100 || shooterRight.getEncoder().getVelocity() > 100)) zero();

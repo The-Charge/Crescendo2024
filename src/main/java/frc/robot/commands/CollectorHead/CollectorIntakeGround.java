@@ -1,5 +1,6 @@
 package frc.robot.commands.CollectorHead;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CollectorHeadSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
@@ -22,6 +23,7 @@ public class CollectorIntakeGround extends Command {
     }
     @Override
     public void execute() {
+        SmartDashboard.putBoolean("Photosensor 1", m_collector.getNoteSensor1());
         if(m_collector.getNoteSensor1()) {
             m_pivot.pivotUp();
         }

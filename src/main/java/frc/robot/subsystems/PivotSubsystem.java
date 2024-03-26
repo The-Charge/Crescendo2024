@@ -71,6 +71,7 @@ public class PivotSubsystem extends SubsystemBase {
     }
     public void pivotUp() {
         pivotToAngle(getAngle() + 20);
+        System.out.println("Pivot up");
     }
     public void resetEncoder() {
         pivotMotor.setPosition(0);

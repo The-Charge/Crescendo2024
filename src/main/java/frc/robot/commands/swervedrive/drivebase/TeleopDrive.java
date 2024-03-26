@@ -6,6 +6,7 @@ package frc.robot.commands.swervedrive.drivebase;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.function.*;
@@ -19,13 +20,17 @@ public class TeleopDrive extends Command {
     private final DoubleSupplier vY;
     private final DoubleSupplier heading;
     private final DoubleSupplier POV;
-    private final BooleanSupplier shiftHalf;
-    private final BooleanSupplier shiftQuarter;
+    private final BooleanSupplier shiftHalfCurr;
+    private final BooleanSupplier shiftQuarterCurr;
     private final BooleanSupplier centricToggle;
     private double rotationSpeed;
     private boolean usePOV;
     private boolean isFieldCentric = true;
     private double allianceCorrection = 1;
+    private boolean shiftHalfLast = false;
+    private boolean shiftQuarterLast = false;
+    private boolean shiftHalf = false;
+    private boolean shiftQuarter = false;
     
     /**
     * Used to drive a swerve robot in full field-centric mode. vX and vY supply
@@ -56,8 +61,8 @@ public class TeleopDrive extends Command {
         this.vY = vY;
         this.heading = heading;
         this.POV = POV;
-        this.shiftHalf = shiftHalf;
-        this.shiftQuarter = shiftQuarter;
+        this.shiftHalfCurr = shiftHalf;
+        this.shiftQuarterCurr = shiftQuarter;
         this.centricToggle = centricToggle;
         
         rotationSpeed = 0;
@@ -122,7 +127,20 @@ public class TeleopDrive extends Command {
         //SmartDashboard.putNumber("LimitedTranslation", translation.getX());
         //SmartDashboard.putString("Translation", translation.toString());
         
-        double multiplier = shiftQuarter.getAsBoolean() ? 0.25 : (shiftHalf.getAsBoolean() ? 0.5 : 1);
+        if(shiftHalfCurr.getAsBoolean() && !shiftHalfLast) {
+            shiftHalf = !shiftHalf;
+            shiftQuarter = false;
+        }
+        if(shiftQuarterCurr.getAsBoolean() && !shiftQuarterLast) {
+            shiftQuarter = !shiftQuarter;
+            shiftHalf = false;
+        }
+
+        double multiplier;
+        if(Constants.outreachMode) multiplier = 0.1;
+        else multiplier = shiftHalf ? 0.5 : (shiftQuarter ? 0.25 : 1);
+
+        SmartDashboard.putNumber("Drive Multiplier", multiplier);
         translation = translation.times(multiplier);
         rotationSpeed = rotationSpeed * multiplier;
         
@@ -133,6 +151,9 @@ public class TeleopDrive extends Command {
             swerve.drive(translation, rotationSpeed, isFieldCentric);
         }
         // swerve.drive(translation, rotationSpeed, isFieldCentric);
+
+        shiftHalfLast = shiftHalfCurr.getAsBoolean();
+        shiftQuarterLast = shiftQuarterCurr.getAsBoolean();
     }
     
     // Called once the command ends or is interrupted.

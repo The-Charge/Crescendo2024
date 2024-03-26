@@ -39,6 +39,7 @@ public final class Constants {
     public static final int BACKWARD_RIGHT = 135;
     public static final int BACKWARD_LEFT = 225;
     public static final int FORWARD_LEFT = 315;
+    public static final boolean outreachMode = true;
 
     
     public static final class AutonConstants {

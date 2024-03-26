@@ -18,6 +18,7 @@ public class LEDStripSubsystem extends SubsystemBase {
     private boolean hasChanged = true; //we want to update the LEDs on the first frame
     private double brightness = 1;
     private int animationTimer = 0;
+    private int defaultMode = 0;
     
     public LEDStripSubsystem() {
         leds = new AddressableLED(Constants.LEDConstants.ledId);
@@ -87,18 +88,19 @@ public class LEDStripSubsystem extends SubsystemBase {
     }
     public void rainbow() {
         final int s = 255, v = 255;
-        final double speedModifier = 3;
+        final double speedModifier = 1;
         final int pixelDistance = 3;
         
         for(int i = 0; i < getStripLength(); i++) {
-            setPixelHSV(i, (int) (animationTimer * speedModifier + i * pixelDistance) % 180, s, v);
+            // setPixelHSV(i, (int) (animationTimer * speedModifier + i * pixelDistance) % 180, s, v);
+            setPixelHSV(i, (int) (animationTimer * speedModifier) % 180, s, v);
         }
         
         animationTimer++;
     }
     public void chase(Color col1, Color col2) {
-        final int segmentLength = 15;
-        final double speedModifier = 0.3;
+        final int segmentLength = 20;
+        final double speedModifier = 0.6;
         
         for(int i = 0; i < getStripLength(); i++) {
             setPixelColor(i, (Math.floor((i + animationTimer * speedModifier) / segmentLength) % 2 == 0 ? col1 : col2));
@@ -158,7 +160,15 @@ public class LEDStripSubsystem extends SubsystemBase {
           blink(Color.kGold);
         }
         else{
-          chase(Color.kLime, Color.kGold);
+            switch(defaultMode) {
+                case 0:
+                    chase(Color.kLime, Color.kGold);
+                    break;
+                
+                case 1:
+                    rainbow();
+                    break;
+            }
        }
    
   }
@@ -177,5 +187,8 @@ public class LEDStripSubsystem extends SubsystemBase {
     }
     public double getBrightness() {
         return brightness;
+    }
+    public void incrementDefaultMode() {
+        defaultMode = (defaultMode + 1) % 2;
     }
 }

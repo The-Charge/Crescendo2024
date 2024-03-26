@@ -18,9 +18,11 @@ public class CollectorIntake extends Command {
     @Override
     public void initialize() {
         if(Math.abs(pivot.getAngle() - StateLocations.pivFloor) <= 2) {
+            System.out.println("ground");
             task = new CollectorIntakeGround(collector, pivot);
         }
         else {
+            System.out.println("source");
             task = new CollectorIntakeSource(collector);
         }
         task.schedule();

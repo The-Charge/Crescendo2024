@@ -20,7 +20,7 @@ public class CollectorReverseAll extends Command {
     @Override
     public void initialize() {
         m_collector.indexerVBus(-0.5);
-        m_collector.shooterVBus(-0.5);
+        m_collector.shooterVBus(-0.5 / 3);
         m_collector.intakeVBus(-0.5);
     }
     @Override
