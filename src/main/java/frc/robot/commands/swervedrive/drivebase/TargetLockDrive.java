@@ -61,7 +61,7 @@ public class TargetLockDrive extends Command {
     this.fieldRelative = fieldRelative;
     this.limelight = limelight;
     rotationSpeed = 0;
-    heading_controller = new PIDController(0.025, 0.0005, 0.0003);
+    heading_controller = new PIDController(0.015, 0.0005, 0.0003);
     heading_controller.setTolerance(VisionConstants.TX_TOLERANCE_THRESHOLD);
     heading_controller.setSetpoint(0.0);
     addRequirements(swerve);
