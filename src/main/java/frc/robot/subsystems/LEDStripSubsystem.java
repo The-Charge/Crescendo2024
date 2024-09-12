@@ -92,8 +92,8 @@ public class LEDStripSubsystem extends SubsystemBase {
         final int pixelDistance = 3;
         
         for(int i = 0; i < getStripLength(); i++) {
-            // setPixelHSV(i, (int) (animationTimer * speedModifier + i * pixelDistance) % 180, s, v);
-            setPixelHSV(i, (int) (animationTimer * speedModifier) % 180, s, v);
+            setPixelHSV(i, (int) (animationTimer * speedModifier + i * pixelDistance) % 180, s, v);
+            // setPixelHSV(i, (int) (animationTimer * speedModifier) % 180, s, v);
         }
         
         animationTimer++;

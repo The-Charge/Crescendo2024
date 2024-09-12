@@ -137,7 +137,7 @@ public class TeleopDrive extends Command {
         }
 
         double multiplier;
-        if(Constants.outreachMode) multiplier = 0.1;
+        if(Constants.outreachMode) multiplier = 0.5;
         else multiplier = shiftHalf ? 0.5 : (shiftQuarter ? 0.25 : 1);
 
         SmartDashboard.putNumber("Drive Multiplier", multiplier);
