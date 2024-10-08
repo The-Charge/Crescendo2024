@@ -4,36 +4,52 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Pivot.*;
-import frc.robot.commands.led.LEDChase;
-import frc.robot.commands.led.LEDRainbow;
-import frc.robot.commands.swervedrive.drivebase.TargetLockDriveCommandGroup;
-import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
-import frc.robot.commands.vision.DriveToNoteCommandGroup;
-import frc.robot.commands.vision.SwapCurrentLimelight;
-import frc.robot.subsystems.*;
-import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import frc.robot.commands.*;
-import frc.robot.commands.CollectorHead.*;
-import frc.robot.commands.Elevator.*;
-import frc.robot.Constants.StateLocations;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ButtonBox;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.StateLocations;
+import frc.robot.commands.MovePivotElev;
+import frc.robot.commands.CollectorHead.CollectorIntake;
+import frc.robot.commands.CollectorHead.CollectorIntakeGround;
+import frc.robot.commands.CollectorHead.CollectorReverseAll;
+import frc.robot.commands.CollectorHead.CollectorShoot;
+import frc.robot.commands.CollectorHead.CollectorZero;
+import frc.robot.commands.Elevator.ClimbDown;
+import frc.robot.commands.Elevator.ClimbUp;
+import frc.robot.commands.Elevator.MoveToSetpoint;
+import frc.robot.commands.Elevator.MoveToSetpointShuffle;
+import frc.robot.commands.Elevator.ResetElevEncoder;
+import frc.robot.commands.Elevator.ResetElevator;
+import frc.robot.commands.Pivot.ManualDown;
+import frc.robot.commands.Pivot.ManualUp;
+import frc.robot.commands.Pivot.MoveToAngle;
+import frc.robot.commands.Pivot.MoveToAngleShuffle;
+import frc.robot.commands.Pivot.ResetPivEncoder;
+import frc.robot.commands.swervedrive.drivebase.TargetLockDriveCommandGroup;
+import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
+import frc.robot.commands.vision.DriveToNoteCommandGroup;
+import frc.robot.commands.vision.SwapCurrentLimelight;
+import frc.robot.subsystems.CollectorHeadSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LEDStripSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 public class RobotContainer {
     
@@ -94,7 +110,7 @@ public class RobotContainer {
         );
         new JoystickButton(driverXbox, XboxController.Button.kY.value).whileTrue(new ManualDown(m_pivot, m_elevator));
         new JoystickButton(driverXbox, XboxController.Button.kA.value).whileTrue(new ManualUp(m_pivot, m_elevator));
-        new JoystickButton(driverXbox, XboxController.Button.kStart.value).onTrue(new InstantCommand(m_ledSubsystem::incrementDefaultMode));
+        // new JoystickButton(driverXbox, XboxController.Button.kStart.value).onTrue(new InstantCommand(m_ledSubsystem::incrementDefaultMode));
         new JoystickButton(driverXbox, XboxController.Button.kRightStick.value).onTrue(new SwapCurrentLimelight(m_limelight));
         
 

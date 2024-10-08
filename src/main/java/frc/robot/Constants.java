@@ -39,7 +39,7 @@ public final class Constants {
     public static final int BACKWARD_RIGHT = 135;
     public static final int BACKWARD_LEFT = 225;
     public static final int FORWARD_LEFT = 315;
-    public static final boolean outreachMode = true;
+    public static final boolean outreachMode = false;
 
     
     public static final class AutonConstants {
@@ -156,7 +156,7 @@ public final class Constants {
         public static final double pivRest = -3 * Pivot.ticksToDegConversion;
         
         public static final double elevFloor = 0; //done
-        public static final double pivFloor = -35.2 * Pivot.ticksToDegConversion;
+        public static final double pivFloor = -32.5 * Pivot.ticksToDegConversion;
         
         public static final double elevSource = 18.7; //done
         public static final double pivSource = -7.99 * Pivot.ticksToDegConversion;
@@ -170,7 +170,7 @@ public final class Constants {
         public static final double pivShootSpeakerSide = -64.32;
 
         public static final double elevShootSpeakerFront = 18;
-        public static final double pivShootSpeakerFront = -104.5;
+        public static final double pivShootSpeakerFront = -99.2;
 
         public static final double elevClimb = 27;
         public static final double pivClimb = pivRest;
