@@ -26,7 +26,6 @@ public class CollectorIntakeGround extends Command {
         SmartDashboard.putBoolean("Photosensor 1", m_collector.getNoteSensor1());
         if(m_collector.getNoteSensor1()) {
             m_pivot.pivotUp();
-            m_collector.setHasNote(true);
         }
     }
     @Override
