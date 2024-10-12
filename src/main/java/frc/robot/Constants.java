@@ -165,12 +165,12 @@ public final class Constants {
         public static final double pivShootAmp = (-30.58 + 8) * Pivot.ticksToDegConversion;
         
         public static final double elevShootSpeakerCenter = 15;
-        public static final double pivShootSpeakerCenter = -64.32;
+        public static final double pivShootSpeakerCenter = -65.32;
         public static final double elevShootSpeakerSide = 14;
-        public static final double pivShootSpeakerSide = -64.32;
+        public static final double pivShootSpeakerSide = -65.32;
 
         public static final double elevShootSpeakerFront = 18;
-        public static final double pivShootSpeakerFront = -99.2;
+        public static final double pivShootSpeakerFront = -102.9;
 
         public static final double elevClimb = 27;
         public static final double pivClimb = pivRest;

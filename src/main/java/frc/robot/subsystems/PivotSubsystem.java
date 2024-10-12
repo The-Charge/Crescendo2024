@@ -1,9 +1,10 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.*;
-import com.ctre.phoenix6.controls.*;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.*;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -13,7 +14,7 @@ public class PivotSubsystem extends SubsystemBase {
     private TalonFX pivotMotor;
     private int targetCounter;
     private double targetDeg = 0;
-    private double manualPivotOverride = Constants.StateLocations.pivShootSpeakerCenter;
+    private double manualPivotOverride = Constants.StateLocations.pivShootSpeakerFront;
     
     public PivotSubsystem() {
         pivotMotor = new TalonFX(Constants.Pivot.pivotId);

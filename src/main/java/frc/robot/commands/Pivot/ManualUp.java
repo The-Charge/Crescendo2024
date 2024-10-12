@@ -22,8 +22,8 @@ public class ManualUp extends Command{
     }
     @Override
     public void execute() {
-        if(Math.abs(m_elevator.getPosition() - Constants.StateLocations.elevShootSpeakerCenter) <= Constants.Elevator.rangeSize) {
-            double newpos = movePiv.calculate(Constants.StateLocations.pivShootSpeakerCenter + Constants.Pivot.manualAdjustRange);
+        if(Math.abs(m_elevator.getPosition() - Constants.StateLocations.elevShootSpeakerFront) <= Constants.Elevator.rangeSize) {
+            double newpos = movePiv.calculate(Constants.StateLocations.pivShootSpeakerFront + Constants.Pivot.manualAdjustRange);
             m_pivot.setManualPivotOverride(newpos);
             m_pivot.pivotToAngle(newpos);
         }
