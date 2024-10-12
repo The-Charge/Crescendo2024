@@ -137,6 +137,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("shoot side pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevShootSpeakerSide, Constants.StateLocations.pivShootSpeakerSide));
         NamedCommands.registerCommand("shoot side elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.elevShootSpeakerSide));
         NamedCommands.registerCommand("shoot side pivot pos", new MoveToAngle(m_pivot,  Constants.StateLocations.pivShootSpeakerSide));
+
+        NamedCommands.registerCommand("shoot front elev", new MoveToSetpoint(m_elevator, Constants.StateLocations.elevShootSpeakerFront));
+        NamedCommands.registerCommand("shoot front pivot", new MoveToAngle(m_pivot, Constants.StateLocations.pivShootSpeakerFront));
         
         NamedCommands.registerCommand("intake pos", new MovePivotElev(m_elevator, m_pivot, Constants.StateLocations.elevFloor, Constants.StateLocations.pivFloor));
         NamedCommands.registerCommand("intake pivot pos", new MoveToAngle(m_pivot, Constants.StateLocations.pivFloor));
@@ -144,6 +147,9 @@ public class RobotContainer {
         
         NamedCommands.registerCommand("Shoot", new CollectorShoot(m_collector));
         NamedCommands.registerCommand("Intake", new CollectorIntakeGround(m_collector, m_pivot));
+
+        NamedCommands.registerCommand("rest elev pos", new MoveToSetpoint(m_elevator, Constants.StateLocations.elevRest));
+        NamedCommands.registerCommand("rest piv pos", new MoveToAngle(m_pivot, Constants.StateLocations.pivRest));
     }
     
     public void setDriveMode() {
