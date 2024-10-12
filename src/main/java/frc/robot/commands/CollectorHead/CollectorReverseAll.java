@@ -26,6 +26,7 @@ public class CollectorReverseAll extends Command {
     @Override
     public void end(boolean interrupted) {
         m_collector.zero();
+        m_collector.setHasNote(false);
     }
     @Override
     public boolean isFinished() {

@@ -149,7 +149,7 @@ public class LEDStripSubsystem extends SubsystemBase {
           setRange(0, getStripLength(), Color.kGreen);
         }
          */
-        if (RobotContainer.getCollectorHeadSubsystem().getNoteSensor1() || RobotContainer.getCollectorHeadSubsystem().getNoteSensor2()){
+        if (RobotContainer.getCollectorHeadSubsystem().getNoteSensor1() || RobotContainer.getCollectorHeadSubsystem().getNoteSensor2() || RobotContainer.getCollectorHeadSubsystem().getHasNote()){
           setRange(0, getStripLength(), Color.kLime);
         }
          else if (RobotContainer.getlimelight().gettv() > 0){

@@ -2,7 +2,7 @@ package frc.robot.commands.CollectorHead;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.CollectorHeadSubsystem;
 
 public class CollectorShoot extends Command {
 
@@ -39,6 +39,7 @@ public class CollectorShoot extends Command {
     @Override
     public void end(boolean interrupted) {
         m_collector.zero();
+        m_collector.setHasNote(false);
     }
     @Override
     public boolean isFinished() {
